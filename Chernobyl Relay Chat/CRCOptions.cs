@@ -39,8 +39,8 @@ namespace Chernobyl_Relay_Chat
 
         private static readonly Dictionary<string, string> defaultChannel = new Dictionary<string, string>()
         {
-            ["eng"] = "#crc_english",
-            ["rus"] = "#crc_russian",
+            ["eng"] = "#crcr_english",
+            ["rus"] = "#crcr_russian",
         };
 
         public static string ChannelProxy()

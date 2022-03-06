@@ -136,22 +136,22 @@ namespace Chernobyl_Relay_Chat
 
         private readonly Dictionary<string, int> channelToIndex = new Dictionary<string, int>()
         {
-            ["#crc_english"] = 0,
-            ["#crc_english_rp"] = 1,
-            ["#crc_english_shitposting"] = 2,
-            ["#crc_russian"] = 3,
-            ["#crc_russian_rp"] = 4,
+            ["#crcr_english"] = 0,
+            ["#crcr_english_rp"] = 1,
+            ["#crcr_english_shitposting"] = 2,
+            ["#crcr_russian"] = 3,
+            ["#crcr_russian_rp"] = 4,
             ["#crc_tech_support"] = 5,
         };
 
         private readonly Dictionary<int, string> indexToChannel = new Dictionary<int, string>()
         {
-            [0] = "#crc_english",
-            [1] = "#crc_english_rp",
-            [2] = "#crc_english_shitposting",
-            [3] = "#crc_russian",
-            [4] = "#crc_russian_rp",
-            [5] = "#crc_tech_support",
+            [0] = "#crcr_english",
+            [1] = "#crcr_english_rp",
+            [2] = "#crcr_english_shitposting",
+            [3] = "#crcr_russian",
+            [4] = "#crcr_russian_rp",
+            [5] = "#crcr_tech_support",
         };
 
         private readonly Dictionary<string, int> factionToIndex = new Dictionary<string, int>()
