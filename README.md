@@ -3,7 +3,7 @@ An IRC-based chat app for Call of Chernobyl. Features an independent client as w
 
 # Installation
 1. Install the [.NET framework](https://www.microsoft.com/net/download/framework) if you don't have it already  
-2. Copy the included gamedata folder to your game directory  
+2. Copy the included gamedata folder to your game directory (MOD MANAGERS WILL NOT WORK) 
 
 # Usage
 Run Chernobyl Relay Chat.exe; the application must be running for in-game chat to work.  
