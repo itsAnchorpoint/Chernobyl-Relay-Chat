@@ -72,7 +72,7 @@ local inputActions = {
 		if chatBox then
 			chatBox:UpdateUsers()
 		end
-		title = name..", "..(name == "TKGP" and gt("crc_ccon")
+		title = name..", "..(name == "Anchorpoint" and gt("crc_ccon")
 			or gt("crc_"..faction) or gt("crc_unknown"))
 		if highlight then
 			text = HIGHLIGHT_COLOR..message

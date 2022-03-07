@@ -36,8 +36,8 @@ namespace Chernobyl_Relay_Chat
                 return;
             }
 
-            //if (CRCUpdate.CheckFirstUpdate())
-                //return;
+            if (CRCUpdate.CheckFirstUpdate())
+                return;
 
             displayThread = new Thread(CRCDisplay.Start);
             displayThread.Start();

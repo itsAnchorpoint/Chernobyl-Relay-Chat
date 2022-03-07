@@ -26,24 +26,24 @@
 	</string>
 	
 	<string id="update_failed">
-		<eng>Internet connection failed; CRC will now shut down.\nTry running As Administrator or allowing CRC in your firewall settings.</eng>
-		<rus>Не удалось подключиться к Интернету; CRC теперь будет закрыт.\nПопробуйте запустить в качестве администратора или разрешить CRC в настройках вашего брандмауэра.</rus>
+		<eng>Internet connection failed; CRCR will now shut down.\nTry running As Administrator or allowing CRCR in your firewall settings.</eng>
+		<rus>Не удалось подключиться к Интернету; CRCR теперь будет закрыт.\nПопробуйте запустить в качестве администратора или разрешить CRCR в настройках вашего брандмауэра.</rus>
 	</string>
 	<string id="update_notice">
-		<eng>A mandatory update for CRC is available. Please check the external client to download it.</eng>
-		<rus>Доступно обязательное обновление для CRC. Пожалуйста, проверьте внешний клиент, чтобы загрузить его.</rus>
+		<eng>A mandatory update for CRCR is available. Please check the external client to download it.</eng>
+		<rus>Доступно обязательное обновление для CRCR. Пожалуйста, проверьте внешний клиент, чтобы загрузить его.</rus>
 	</string>
 	<string id="update_gamedata">
 		<eng>This update requires reinstallation of gamedata after downloading.</eng>
-		<rus>Это обновление требует установки игровых данных после загрузки.</rus>
+		<rus>Это обновление требует также обновить папку gamedata после загрузки.</rus>
 	</string>
 	<string id="update_description">
-		<eng>A mandatory update for CRC has been released.\nAfter downloading, extract the entire folder; do not merge with the old version.\nClick Download to be taken to the download page, or Close if you prefer to go there manually.</eng>
-		<rus>Выпущено обязательное обновление для CRC.\nПосле загрузки извлеките всю папку; Не сливаются со старой версией.\nНажмите Загрузить, чтобы перейти на страницу загрузки, или Закрыть, если вы предпочитаете идти туда вручную.</rus>
+		<eng>A mandatory update for CRCR has been released.\nAfter downloading, extract the entire folder; do not merge with the old version.\nClick Download to be taken to the download page, or Close if you prefer to go there manually.</eng>
+		<rus>Выпущено обязательное обновление для CRCR.\nПосле загрузки извлеките всю папку; Удалите предыдущую версию.\nНажмите Загрузить, чтобы перейти на страницу загрузки, или Закрыть, чтобы загрузить обновление самостоятельно.</rus>
 	</string>
 	<string id="update_notes">
 		<eng>Release notes</eng>
-		<rus>Примечания к выпуску</rus>
+		<rus>Что нового</rus>
 	</string>
 	<string id="update_download">
 		<eng>Download</eng>
@@ -56,16 +56,16 @@
 	
 	<string id="keyprompt_help">
 		<eng>Press the desired key now to change your in-game chat button.\n\nModifiers such as Alt, Ctrl, or Shift are not supported.</eng>
-		<rus>Нажмите желаемую кнопку сейчас, чтобы изменить кнопку в игре.\n\nМодификаторы, такие как Alt, Ctrl или Shift, не поддерживаются.</rus>
+		<rus>Нажмите нужную клавишу, чтобы изменить клавишу в игре.\n\nМодификаторы, такие как Alt, Ctrl или Shift, не поддерживаются.</rus>
 	</string>
 	<string id="keyprompt_error">
 		<eng>Sorry, that key is not supported.</eng>
-		<rus>К сожалению, этот ключ не поддерживается.</rus>
+		<rus>К сожалению, эта клавиша не поддерживается.</rus>
 	</string>
 	
 	<string id="language_help">
-		<eng>Welcome to Chernobyl Relay Chat\nPlease pick your preferred language below\nYou can change it from the Options menu later</eng>
-		<rus>Добро пожаловать на чат-ретранслятор Чернобыля\nВыберите нужный язык ниже\nВы можете изменить его из меню «Настройки» позже.</rus>
+		<eng>Welcome to Chernobyl Relay Chat Rebirth\nPlease pick your preferred language below\nYou can change it from the Options menu later</eng>
+		<rus>Добро пожаловать в Chernobyl Relay Chat Rebirth\nВыберите нужный язык ниже\nВы можете изменить его из меню «Настройки» позже.</rus>
 	</string>
 	
 	<string id="client_nick_collision">

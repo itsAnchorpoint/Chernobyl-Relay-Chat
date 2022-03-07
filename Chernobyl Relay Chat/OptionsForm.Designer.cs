@@ -432,7 +432,7 @@
             this.Name = "OptionsForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "CRC Options";
+            this.Text = "CRCR Options";
             this.Load += new System.EventHandler(this.OptionsForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeath)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNewsDuration)).EndInit();

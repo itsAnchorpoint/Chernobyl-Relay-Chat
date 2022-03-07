@@ -9,9 +9,9 @@ namespace Chernobyl_Relay_Chat
     class CRCOptions
     {
 #if DEBUG
-        private static RegistryKey registry = Registry.CurrentUser.CreateSubKey(@"Software\Chernobyl Relay Chat Debug");
+        private static RegistryKey registry = Registry.CurrentUser.CreateSubKey(@"Software\Chernobyl Relay Chat Rebirth Debug");
 #else
-        private static RegistryKey registry = Registry.CurrentUser.CreateSubKey(@"Software\Chernobyl Relay Chat");
+        private static RegistryKey registry = Registry.CurrentUser.CreateSubKey(@"Software\Chernobyl Relay Chat Rebirth");
 #endif
 
         public const string Server = "irc.slashnet.org";

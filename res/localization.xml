@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
 	<string id="crc_name">
-		<eng>Chernobyl Relay Chat</eng>
-		<rus>Chernobyl Relay Chat</rus>
+		<eng>Chernobyl Relay Chat Rebirth</eng>
+		<rus>Chernobyl Relay Chat Rebirth</rus>
 	</string>
 	<string id="crc_seconds">
 		<eng>seconds</eng>
-		<rus>сек</rus>
+		<rus>сек.</rus>
 	</string>
 	<string id="crc_error">
 		<eng>Error</eng>
@@ -17,13 +17,13 @@
 		<rus>Информация</rus>
 	</string>
 	<string id="registry_error">
-		<eng>CRC was unable to access the registry, which is needed to preserve settings.\nPlease try running the application As Administrator.</eng>
-		<rus>CRC не смог получить доступ к реестру, который необходим для сохранения настроек.\nПопробуйте запустить приложение с правами администратора.</rus>
+		<eng>CRCR was unable to access the registry, which is needed to preserve settings.\nPlease try running the application As Administrator.</eng>
+		<rus>CRCR не смог получить доступ к реестру, который необходим для сохранения настроек.\nПопробуйте запустить приложение с правами администратора.</rus>
 	</string>
 	
 	<string id="client_connection_error">
-		<eng>Could not connect to the IRC server; CRC will now shut down.\nTry running As Administrator or allowing CRC in your firewall.</eng>
-		<rus>Не удалось подключиться к IRC-серверу; CRC теперь будет закрыт.\nПопробуйте запустить с правами администратора или выставить CRC в исключения в брандмауэре.</rus>
+		<eng>Could not connect to the IRC server; CRCR will now shut down.\nTry running As Administrator or allowing CRCR in your firewall.</eng>
+		<rus>Не удалось подключиться к IRC-серверу; CRCR теперь будет закрыт.\nПопробуйте запустить с правами администратора или выставить CRCR в исключения в брандмауэре.</rus>
 	</string>
 	<string id="client_connected">
 		<eng>You are now connected to the network</eng>
@@ -39,7 +39,7 @@
 	</string>
 	<string id="client_join">
 		<eng> has logged on</eng>
-		<rus> вошёл в систему</rus>
+		<rus> подключился</rus>
 	</string>
 	<string id="client_part">
 		<eng> has logged off</eng>
@@ -47,7 +47,7 @@
 	</string>
 	<string id="client_own_part">
 		<eng>Switching channel...</eng>
-		<rus>Коммутационный канал ...</rus>
+		<rus>Меняем канал...</rus>
 	</string>
 	<string id="client_nick_change">
 		<eng> is now known as </eng>
@@ -59,7 +59,7 @@
 	</string>
 	<string id="client_kicked">
 		<eng> has been kicked for: </eng>
-		<rus> изгнан за: </rus>
+		<rus> выгнали за: </rus>
 	</string>
 	<string id="client_got_kicked">
 		<eng>You have been kicked for: </eng>
@@ -75,12 +75,12 @@
 	</string>
 	
 	<string id="game_file_error">
-		<eng>CRC was unable to read or write files needed to communicate with the game.\nYou may continue using the built-in client for now.\nPlease try running the program As Administrator.</eng>
-		<rus>CRC не смог прочитать или записать файлы, необходимые для общения с игрой.\nНа данный момент Вы можете продолжать использовать встроенный клиент.\nПопробуйте запустить программу с правами администратора.</rus>
+		<eng>CRCR was unable to read or write files needed to communicate with the game.\nYou may continue using the built-in client for now.\nPlease try running the program As Administrator.</eng>
+		<rus>CRCR не смог прочитать или записать файлы, необходимые для общения с игрой.\nНа данный момент Вы можете продолжать использовать встроенный клиент.\nПопробуйте запустить программу с правами администратора.</rus>
 	</string>
 	<string id="game_script_version_error">
-		<eng>Script version out of date; please exit the game and install the latest CRC gamedata.</eng>
-		<rus>Версия скрипта устарела; Выйдите из игры и установите последнюю версию.</rus>
+		<eng>Script version out of date; please exit the game and install the latest CRCR gamedata.</eng>
+		<rus>Версия скрипта устарела; Выйдите из игры и установите последнюю версию gamedata.</rus>
 	</string>
 	
 	<string id="display_send">
@@ -97,8 +97,8 @@
 	</string>
 	
 	<string id="options_title">
-		<eng>CRC Options</eng>
-		<rus>Параметры CRC</rus>
+		<eng>CRCR Options</eng>
+		<rus>Параметры CRCR</rus>
 	</string>
 	<string id="options_ok">
 		<eng>OK</eng>
@@ -125,8 +125,8 @@
 		<rus>Канал</rus>
 	</string>
 	<string id="options_language_restart">
-		<eng>CRC must be restarted for language changes to take full effect.</eng>
-		<rus>Перезапустите CRC, чтобы изменения языка вступили в силу.</rus>
+		<eng>CRCR must be restarted for language changes to take full effect.</eng>
+		<rus>Перезапустите CRCR, чтобы изменения языка вступили в силу.</rus>
 	</string>
 	<string id="options_auto_faction">
 		<eng>Sync game faction</eng>

@@ -202,7 +202,7 @@ namespace Chernobyl_Relay_Chat
                     client.SendMessage(SendType.CtcpReply, from, "PING " + e.CtcpParameter);
                     break;
                 case "VERSION":
-                    client.SendMessage(SendType.CtcpReply, from, "VERSION Chernobyl Relay Chat " + Application.ProductVersion);
+                    client.SendMessage(SendType.CtcpReply, from, "VERSION Chernobyl Relay Chat Rebirth " + Application.ProductVersion);
                     break;
             }
         }

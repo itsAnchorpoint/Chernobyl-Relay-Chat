@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chernobyl Relay Chat", "Chernobyl Relay Chat\Chernobyl Relay Chat.csproj", "{64EB5DDA-2131-47FC-A32C-FBC64F440D8A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chernobyl Relay Chat Rebirth", "Chernobyl Relay Chat\Chernobyl Relay Chat Rebirth.csproj", "{64EB5DDA-2131-47FC-A32C-FBC64F440D8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +18,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {24356F6F-093F-44B9-9EC0-A54B169B6E15}
 	EndGlobalSection
 EndGlobal

@@ -67,7 +67,7 @@
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Chernobyl Relay Chat";
+            this.Text = "Chernobyl Relay Chat Rebirth";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyPromptForm_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();

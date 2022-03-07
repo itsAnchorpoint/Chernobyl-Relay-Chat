@@ -14,7 +14,7 @@ namespace Chernobyl_Relay_Chat
 
         public static bool CheckFirstUpdate()
         {
-            UpdateChecker updateChecker = new UpdateChecker("TKGP", "Chernobyl-Relay-Chat");
+            UpdateChecker updateChecker = new UpdateChecker("itsAnchorpoint", "Chernobyl-Relay-Chat-Rebirth");
             UpdateType updateType;
             try
             {
@@ -41,7 +41,7 @@ namespace Chernobyl_Relay_Chat
                 {
                     DialogResult dialogResult = updateForm.ShowDialog();
                     if (dialogResult == DialogResult.OK)
-                        updateChecker.DownloadAsset("Chernobyl-Relay-Chat.zip");
+                        updateChecker.DownloadAsset("Chernobyl-Relay-Chat-Rebirth.zip");
                 }
                 return true;
             }
@@ -50,7 +50,7 @@ namespace Chernobyl_Relay_Chat
 
         public static async Task<bool> CheckUpdate()
         {
-            UpdateChecker updateChecker = new UpdateChecker("TKGP", "Chernobyl-Relay-Chat");
+            UpdateChecker updateChecker = new UpdateChecker("itsAnchorpoint", "Chernobyl-Relay-Chat-Rebirth");
             UpdateType updateType;
             try
             {
@@ -78,7 +78,7 @@ namespace Chernobyl_Relay_Chat
                 {
                     DialogResult dialogResult = updateForm.ShowDialog();
                     if (dialogResult == DialogResult.OK)
-                        updateChecker.DownloadAsset("Chernobyl-Relay-Chat.zip");
+                        updateChecker.DownloadAsset("Chernobyl-Relay-Chat-Rebirth.zip");
                 }
                 return true;
             }
