@@ -11,6 +11,14 @@ After connecting, click the Options button to change your name and other setting
 Once playing, press Enter (by default) to bring up the chat interface and Enter again to send your message, or Escape to close without sending.  
 You may use text commands from the game or client by starting with a /. Use /commands to see all available commands.  
 
+# What's Planned  
+I AM CURRENTLY LOOKING FOR ANYONE WHO IS WILLING TO HELP WITH DEVELOPING THIS MOD!  
+IF ANYONE IS WILLING TO HELP WITH ANY OF THIS FEATURES, FEEL FREE TO HIT ME ON DISCORD: anchorpoint#6144
+- Advanced anti-spam and moderation features
+- New interface
+- (possibly) Own private IRC-server
+- New In-game chat GUI and (possibly) integrating it in Anomaly's 3D PDA  
+
 # Credits
 TKGP: Original CRC  
 GitHub: Octokit  
