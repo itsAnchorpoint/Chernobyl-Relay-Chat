@@ -12,11 +12,11 @@ Once playing, press Enter (by default) to bring up the chat interface and Enter 
 You may use text commands from the game or client by starting with a /. Use /commands to see all available commands.  
 
 # Credits
-TKGP: Original CRC 
+TKGP: Original CRC  
 GitHub: Octokit  
 Max Hauser: semver  
 Mirco Bauer: SmartIrc4Net  
 nixx quality: GitHubUpdate  
   
-av661194, OWL, XMODER, Anchorpoint: Russian translation 
+av661194, OWL, XMODER, Anchorpoint: Russian translation  
 Rebirth changes: Anchorpoint
