@@ -141,7 +141,7 @@ namespace Chernobyl_Relay_Chat
             ["#crcr_english_shitposting"] = 2,
             ["#crcr_russian"] = 3,
             ["#crcr_russian_rp"] = 4,
-            ["#crc_tech_support"] = 5,
+            ["#crcr_tech_support"] = 5,
         };
 
         private readonly Dictionary<int, string> indexToChannel = new Dictionary<int, string>()
