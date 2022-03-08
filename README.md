@@ -1,3 +1,6 @@
+# DISCLAIMER  
+Original mod by TKGP. Please, hit me up if you are against me trying to revive this project and want me to shut it down!
+
 # Chernobyl Relay Chat Rebirth
 An IRC-based chat app for Anomaly, originally developed by TKGP for CoC. Features an independent client as well as in-game chat, automatic death messages, and compatibility with all other addons.
 
