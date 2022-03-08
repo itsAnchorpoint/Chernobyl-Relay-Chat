@@ -41,7 +41,7 @@ namespace Chernobyl_Relay_Chat
                 {
                     DialogResult dialogResult = updateForm.ShowDialog();
                     if (dialogResult == DialogResult.OK)
-                        updateChecker.DownloadAsset("Chernobyl-Relay-Chat-Rebirth.zip");
+                        updateChecker.DownloadAsset("CRCR.zip");
                 }
                 return true;
             }
@@ -78,7 +78,7 @@ namespace Chernobyl_Relay_Chat
                 {
                     DialogResult dialogResult = updateForm.ShowDialog();
                     if (dialogResult == DialogResult.OK)
-                        updateChecker.DownloadAsset("Chernobyl-Relay-Chat-Rebirth.zip");
+                        updateChecker.DownloadAsset("CRCR.zip");
                 }
                 return true;
             }
