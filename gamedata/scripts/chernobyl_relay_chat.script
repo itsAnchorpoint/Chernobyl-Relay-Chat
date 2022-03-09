@@ -2,8 +2,9 @@
 --| Chernobyl Relay Chat
 --| Interface for external application
 --| By TKGP
+--| CRCR additions by Anchorpoint
 
-local SCRIPT_VERSION = 1
+local SCRIPT_VERSION = 2
 
 -- Constants
 local UPDATE_INTERVAL = 250
@@ -130,6 +131,8 @@ local function update()
 		showChatBox = false
 		chatBox = ChatBox()
 		chatBox:ShowDialog()
+		-- Disable keypress callback so other scripts don't fire while typing
+		Register_UI("ChatBox","chernobyl_relay_chat")
 	end
 	
 	if not db.actor or time_global() < lastUpdate + UPDATE_INTERVAL then return end
@@ -204,8 +207,6 @@ end
 
 class "ChatBox" (CUIScriptWnd)
 function ChatBox:__init() super()
-	-- Disable keypress callback so other scripts don't fire while typing
-	db.actor:set_callback(callback.key_press)
 	
 	self:SetWndRect(Frect():set(0, 0, 1024, 768))
 	self.xml = CScriptXmlInit()
@@ -284,5 +285,5 @@ function ChatBox:Cancel()
 	chatBox:HideDialog()
 	chatBox = nil
 	-- Re-enable keypress callback when done
-	db.actor:set_callback(callback.key_press, bind_stalker_ext.on_key_press, db.actor_binder)
+	Unregister_UI("ChatBox")
 end

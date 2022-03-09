@@ -12,7 +12,7 @@ namespace Chernobyl_Relay_Chat
 {
     class CRCGame
     {
-        private const int SCRIPT_VERSION = 1;
+        private const int SCRIPT_VERSION = 2;
         private static readonly CRCGameWrapper wrapper = new CRCGameWrapper();
         private static readonly Encoding encoding = Encoding.GetEncoding(1251);
         private static readonly Regex outputRx = new Regex("^(.+?)(?:/(.+))?$");
