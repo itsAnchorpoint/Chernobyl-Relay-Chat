@@ -185,6 +185,9 @@ local function onDeath(whoID)
 			class = who:community()
 		end
 	end
+	if chatBox then
+			ChatBox:Cancel()
+		end
 	send("Death/%s/%s/%s/%s", db.actor:character_community(), level.name(), class:upper(), section)
 end
 
