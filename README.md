@@ -24,6 +24,7 @@ IF ANYONE IS WILLING TO HELP WITH ANY OF THIS FEATURES, FEEL FREE TO HIT ME ON D
 
 # Credits
 TKGP: Original CRC  
+EveNaari: Huge help with C#, Microsoft Visual Studio  
 GitHub: Octokit  
 Max Hauser: semver  
 Mirco Bauer: SmartIrc4Net  
