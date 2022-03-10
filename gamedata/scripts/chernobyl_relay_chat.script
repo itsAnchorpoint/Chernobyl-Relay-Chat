@@ -4,7 +4,7 @@
 --| By TKGP
 --| CRCR additions by Anchorpoint
 
-local SCRIPT_VERSION = 2
+local SCRIPT_VERSION = 3
 
 -- Constants
 local UPDATE_INTERVAL = 250
@@ -13,6 +13,8 @@ local OUTPATH = getFS():update_path("$game_config$", "").."\\crc_output.txt"
 local QUERY_COLOR = "%c[255,255,192,192]"
 local ERROR_COLOR = "%c[255,255,128,128]"
 local HIGHLIGHT_COLOR = "%c[255,255,255,128]"
+local MONEY_COLOR = "%c[255,255,139,1]"
+local prev_money = 0
 
 -- Options
 local option = {
@@ -50,6 +52,11 @@ local function addMessage(icon, title, text)
 	if chatBox then
 		chatBox:UpdateMessages()
 	end
+end
+
+local function send(message, ...)
+	local line = message:format(...).."\n"
+	table.insert(sendQueue, line)
 end
 
 local inputActions = {
@@ -93,6 +100,28 @@ local inputActions = {
 		text = QUERY_COLOR..message
 		addMessage(icon, title, text)
 	end,
+	Money = function(body)
+		local from, to, message = body:match("([^/]+)/([^/]+)/(.+)")
+		icon = crc_icons.info
+		if chatBox then
+			chatBox:UpdateUsers()
+		end
+		title = from.." "..(gt("crc_money")).." "..to
+		text = MONEY_COLOR..message.." RUB"
+		addMessage(icon, title, text)
+		db.actor:give_money(-message)
+	end,
+	MoneyRecv = function(body)
+		local from, message = body:match("([^/]+)/(.+)")
+		icon = crc_icons.info
+		if chatBox then
+			chatBox:UpdateUsers()
+		end
+		title = from.." "..(gt("crc_money_recv"))
+		text = MONEY_COLOR..message.." RUB"
+		addMessage(icon, title, text)
+		db.actor:give_money(message)		
+	end,
 	Setting = function (body)
 		local setting, value = body:match("([^/]+)/(.+)")
 		if setting == "NewsDuration" then
@@ -115,11 +144,6 @@ local inputActions = {
 		end
 	end,
 	}
-
-local function send(message, ...)
-	local line = message:format(...).."\n"
-	table.insert(sendQueue, line)
-end
 
 local function update()
 	if chatBox and not chatBox.focus then
@@ -201,11 +225,19 @@ end
 function on_game_start()
 	AddUniqueCall(update)
 	RegisterScriptCallback("actor_on_before_death", onDeath)
+	RegisterScriptCallback("actor_on_update", actor_on_update)
 	-- Not using axr_keybind for old version compatibility
 	RegisterScriptCallback("on_key_press", onKeyPress)
 	send("Handshake/%s", SCRIPT_VERSION)
 end
 
+function actor_on_update()
+    local cur_money = db.actor:money()
+    if prev_money == cur_money then return end
+    -- munie changed here
+    prev_money = cur_money
+	send("Money/%s", cur_money)
+end
 ----------------------------------------------------------------------------------------------------
 
 class "ChatBox" (CUIScriptWnd)

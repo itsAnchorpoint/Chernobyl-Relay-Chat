@@ -5,6 +5,12 @@
 	</string>
 	<string id="crc_error">
 		<text>Error</text>
+	</string>
+	<string id="crc_money">
+		<text>has sent some money to</text>
+	</string>
+	<string id="crc_money_recv">
+		<text>has sent you some money</text>
 	</string>	
 	<string id="crc_ccon">
 		<text>C-Consciousness</text>

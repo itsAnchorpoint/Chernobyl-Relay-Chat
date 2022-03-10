@@ -5,7 +5,13 @@
 	</string>
 	<string id="crc_error">
 		<text>Ошибка</text>
-	</string>	
+	</string>
+	<string id="crc_money">
+		<text>отправил денег</text>
+	</string>
+	<string id="crc_money_recv">
+		<text>отправил вам деньги</text>
+	</string>		
 	<string id="crc_ccon">
 		<text>«О-Сознание»</text>
 	</string>

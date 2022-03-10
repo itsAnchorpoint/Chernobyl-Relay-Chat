@@ -136,6 +136,33 @@ namespace Chernobyl_Relay_Chat
             CRCGame.OnQueryMessage(CRCOptions.Name, nick, CRCOptions.GetFaction(), message);
         }
 
+        public static void SendMoney(string nick, string message)
+        {
+            int amount;
+            bool acceptable = int.TryParse(message, out amount);
+            if (acceptable && amount <=1000000)
+            {
+                if (amount > CRCGame.ActorMoney)
+                {
+                    CRCGame.AddError(CRCStrings.Localize("crc_money_none"));
+                    CRCDisplay.AddError(CRCStrings.Localize("crc_money_none"));
+                    return;
+                }
+                else 
+                {
+                    client.SendMessage(SendType.Message, nick, CRCOptions.GetFaction() + " pay " + META_DELIM + amount.ToString());
+                    CRCDisplay.OnMoneySent(CRCOptions.Name, nick, amount.ToString());
+                    CRCGame.OnMoneySent(CRCOptions.Name, nick, CRCOptions.GetFaction(), amount.ToString());
+                }
+            }
+            else
+            {
+                CRCGame.AddError(CRCStrings.Localize("crc_money_toohigh"));
+                CRCDisplay.AddError(CRCStrings.Localize("crc_money_toohigh"));
+                return;
+            }
+        }
+
         public static bool SendReply(string message)
         {
             if (lastQuery != null)
@@ -307,14 +334,29 @@ namespace Chernobyl_Relay_Chat
 
         private static void OnQueryMessage(object sender, IrcEventArgs e)
         {
-            lastQuery = e.Data.Nick;
-            // Metadata should not be used in queries, just throw it out
-            string fakeNick, faction;
-            string message = GetMetadata(e.Data.Message, out fakeNick, out faction);
-            string nick = e.Data.Nick;
-            faction = crcNicks.ContainsKey(nick) ? crcNicks[nick] : "actor_stalker";
-            CRCDisplay.OnQueryMessage(nick, CRCOptions.Name, message);
-            CRCGame.OnQueryMessage(nick, CRCOptions.Name, faction, message);
+            string raw = e.Data.Message;
+            bool check = raw.Contains("pay");
+            if (check)
+            {
+                // Metadata should not be used in queries, just throw it out
+                string fakeNick, faction;
+                string message = GetMetadata(e.Data.Message, out fakeNick, out faction);
+                string nick = e.Data.Nick;
+                faction = crcNicks.ContainsKey(nick) ? crcNicks[nick] : "actor_stalker";
+                CRCDisplay.OnMoneyRecv(nick, message);
+                CRCGame.OnMoneyRecv(nick, message);
+            }
+            else
+            {
+                lastQuery = e.Data.Nick;
+                // Metadata should not be used in queries, just throw it out
+                string fakeNick, faction;
+                string message = GetMetadata(e.Data.Message, out fakeNick, out faction);
+                string nick = e.Data.Nick;
+                faction = crcNicks.ContainsKey(nick) ? crcNicks[nick] : "actor_stalker";
+                CRCDisplay.OnQueryMessage(nick, CRCOptions.Name, message);
+                CRCGame.OnQueryMessage(nick, CRCOptions.Name, faction, message);
+            }
         }
 
         private static void OnJoin(object sender, JoinEventArgs e)

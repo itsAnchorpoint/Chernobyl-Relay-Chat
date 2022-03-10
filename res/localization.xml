@@ -16,6 +16,22 @@
 		<eng>Information</eng>
 		<rus>Информация</rus>
 	</string>
+	<string id="crc_money">
+		<eng> has sent some money to </eng>
+		<rus> отправил денег </rus>
+	</string>
+	<string id="crc_money_recv">
+		<eng> has sent you </eng>
+		<rus> отправил вам </rus>
+	</string>
+	<string id="crc_money_none">
+		<eng>Not enough money!</eng>
+		<rus>Недостаточно средств!</rus>
+	</string>
+	<string id="crc_money_toohigh">
+		<eng>Can't send that much. Maximum amount is 1 000 000 RUB.</eng>
+		<rus>Максимальная сумма перевода - 1 000 000 RUB.</rus>
+	</string>
 	<string id="registry_error">
 		<eng>CRCR was unable to access the registry, which is needed to preserve settings.\nPlease try running the application As Administrator.</eng>
 		<rus>CRCR не смог получить доступ к реестру, который необходим для сохранения настроек.\nПопробуйте запустить приложение с правами администратора.</rus>

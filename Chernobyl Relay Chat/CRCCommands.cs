@@ -14,6 +14,7 @@ namespace Chernobyl_Relay_Chat
             new CRCCommand("msg", "/msg [nick] [message]", "Sends a private message to another user.", 2, true, SendQuery),
             new CRCCommand("nick", "/nick [nick]", "Changes your nickname.", 1, true, ChangeNick),
             new CRCCommand("reply", "/reply [message]", "Sends a private message to the last user who sent you one.", 1, true, SendReply),
+            new CRCCommand("pay", "/pay [nick] [amount]", "Send specified amount of in-game money to the player. Must be in-game.", 2, true, SendMoney),
         };
 
         public static void ProcessCommand(string message, ICRCSendable output)
@@ -53,6 +54,22 @@ namespace Chernobyl_Relay_Chat
         private static void SendQuery(List<string> args, ICRCSendable output)
         {
             CRCClient.SendQuery(args[0], args[1]);
+        }
+
+        private static void SendMoney(List<string> args, ICRCSendable output)
+        {
+            if (CRCGame.disable || CRCGame.processID == -1)
+            {
+                output.AddError("You must be in-game to be able to send money!");
+            }
+            else if (Regex.IsMatch(args[1], @"^\d+$"))
+            {
+                CRCClient.SendMoney(args[0], args[1]);
+            }
+            else
+            {
+                output.AddError("\"" + args[1] + "\" is not a number. Please, input an amount of money you want to send.");
+            }
         }
 
         private static void ChangeNick(List<string> args, ICRCSendable output)

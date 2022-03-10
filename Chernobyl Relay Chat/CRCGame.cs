@@ -13,14 +13,15 @@ namespace Chernobyl_Relay_Chat
     class CRCGame
     {
         private const int SCRIPT_VERSION = 2;
+        public static int ActorMoney = 0;
         private static readonly CRCGameWrapper wrapper = new CRCGameWrapper();
         private static readonly Encoding encoding = Encoding.GetEncoding(1251);
         private static readonly Regex outputRx = new Regex("^(.+?)(?:/(.+))?$");
         private static readonly Regex messageRx = new Regex("^(.+?)/(.+)$");
         private static readonly Regex deathRx = new Regex("^(.+?)/(.+?)/(.+?)/(.+)$");
 
-        private static bool disable = false;
-        private static int processID = -1;
+        public static bool disable = false;
+        public static int processID = -1;
         private static string gamePath;
         private static bool firstClear = false;
         private static StringBuilder sendQueue = new StringBuilder();
@@ -121,6 +122,19 @@ namespace Chernobyl_Relay_Chat
                         }
                         UpdateSettings();
                         UpdateUsers();
+                    }
+                    else if (type == "Money")
+                    {
+                        int amount;
+                        bool acceptable = int.TryParse(typeMatch.Groups[2].Value, out amount);
+                            if (acceptable)
+                        {
+                            ActorMoney = amount;
+                        }
+                            else
+                        {
+                            ActorMoney = 1000001;
+                        }
                     }
                     else if (type == "Message")
                     {
@@ -233,6 +247,16 @@ namespace Chernobyl_Relay_Chat
         public static void OnQueryMessage(string from, string to, string faction, string message)
         {
             SendToGame("Query/" + faction + "/" + from + "/" + to + "/" + message);
+        }
+
+        public static void OnMoneySent(string from, string to, string faction, string message)
+        {
+            SendToGame("Money/" + from + "/" + to + "/" + message);
+        }
+        
+        public static void OnMoneyRecv(string from, string message)
+        {
+            SendToGame("MoneyRecv/" + from + "/" + message);
         }
     }
 }

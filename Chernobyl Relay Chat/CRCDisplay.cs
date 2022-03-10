@@ -66,6 +66,18 @@ namespace Chernobyl_Relay_Chat
             clientDisplay?.AddMessage(from + " -> " + to, message, Color.DeepPink);
         }
 
+        public static void OnMoneySent(string from, string to, string message)
+        {
+            SystemSounds.Asterisk.Play();
+            clientDisplay?.AddMessage(from + CRCStrings.Localize("crc_money") + to, message + " RUB", Color.DarkBlue);
+        }
+
+        public static void OnMoneyRecv(string from, string message)
+        {
+            SystemSounds.Asterisk.Play();
+            clientDisplay?.AddMessage(from + CRCStrings.Localize("crc_money_recv"), message + " RUB!", Color.DarkBlue);
+        }
+
         public static void OnGotKicked()
         {
             clientDisplay?.Disable();
