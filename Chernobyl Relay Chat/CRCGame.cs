@@ -12,7 +12,7 @@ namespace Chernobyl_Relay_Chat
 {
     class CRCGame
     {
-        private const int SCRIPT_VERSION = 3;
+        private const int SCRIPT_VERSION = 4;
         public static int ActorMoney = 0;
         private static readonly CRCGameWrapper wrapper = new CRCGameWrapper();
         private static readonly Encoding encoding = Encoding.GetEncoding(1251);

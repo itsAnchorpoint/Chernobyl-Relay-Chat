@@ -4,7 +4,7 @@
 --| By TKGP
 --| CRCR additions by Anchorpoint
 
-local SCRIPT_VERSION = 3
+local SCRIPT_VERSION = 4
 
 -- Constants
 local UPDATE_INTERVAL = 250
