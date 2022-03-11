@@ -314,7 +314,7 @@ namespace Chernobyl_Relay_Chat
                 else if (CRCOptions.ReceiveDeath && (DateTime.Now - lastDeath).TotalSeconds > CRCOptions.DeathInterval)
                 {
                     lastDeath = DateTime.Now;
-                    nick = e.Data.Nick; //fakeNick;
+                    nick = fakeNick; //e.Data.Nick;
                 }
                 else
                     return;
