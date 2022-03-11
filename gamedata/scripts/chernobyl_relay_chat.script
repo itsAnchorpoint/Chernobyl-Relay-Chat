@@ -31,6 +31,7 @@ local sendQueue = {}
 local messageLog = {}
 local chatBox
 local showChatBox = false
+local ChatBoxEnabled = true
 local users = {}
 local knownIcons = {}
 
@@ -151,7 +152,7 @@ local function update()
 		chatBox.focus = true
 	end
 	
-	if showChatBox then
+	if showChatBox and ChatBoxEnabled then
 		showChatBox = false
 		chatBox = ChatBox()
 		chatBox:ShowDialog()
@@ -210,8 +211,9 @@ local function onDeath(whoID)
 		end
 	end
 	if chatBox then
-			ChatBox:Cancel()
-		end
+		ChatBox:Cancel()
+	end
+	ChatBoxEnabled = false	
 	send("Death/%s/%s/%s/%s", db.actor:character_community(), level.name(), class:upper(), section)
 end
 
@@ -223,9 +225,11 @@ local function onKeyPress(dik)
 end
 
 function on_game_start()
+	ChatBoxEnabled = true
 	AddUniqueCall(update)
 	RegisterScriptCallback("actor_on_before_death", onDeath)
 	RegisterScriptCallback("actor_on_update", actor_on_update)
+	RegisterScriptCallback("actor_on_net_destroy", actor_on_net_destroy)
 	-- Not using axr_keybind for old version compatibility
 	RegisterScriptCallback("on_key_press", onKeyPress)
 	send("Handshake/%s", SCRIPT_VERSION)
@@ -237,6 +241,12 @@ function actor_on_update()
     -- munie changed here
     prev_money = cur_money
 	send("Money/%s", cur_money)
+end
+
+function actor_on_net_destroy()
+	if chatBox then
+		ChatBox:Cancel()
+	end	
 end
 ----------------------------------------------------------------------------------------------------
 

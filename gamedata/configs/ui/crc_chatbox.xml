@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="windows-1251"?>
 <window>
 	<background x="0" y="0" width="1024" height="768" stretch="1">
 		<texture>ui\crc_log_background</texture>
