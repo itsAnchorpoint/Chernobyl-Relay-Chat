@@ -7,13 +7,22 @@
 		<text>Error</text>
 	</string>
 	<string id="crc_money">
-		<text>has sent some money to</text>
+		<text>has sent money to</text>
 	</string>
 	<string id="crc_money_recv">
-		<text>has sent you some money</text>
-	</string>	
+		<text>has sent you money</text>
+	</string>
+	<string id="crc_ingame">
+		<text>In the Zone</text>
+	</string>
+	<string id="crc_notingame">
+		<text>Not in the Zone</text>
+	</string>
 	<string id="crc_ccon">
 		<text>C-Consciousness</text>
+	</string>
+	<string id="crc_admin">
+		<text>Network Administrator</text>
 	</string>
 	<string id="crc_unknown">
 		<text>Unknown</text>
@@ -54,5 +63,17 @@
 	</string>
 	<string id="crc_actor_zombied">
 		<text>Zombie</text>
+	</string>
+	<string id="crc_actor_renegade">
+		<text>Renegade</text>
+	</string>
+	<string id="crc_actor_greh">
+		<text>Sin</text>
+	</string>
+	<string id="crc_actor_isg">
+		<text>UNISG</text>
+	</string>
+	<string id="crc_actor_anonymous">
+		<text>Anonymous</text>
 	</string>
 </string_table>

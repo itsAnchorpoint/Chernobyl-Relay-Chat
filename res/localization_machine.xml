@@ -18,11 +18,11 @@
 	</string>
 	<string id="strings_level_unknown">
 		<eng>somewhere in the Zone</eng>
-		<rus>Где-то в зоне</rus>
+		<rus>где-то в зоне</rus>
 	</string>
 	<string id="strings_death_unknown">
 		<eng>died of unknown causes</eng>
-		<rus>Умер от неизвестных причин</rus>
+		<rus>умер от неизвестных причин</rus>
 	</string>
 	
 	<string id="update_failed">

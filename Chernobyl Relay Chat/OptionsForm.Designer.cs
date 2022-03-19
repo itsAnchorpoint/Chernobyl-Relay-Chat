@@ -129,7 +129,8 @@
             "Loner",
             "Mercenary",
             "Military",
-            "Monolith"});
+            "Monolith",
+            "Renegade"});
             this.comboBoxFaction.Location = new System.Drawing.Point(6, 132);
             this.comboBoxFaction.Name = "comboBoxFaction";
             this.comboBoxFaction.Size = new System.Drawing.Size(280, 21);
@@ -227,6 +228,10 @@
             this.checkBoxTimestamps.TabIndex = 15;
             this.checkBoxTimestamps.Text = "Show timestamps";
             this.checkBoxTimestamps.UseVisualStyleBackColor = true;
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
             // 
             // labelNewsDuration
             // 

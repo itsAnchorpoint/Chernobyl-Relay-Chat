@@ -30,9 +30,13 @@
 	<user x="0" y="20" width="1024" height="39">
 		<icon x="963" y="5" width="41" height="29" stretch="1"/>
 		
-		<name x="0" y="5" width="958" height="29">
+		<name x="0" y="0" width="958" height="29">
 			<text font="letterica16" color="ui_5" align="r" vert_align="c"/>
 		</name>
+		
+		<status x="0" y="15" width="958" height="29">
+			<text font="letterica16" color="ui_5" align="r" vert_align="c"/>
+		</status>
 	</user>
 	
 	<message x="0" y="0" width="1024" height="39">

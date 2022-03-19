@@ -21,7 +21,7 @@ namespace Chernobyl_Relay_Chat
         public CRCCommand(string name, string setUsage, string setHelp, int setArgCount, bool setLongArg, Action<List<string>, ICRCSendable> setAction)
         {
             Name = name;
-            usage = "Usage: " + setUsage;
+            usage = CRCStrings.Localize("command_usage") + setUsage;
             Help = setHelp + ' ' + usage;
             argCount = setArgCount;
             longArg = setLongArg;

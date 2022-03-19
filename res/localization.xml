@@ -28,6 +28,10 @@
 		<eng>Not enough money!</eng>
 		<rus>Недостаточно средств!</rus>
 	</string>
+	<string id="crc_money_cooldown">
+		<eng>You can't send money that often.</eng>
+		<rus>Нельзя отправлять деньги так часто.</rus>
+	</string>
 	<string id="crc_money_toohigh">
 		<eng>Can't send that much. Maximum amount is 1 000 000 RUB.</eng>
 		<rus>Максимальная сумма перевода - 1 000 000 RUB.</rus>
@@ -195,5 +199,89 @@
 	<string id="options_close_chat">
 		<eng>Close chat after sending</eng>
 		<rus>Закрыть чат после отправки</rus>
+	</string>
+	<string id="command_commands">
+		<eng>Displays all available commands.</eng>
+		<rus>Отображает все доступные команды.</rus>
+	</string>
+	<string id="command_help_usage">
+		<eng>/help [command] Use /commands to see all available commands.</eng>
+		<rus>/help [комманда] Используйте /commands для отображения всех доступных комманд.</rus>
+	</string>
+	<string id="command_help_help">
+		<eng>Displays information about the given command.</eng>
+		<rus>Отображает информацию о выбранной команде.</rus>
+	</string>
+	<string id="command_msg_usage">
+		<eng>/msg [nick] [message]</eng>
+		<rus>/msg [ник] [сообщение]</rus>
+	</string>
+	<string id="command_msg_help">
+		<eng>Sends a private message to another user.</eng>
+		<rus>Отправляет пользователю приватное сообщение.</rus>
+	</string>
+	<string id="command_nick_usage">
+		<eng>/nick [nick]</eng>
+		<rus>/nick [ник]</rus>
+	</string>
+	<string id="command_nick_help">
+		<eng>Changes your nickname.</eng>
+		<rus>Меняет ваш никнейм</rus>
+	</string>
+	<string id="command_reply_usage">
+		<eng>/reply [message]</eng>
+		<rus>/reply [сообщение]</rus>
+	</string>
+	<string id="command_reply_help">
+		<eng>Sends a private message to the last user who sent you one.</eng>
+		<rus>Ответить приватным сообщением тому, кто вам его написал.</rus>
+	</string>
+	<string id="command_reply_help">
+		<eng>Sends a private message to the last user who sent you one.</eng>
+		<rus>Ответить приватным сообщением тому, кто вам его написал.</rus>
+	</string>
+	<string id="command_pay_usage">
+		<eng>/pay [nick] [amount]</eng>
+		<rus>/pay [ник] [сумма]</rus>
+	</string>
+	<string id="command_pay_help">
+		<eng>Sends a specified amount of in-game money to another user. Must be in-game.</eng>
+		<rus>Отправляет указанное количество игровых денег другому пользователю. Вы и адресат должны находиться в игре.</rus>
+	</string>
+	<string id="command_available_commands">
+		<eng>Available commands: </eng>
+		<rus>Доступные команды: </rus>
+	</string>
+	<string id="command_not_recognized_1">
+		<eng>Command "</eng>
+		<rus>Комманда "</rus>
+	</string>
+	<string id="command_not_recognized_2">
+		<eng>" not recognized. Use /commands to see all available commands.</eng>
+		<rus>" не распознана. Используйте /commands для отображения всех доступных комманд.</rus>
+	</string>
+	<string id="command_pay_notingame">
+		<eng>You must be in-game to be able to send money.</eng>
+		<rus>Вы должны находиться в игре чтобы отправлять деньги.</rus>
+	</string>
+	<string id="command_pay_notanumber">
+		<eng>" is not a number. Please, input an amount of money you want to send.</eng>
+		<rus>" не является числом. Пожалуйста, введите сумму денег, которую вы хотите отправить.</rus>
+	</string>
+	<string id="command_pay_usernotingame">
+		<eng>Cannot send money - user in not in the Zone.</eng>
+		<rus>Невозможно отправить деньги - пользователь находится вне Зоны.</rus>
+	</string>
+	<string id="command_reply_error">
+		<eng>You can't reply if you haven't been sent any messages yet.</eng>
+		<rus>Вы не можете ответить если вам ещё никто не писал.</rus>
+	</string>
+	<string id="command_usage">
+		<eng>Usage: </eng>
+		<rus>Использование: </rus>
+	</string>
+	<string id="error_no_such_nickname">
+		<eng>No such nick/channel</eng>
+		<rus>Такого пользователя/канала не существует</rus>
 	</string>
 </root>

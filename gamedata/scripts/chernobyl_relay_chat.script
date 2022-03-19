@@ -4,7 +4,7 @@
 --| By TKGP
 --| CRCR additions by Anchorpoint
 
-local SCRIPT_VERSION = 4
+local SCRIPT_VERSION = 5
 
 -- Constants
 local UPDATE_INTERVAL = 250
@@ -14,7 +14,7 @@ local QUERY_COLOR = "%c[255,255,192,192]"
 local ERROR_COLOR = "%c[255,255,128,128]"
 local HIGHLIGHT_COLOR = "%c[255,255,255,128]"
 local MONEY_COLOR = "%c[255,255,139,1]"
-local prev_money = 0
+local INGAME_COLOR = "%c[255,128,255,154]"
 
 -- Options
 local option = {
@@ -34,6 +34,7 @@ local showChatBox = false
 local ChatBoxEnabled = true
 local users = {}
 local knownIcons = {}
+local prev_money = 0
 
 local function gt(id)
 	local result = game.translate_string(id)
@@ -81,8 +82,8 @@ local inputActions = {
 		if chatBox then
 			chatBox:UpdateUsers()
 		end
-		title = name..", "..(name == "Anchorpoint" and gt("crc_ccon")
-			or gt("crc_"..faction) or gt("crc_unknown"))
+		title = name..", "..(name == "Anchorpoint" and gt("crc_admin")
+			or gt("crc_"..faction) or gt("crc_actor_anonymous") or gt("crc_unknown"))
 		if highlight then
 			text = HIGHLIGHT_COLOR..message
 		else
@@ -110,7 +111,9 @@ local inputActions = {
 		title = from.." "..(gt("crc_money")).." "..to
 		text = MONEY_COLOR..message.." RUB"
 		addMessage(icon, title, text)
-		db.actor:give_money(-message)
+		if users[from] then
+			db.actor:give_money(-message)
+		end
 	end,
 	MoneyRecv = function(body)
 		local from, message = body:match("([^/]+)/(.+)")
@@ -133,12 +136,18 @@ local inputActions = {
 			option.newsSound = value == "True"
 		elseif setting == "CloseChat" then
 			option.closeChat = value == "True"
+		elseif setting == "ActorMoney" then
+			send("Money/%s", db.actor:money())
 		end
 	end,
 	Users = function (body)
 		users = {}
-		for user in body:gmatch("[^/]+") do
-			table.insert(users, user)
+		--printf("RAW user data: "..body)
+		--for user in body:gmatch("[^/]+") do
+		for k, v in body:gmatch("([^/]+)%s=%s([^/]+)") do
+			--table.insert(users, user)
+			users[k] = v
+			--printf("received user data: "..k.." is "..v)
 		end
 		if chatBox then
 			chatBox:UpdateUsers()
@@ -205,7 +214,7 @@ local function onDeath(whoID)
 		class = "UNKNOWN"
 	else
 		section = who:section_name()
-		class = config:r_string(section, "class")
+		class = ini_sys:r_string_ex(section, "kind") or ini_sys:r_string_ex(section, "class")
 		if class == "AI_STL_S" then
 			class = who:community()
 		end
@@ -224,6 +233,14 @@ local function onKeyPress(dik)
 	end
 end
 
+function update_money()
+    local cur_money = db.actor:money()
+    if prev_money == cur_money then return end
+    -- munie changed here
+    prev_money = cur_money
+	send("Money/%s", cur_money)
+end
+
 function on_game_start()
 	ChatBoxEnabled = true
 	AddUniqueCall(update)
@@ -236,11 +253,7 @@ function on_game_start()
 end
 
 function actor_on_update()
-    local cur_money = db.actor:money()
-    if prev_money == cur_money then return end
-    -- munie changed here
-    prev_money = cur_money
-	send("Money/%s", cur_money)
+    update_money()
 end
 
 function actor_on_net_destroy()
@@ -287,13 +300,32 @@ function ChatBox:UpdateUsers()
 		self:DetachChild(user)
 	end
 	self.users = {}
-	for index, name in ipairs(users) do
+	--[[for index, name in ipairs(users) do
 		local user = self.xml:InitStatic("user", self)
 		local newPos = vector2():set(0, user:GetWndPos().y + (index - 1) * user:GetHeight())
 		user:SetWndPos(newPos)
 		self.xml:InitStatic("user:icon", user):InitTexture(knownIcons[name] or crc_icons.unknown)
 		self.xml:InitStatic("user:name", user):TextControl():SetText(name)
 		table.insert(self.users, user)
+	end--]]
+	local index = 1
+	for k, v in pairs(users) do
+		IsInGame = v == "True"
+		local user = self.xml:InitStatic("user", self)
+		local newPos = vector2():set(0, user:GetWndPos().y + (index - 1) * user:GetHeight())
+		user:SetWndPos(newPos)
+		self.xml:InitStatic("user:icon", user):InitTexture(knownIcons[k] or crc_icons.unknown)
+		self.xml:InitStatic("user:name", user):TextControl():SetText(k)
+		self.user_status = self.xml:InitStatic("user:status", user)
+		if IsInGame then
+			self.user_status:TextControl():SetText(gt("crc_ingame"))
+			self.user_status:TextControl():SetTextColor(GetARGB(255, 128, 255, 154))
+		else
+			self.user_status:TextControl():SetText(gt("crc_notingame"))
+			self.user_status:TextControl():SetTextColor(GetARGB(255, 255, 128, 128))
+		end
+		table.insert(self.users, user)
+		index = index + 1
 	end
 end
 

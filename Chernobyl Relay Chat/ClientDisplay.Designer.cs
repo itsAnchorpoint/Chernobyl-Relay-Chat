@@ -36,7 +36,7 @@
             this.timerGameCheck = new System.Windows.Forms.Timer(this.components);
             this.timerGameUpdate = new System.Windows.Forms.Timer(this.components);
             this.buttonOptions = new System.Windows.Forms.Button();
-            this.textBoxUsers = new System.Windows.Forms.TextBox();
+            this.textBoxUsers = new System.Windows.Forms.RichTextBox();
             this.timerCheckUpdate = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
@@ -85,6 +85,7 @@
             resources.ApplyResources(this.textBoxUsers, "textBoxUsers");
             this.textBoxUsers.Name = "textBoxUsers";
             this.textBoxUsers.ReadOnly = true;
+            this.textBoxUsers.TextChanged += new System.EventHandler(this.textBoxUsers_TextChanged);
             // 
             // timerCheckUpdate
             // 
@@ -118,7 +119,7 @@
         private System.Windows.Forms.Timer timerGameCheck;
         private System.Windows.Forms.Timer timerGameUpdate;
         private System.Windows.Forms.Button buttonOptions;
-        private System.Windows.Forms.TextBox textBoxUsers;
+        private System.Windows.Forms.RichTextBox textBoxUsers;
         private System.Windows.Forms.Timer timerCheckUpdate;
     }
 }

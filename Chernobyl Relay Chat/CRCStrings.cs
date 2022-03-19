@@ -84,6 +84,8 @@ namespace Chernobyl_Relay_Chat
             MergeLists(fNames, "actor_killer", "actor_stalker", "actor_bandit", "actor_ecolog");
             MergeLists(fNames, "actor_monolith", "actor_stalker", "actor_bandit", "actor_ecolog");
             MergeLists(fNames, "actor_zombied", "actor_stalker", "actor_bandit", "actor_ecolog", "actor_army");
+            MergeLists(fNames, "actor_renegade", "actor_stalker", "actor_bandit");
+            MergeLists(fNames, "actor_greh", "actor_stalker", "actor_bandit", "actor_ecolog");
 
             MergeLists(sNames, "actor_csky", "actor_stalker", "actor_ecolog");
             MergeLists(sNames, "actor_dolg", "actor_stalker", "actor_army");
@@ -91,6 +93,8 @@ namespace Chernobyl_Relay_Chat
             MergeLists(sNames, "actor_killer", "actor_stalker", "actor_bandit", "actor_ecolog");
             MergeLists(sNames, "actor_monolith", "actor_stalker", "actor_bandit", "actor_ecolog");
             MergeLists(sNames, "actor_zombied", "actor_stalker", "actor_bandit", "actor_ecolog", "actor_army");
+            MergeLists(sNames, "actor_renegade", "actor_stalker", "actor_bandit");
+            MergeLists(sNames, "actor_greh", "actor_stalker", "actor_bandit", "actor_ecolog");
         }
 
         public static string Localize(string id)
@@ -155,7 +159,7 @@ namespace Chernobyl_Relay_Chat
         public static string DeathMessage(string name, string level, string xrClass, string section)
         {
             string lang = channelLangs[CRCOptions.Channel];
-            string levelText = deathLevels[lang].ContainsKey(level) ? PickRandom(deathLevels[lang][level]) : (Localize("strings_level_unknown") + " (" + level + ")");
+            string levelText = deathLevels[lang].ContainsKey(level) ? PickRandom(deathLevels[lang][level]) : Localize("strings_level_unknown") + " (" + level + ")";
             string deathText;
             if (rand.Next(101) < GENERIC_CHANCE)
                 deathText = PickRandom(deathGeneric[lang]);
@@ -190,6 +194,9 @@ namespace Chernobyl_Relay_Chat
             "actor_army",
             "actor_monolith",
             "actor_zombied",
+            "actor_renegade",
+            "actor_greh",
+            "actor_isg",
         };
 
         private static Dictionary<string, List<string>> loadXmlList(string path)

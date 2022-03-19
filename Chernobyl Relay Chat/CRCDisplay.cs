@@ -9,6 +9,7 @@ namespace Chernobyl_Relay_Chat
     class CRCDisplay
     {
         private static ClientDisplay clientDisplay;
+        private static List<string> UsersAndStatuses = new List<string>();
 
         public static void Start()
         {

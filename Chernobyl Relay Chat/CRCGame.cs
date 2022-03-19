@@ -12,8 +12,9 @@ namespace Chernobyl_Relay_Chat
 {
     class CRCGame
     {
-        private const int SCRIPT_VERSION = 4;
+        private const int SCRIPT_VERSION = 5;
         public static int ActorMoney = 0;
+        public static bool IsInGame = false;
         private static readonly CRCGameWrapper wrapper = new CRCGameWrapper();
         private static readonly Encoding encoding = Encoding.GetEncoding(1251);
         private static readonly Regex outputRx = new Regex("^(.+?)(?:/(.+))?$");
@@ -55,6 +56,8 @@ namespace Chernobyl_Relay_Chat
                 catch (ArgumentException)
                 {
                     processID = -1;
+                    IsInGame = false;
+                    CRCClient.UpdateStatus();
                     lock (queueLock)
                     {
                         sendQueue.Clear();
@@ -63,6 +66,8 @@ namespace Chernobyl_Relay_Chat
             }
             if (processID == -1)
             {
+                IsInGame = false;
+                CRCClient.UpdateStatus();
                 foreach (Process process in Process.GetProcesses())
                 {
                     if (process.MainWindowTitle == "S.T.A.L.K.E.R.: Anomaly")
@@ -73,6 +78,8 @@ namespace Chernobyl_Relay_Chat
                             gamePath = path;
                             firstClear = false;
                             processID = process.Id;
+                            IsInGame = true;
+                            CRCClient.UpdateStatus();
                             UpdateSettings();
                             break;
                         }
@@ -200,11 +207,22 @@ namespace Chernobyl_Relay_Chat
             SendToGame("Setting/ChatKey/DIK_" + CRCOptions.ChatKey);
             SendToGame("Setting/NewsSound/" + CRCOptions.NewsSound);
             SendToGame("Setting/CloseChat/" + CRCOptions.CloseChat);
+            SendToGame("Setting/ActorMoney/Get");
         }
 
         public static void UpdateUsers()
         {
-            SendToGame("Users/" + string.Join("/", CRCClient.Users));
+            string UserStatus = "";
+            foreach (KeyValuePair<string, string> item in CRCClient.InGameStatus)
+            {
+                UserStatus += item.Key + " = " + item.Value + "/";
+                System.Diagnostics.Debug.WriteLine(item.Key + " IS " + item.Value);
+            }
+            SendToGame("Users/" + UserStatus.TrimEnd('/'));
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(UserStatus.TrimEnd('/'));
+#endif
+            //SendToGame("Users/" + string.Join("/", CRCClient.Users));
         }
 
         private static void SendToGame(string line)

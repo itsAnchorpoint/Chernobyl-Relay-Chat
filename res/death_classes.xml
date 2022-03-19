@@ -77,6 +77,14 @@
 			<string>was gnawed to the bone by a tushkano</string>
 			<string>couldn't handle a tushkano</string>
 		</SM_TUSHK>
+		<SM_LURKER>
+			<string>was torn to pieces by lurker</string>
+			<string>couldn't escape a lurker</string>
+		</SM_LURKER>
+		<SM_PSYSUCKER>
+			<string>got a kiss from a psysucker</string>
+			<string>was ambushed by a psy-bloodsucker</string>
+		</SM_PSYSUCKER>		
 		<SM_ZOMBI>
 			<string>had their brains eaten by a zombie</string>
 		</SM_ZOMBI>
@@ -162,169 +170,217 @@
 		<ARMY>
 			<string>was shot down by the military</string>
 		</ARMY>
+		<RENEGADE>
+			<string>was gunned down by some thug</string>
+			<string>got killed by a renegade</string>
+		</RENEGADE>
+		<GREH>
+			<string>was shot brutally by some shady-looking guy</string>
+			<string>was unlucky to catch a bullet from a Sin fanatic</string>
+		</GREH>
+		<ISG>
+			<string>was shot by some kind of a spec-ops</string>
+			<string>got an unhealthy amount of bullets from some tacticool dudes</string>
+			<string>had died in a firefight with an unknown military squad</string>
+		</ISG>
 	</eng>
 	
 	<rus>
 		<O_ACTOR>
-			<string>Покончил с собой</string>
-			<string>Сам себя порешил</string>
-			<string>Свёл счёты с жизнью</string>
+			<string>покончил с собой</string>
+			<string>сам себя порешил</string>
+			<string>свёл счёты с жизнью</string>
 		</O_ACTOR>
 		<S_ACTOR clone="O_ACTOR"/>
 		<AI_STL_S>
-			<string>Убит сталкером</string>
-			<string>Застрелен сталкером</string>
+			<string>убит сталкером</string>
+			<string>застрелен сталкером</string>
 		</AI_STL_S>
 		<AI_STL clone="AI_STL_S"/>
 		<SM_BLOOD>
-			<string>Попался кровососу</string>
+			<string>попался кровососу</string>
 		</SM_BLOOD>
 		<SM_BOARW>
-			<string>Растерзан кабаном</string>
-			<string>Растоптан кабаном</string>
-			<string>Кабаны убили</string>
-			<string>Кабаны разорвали</string>
+			<string>растерзан кабаном</string>
+			<string>растоптан кабаном</string>
+			<string>кабаны убили</string>
+			<string>кабаны разорвали</string>
 		</SM_BOARW>
 		<SM_BURER>
-			<string>С бюрером повстречался</string>
-			<string>Бюрер убил</string>
+			<string>с бюрером повстречался</string>
+			<string>бюрер убил</string>
 		</SM_BURER>
 		<SM_CAT_S>
-			<string>Дикий кот атаковал</string>
-			<string>Дикие кошки закусали</string>
+			<string>дикий кот атаковал</string>
+			<string>дикие кошки закусали</string>
 		</SM_CAT_S>
 		<SM_CHIMS>
-			<string>Химера набросилась</string>
-			<string>С химерой повстречался</string>
+			<string>химера набросилась</string>
+			<string>с химерой повстречался</string>
 		</SM_CHIMS>
 		<SM_CONTR>
-			<string>Стал жертвой контролёра</string>
+			<string>стал жертвой контролёра</string>
+			<string>походу контролёр парня самоубиться заставил</string>
 		</SM_CONTR>
 		<SM_DOG_S>
-			<string>Слепой пёс загрыз</string>
-			<string>Псы заели</string>
+			<string>слепой пёс загрыз</string>
+			<string>псы заели</string>
 		</SM_DOG_S>
 		<SM_FLESH>
-			<string>Нападение плотей</string>
+			<string>нападение плотей</string>
+			<string>затоптала стая плотей</string>
 		</SM_FLESH>
 		<SM_IZLOM>
-			<string>Излом напал</string>
+			<string>излом напал</string>
+			<string>излом схватил и просто надвое порвал</string>
 		</SM_IZLOM>
 		<SM_GIANT>
-			<string>Размазан псевдогигантом</string>
-			<string>Растоптан псевдогигантом</string>
+			<string>размазан псевдогигантом</string>
+			<string>растоптан псевдогигантом</string>
 		</SM_GIANT>
 		<AI_PHANT>
-			<string>Попал под пси-излучение</string>
+			<string>попал под пси-излучение</string>
 		</AI_PHANT>
 		<SM_POLTR>
-			<string>Убит какой-то невидимой сущностью. Полтергейст?.</string>
-			<string>Убит полтергейстом</string>
+			<string>убит какой-то невидимой сущностью. Полтергейст?</string>
+			<string>убит полтергейстом</string>
 		</SM_POLTR>
 		<SM_P_DOG>
-			<string>Стал добычей чернобыльского пса</string>
-			<string>Загрызен псом-чернобыльцем</string>
+			<string>стал добычей чернобыльского пса</string>
+			<string>загрызен псом-чернобыльцем</string>
 		</SM_P_DOG>
 		<SM_DOG_P>
-			<string>Пси-собаки загрызли</string>
-			<string>Фантомы,- не смог вожака вычислить</string>
+			<string>пси-собаки загрызли</string>
+			<string>фантомы - не смог вожака вычислить в стае пси-собак</string>
 		</SM_DOG_P>
 		<SM_DOG_F clone="SM_DOG_P"/>
 		<AI_RAT>
-			<string>Съеден крысами заживо</string>
+			<string>съеден крысами заживо</string>
+			<string>на такую стаю крыс нарвался, это пиздец</string>
 		</AI_RAT>
 		<SM_SNORK>
-			<string>На снорка нарвался</string>
-			<string>Не успел на прыжок снорка среагировать</string>
+			<string>на снорка нарвался</string>
+			<string>не успел на прыжок снорка среагировать</string>
 		</SM_SNORK>
 		<SM_TUSHK>
-			<string>Тушканы загрызли</string>
-			<string>С тушканами не справился</string>
+			<string>тушканы загрызли, и смех и грех))</string>
+			<string>с тушканами не справился ахахахах</string>
 		</SM_TUSHK>
+		<SM_LURKER>
+			<string>его кикимора на части порвала</string>
+			<string>кикимора напрыгнула и всё, был пацан и нет пацана</string>
+		</SM_LURKER>
+		<SM_PSYSUCKER>
+			<string>поцеловался с пси-кровососом</string>
+			<string>окружили фантомы псисосычей, походу не успел сориентироваться</string>
+		</SM_PSYSUCKER>
 		<SM_ZOMBI>
-			<string>Пошёл на корм зомби</string>
+			<string>пошёл на корм зомби</string>
+			<string>зомбаки загрызли</string>
 		</SM_ZOMBI>
 		<C_HLCP_S>
-			<string>Уничтожен огнём вертолёта</string>
-			<string>Попал под авианалёт</string>
+			<string>вертушка сбрила</string>
+			<string>попал под авианалёт</string>
 		</C_HLCP_S>
 		<SCRPTCAR>
-			<string>Сбит машиной</string>
-			<string>Попал под машину</string>
+			<string>сбит машиной</string>
+			<string>попал под машину</string>
 		</SCRPTCAR>
 		<ZS_MBALD>
-			<string>Угодил прямиком в аномалию</string>
+			<string>угодил прямиком в аномалию</string>
 		</ZS_MBALD>
 		<ZS_GALAN>
-			<string>Попал в гравитационную ловушку</string>
+			<string>попал в гравитационную ловушку</string>
 		</ZS_GALAN>
 		<ZS_MINCE clone="ZS_GALAN"/>
 		<ZS_RADIO>
-			<string>Зашёл в аномальное поле</string>
+			<string>влетел в аномальное поле</string>
 		</ZS_RADIO>
 		<ZS_TORRD>
-			<string>Сгорел в аномалии</string>
+			<string>сгорел в аномалии</string>
 		</ZS_TORRD>
 		<ZS_BFUZZ>
-			<string>Запутался в «жгучем пухе»</string>
-			<string>Сгорел заживо в «жгучем пухе»</string>
-			<string>Запёкся в «жгучем пухе»</string>
+			<string>запутался в «жгучем пухе»</string>
+			<string>сгорел заживо в «жгучем пухе»</string>
+			<string>запёкся в «жгучем пухе»</string>
 		</ZS_BFUZZ>
 		<Z_MBALD>
-			<string>Подорвался на мине</string>
-			<string>Погиб на минном поле</string>
+			<string>подорвался на мине</string>
+			<string>погиб на минном поле</string>
 		</Z_MBALD>
 		<Z_RADIO clone="ZS_RADIO"/>
 		<Z_CFIRE>
-			<string>Сгорел в огне</string>
-			<string>В огне погиб</string>
+			<string>сгорел в огне</string>
+			<string>в огне погиб</string>
 		</Z_CFIRE>
 		<Z_TORRID>
-			<string>Сожжён аномалией</string>
-			<string>Аномалией зажарило</string>
+			<string>сожжён аномалией</string>
+			<string>аномалией зажарило</string>
 		</Z_TORRID>
 		<S_EXPLO>
-			<string>Разорвало на куски взрывом</string>
-			<string>Взрывная волна</string>
+			<string>разорвало на куски взрывом</string>
+			<string>взрывная волна</string>
 		</S_EXPLO>
 		<II_EXPLO clone="S_EXPLO"/>
 		
 		<STALKER>
-			<string>Убит вольным сталкером</string>
-			<string>Убит одиночкой</string>
+			<string>убит вольным сталкером</string>
+			<string>убит одиночкой</string>
 		</STALKER>
 		<BANDIT>
-			<string>Бандиты прикончили</string>
+			<string>бандиты прикончили</string>
+			<string>гопники завалили</string>
+			<string>гоп-стопнули основательно</string>
 		</BANDIT>
 		<DOLG>
-			<string>«Долг» зачистку проводил в том районе</string>
+			<string>«Долг» знатно угостил свинцом</string>
+			<string>Чем-то Долговцам не понравился, шлёпнули без разговоров</string>
 		</DOLG>
 		<FREEDOM>
-			<string>«Свободовцы» застрелили</string>
+			<string>Свободовцы застрелили</string>
 			<string>«Свободой» застрелен</string>
 		</FREEDOM>
 		<ECOLOG>
-			<string>Учёные постарались</string>
+			<string>учёные постарались</string>
+			<string>экологи завалили, прикиньте?</string>
 		</ECOLOG>
 		<KILLER>
-			<string>Убит наёмником</string>
+			<string>убит наёмником</string>
+			<string>мерк контракт отработал</string>
 		</KILLER>
 		<MONOLITH>
-			<string>Фанатики из «Монолита»</string>
+			<string>фанатики из «Монолита»</string>
 			<string>«Монолитовцы» застрелили</string>
 		</MONOLITH>
 		<ZOMBIED>
-			<string>Зомбированные убили</string>
+			<string>зомбированные убили</string>
+			<string>зомбари полакомились</string>
 		</ZOMBIED>
 		<ARENA_ENEMY>
-			<string>Погиб на Арене</string>
-			<string>Умер на Арене</string>
+			<string>погиб на Арене</string>
+			<string>умер на Арене</string>
 		</ARENA_ENEMY>
 		<CSKY>
-			<string>Убит сталкером из «Чистого Неба»</string>
+			<string>убит сталкером из «Чистого Неба»</string>
+			<string>погиб в перестрелке с чистонебовцем</string>
 		</CSKY>
 		<ARMY>
 			<string>Убит военными</string>
+			<string>ВСУшники грохнули</string>
+			<string>нарвался на патруль военных</string>
 		</ARMY>
+		<RENEGADE>
+			<string>ренегатовец его шлёпнул</string>
+			<string>не вывез против отряда ренегатов</string>
+		</RENEGADE>
+		<GREH>
+			<string>какой-то стрёмный тип в капюшоне изрешетил</string>
+			<string>фанатики Греховские постарались</string>
+		</GREH>
+		<ISG>
+			<string>убит каким-то спецом</string>
+			<string>расстреляли спецназовцы, форму не могу опознать</string>
+			<string>пристрелил то ли мерк, то ли спецназовец какой-то</string>
+		</ISG>
 	</rus>
 </root>

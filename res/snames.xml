@@ -985,6 +985,80 @@
 			<string>Zubkov</string>
 			<string>Zvonnitsky</string>
 		</actor_army>
+		<actor_isg>
+			<string>Sargsyan</string>
+			<string>Khachatryan</string>
+			<string>Grigoryan</string>
+			<string>Wagner</string>
+			<string>Müller</string>
+			<string>Eder</string>
+			<string>Weber</string>
+			<string>Schmidt</string>
+			<string>Auer</string>
+			<string>Binder</string>
+			<string>Wolf</string>
+			<string>Ismayilov</string>
+			<string>Jafarov</string>
+			<string>Novik</string>
+			<string>Peeters</string>
+			<string>Janssens</string>
+			<string>Maes</string>
+			<string>Willems</string>
+			<string>Nguyen</string>
+			<string>Angelov</string>
+			<string>Hristov</string>
+			<string>Novak</string>
+			<string>Nielsen</string>
+			<string>Andersen</string>
+			<string>Olsen</string>
+			<string>Johansen</string>
+			<string>Saarinen</string>
+			<string>Kinnunen</string>
+			<string>Johansson</string>
+			<string>Nyman</string>
+			<string>Lindholm</string>
+			<string>Karlsson</string>
+			<string>Andersson</string>
+			<string>Martin</string>
+			<string>Petit</string>
+			<string>Leroy</string>
+			<string>Garcia</string>
+			<string>Roux</string>
+			<string>Vincent</string>
+			<string>Fournier</string>
+			<string>Beridze</string>
+			<string>Giorgadze</string>
+			<string>Fischer</string>
+			<string>Weber</string>
+			<string>Wagner</string>
+			<string>Becker</string>
+			<string>Hoffmann</string>
+			<string>Murphy</string>
+			<string>Walsh</string>
+			<string>O'Connor</string>
+			<string>Kennedy</string>
+			<string>Murray</string>
+			<string>Russo</string>
+			<string>Lombardi</string>
+			<string>Moretti</string>
+			<string>Caruso</string>
+			<string>Vitale</string>
+			<string>Amato</string>
+			<string>Morelli</string>
+			<string>Bernardi</string>
+			<string>Neri</string>
+			<string>Battaglia</string>
+			<string>De Vries</string>
+			<string>De Jong</string>
+			<string>Van Leeuwen</string>
+			<string>Nowak</string>
+			<string>Kowalski</string>
+			<string>Kowalczyk</string>
+			<string>Lewandowski</string>
+			<string>Mazur</string>
+			<string>Piotrowski</string>
+			<string>Grabowski</string>
+		</actor_isg>
 	</eng>
 	
 	<rus>
@@ -1972,5 +2046,79 @@
 			<string>Гацула</string>
 			<string>Резкий</string>
 		</actor_army>
+		<actor_isg>
+			<string>Саргсян</string>
+			<string>Хачатрян</string>
+			<string>Григорян</string>
+			<string>Вагнер</string>
+			<string>Мюллер</string>
+			<string>Эдер</string>
+			<string>Вебер</string>
+			<string>Шмидт</string>
+			<string>Ауэр</string>
+			<string>Биндер</string>
+			<string>Вульф</string>
+			<string>Исмаилов</string>
+			<string>Джафаров</string>
+			<string>Новик</string>
+			<string>Питерс</string>
+			<string>Янссенс</string>
+			<string>Мэйс</string>
+			<string>Виллемс</string>
+			<string>Нгуен</string>
+			<string>Ангелов</string>
+			<string>Христов</string>
+			<string>Новак</string>
+			<string>Нильсен</string>
+			<string>Андерсен</string>
+			<string>Олсен</string>
+			<string>Йохансен</string>
+			<string>Сааринен</string>
+			<string>Киннунен</string>
+			<string>Йоханссон</string>
+			<string>Найман</string>
+			<string>Линдхольм</string>
+			<string>Карлссон</string>
+			<string>Андерссон</string>
+			<string>Мартин</string>
+			<string>Пети</string>
+			<string>Лерой</string>
+			<string>Гарсия</string>
+			<string>Ру</string>
+			<string>Винсент</string>
+			<string>Фурнье</string>
+			<string>Беридзе</string>
+			<string>Гиоргадзе</string>
+			<string>Фишер</string>
+			<string>Вебер</string>
+			<string>Вагнер</string>
+			<string>Беккер</string>
+			<string>Хоффманн</string>
+			<string>Мерфи</string>
+			<string>Уолш</string>
+			<string>О'Коннор</string>
+			<string>Кеннеди</string>
+			<string>Мюррей</string>
+			<string>Руссо</string>
+			<string>Ломбарди</string>
+			<string>Моретти</string>
+			<string>Карузо</string>
+			<string>Витале</string>
+			<string>Амато</string>
+			<string>Морелли</string>
+			<string>Бернарди</string>
+			<string>Нери</string>
+			<string>Батталья</string>
+			<string>Де Врис</string>
+			<string>Де Йонг</string>
+			<string>Ван Левен</string>
+			<string>Новак</string>
+			<string>Ковальски</string>
+			<string>Ковальчик</string>
+			<string>Левандовски</string>
+			<string>Мазур</string>
+			<string>Пиотровски</string>
+			<string>Грабовски</string>
+		</actor_isg>
 	</rus>
 </root>

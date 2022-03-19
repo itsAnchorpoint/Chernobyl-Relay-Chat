@@ -7,13 +7,22 @@
 		<text>Ошибка</text>
 	</string>
 	<string id="crc_money">
-		<text>отправил денег</text>
+		<text>отправил деньги</text>
 	</string>
 	<string id="crc_money_recv">
 		<text>отправил вам деньги</text>
-	</string>		
+	</string>
+	<string id="crc_ingame">
+		<text>В Зоне</text>
+	</string>
+	<string id="crc_notingame">
+		<text>Вне Зоны</text>
+	</string>	
 	<string id="crc_ccon">
 		<text>«О-Сознание»</text>
+	</string>
+	<string id="crc_admin">
+		<text>Администратор</text>
 	</string>
 	<string id="crc_unknown">
 		<text>Неизвестный</text>
@@ -26,33 +35,45 @@
 	</string>
 	
 	<string id="crc_actor_bandit">
-		<text>«Бандиты»</text>
+		<text>Бандиты</text>
 	</string>
 	<string id="crc_actor_csky">
-		<text>«Чистое Небо»</text>
+		<text>Чистое Небо</text>
 	</string>
 	<string id="crc_actor_dolg">
-		<text>«Долг»</text>
+		<text>Долг</text>
 	</string>
 	<string id="crc_actor_ecolog">
-		<text>«Учёные»</text>
+		<text>Учёные</text>
 	</string>
 	<string id="crc_actor_freedom">
-		<text>«Свобода»</text>
+		<text>Свобода</text>
 	</string>
 	<string id="crc_actor_stalker">
-		<text>«Одиночки»</text>
+		<text>Одиночки</text>
 	</string>
 	<string id="crc_actor_killer">
-		<text>«Наёмники»</text>
+		<text>Наёмники</text>
 	</string>
 	<string id="crc_actor_army">
-		<text>«Военные»</text>
+		<text>Военные</text>
 	</string>
 	<string id="crc_actor_monolith">
-		<text>«Монолит»</text>
+		<text>Монолит</text>
 	</string>
 	<string id="crc_actor_zombied">
 		<text>Зомбированные</text>
+	</string>
+	<string id="crc_actor_renegade">
+		<text>Ренегаты</text>
+	</string>
+	<string id="crc_actor_greh">
+		<text>Грех</text>
+	</string>
+	<string id="crc_actor_isg">
+		<text>ИИГ</text>
+	</string>
+	<string id="crc_actor_anonymous">
+		<text>Анонимно</text>
 	</string>
 </string_table>

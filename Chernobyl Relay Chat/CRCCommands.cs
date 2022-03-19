@@ -9,12 +9,12 @@ namespace Chernobyl_Relay_Chat
 
         private static readonly List<CRCCommand> commands = new List<CRCCommand>()
         {
-            new CRCCommand("commands", "/commands", "Displays all available commands.", 0, false, ShowCommands),
-            new CRCCommand("help", "/help [command] Use /commands to see all available commands.", "Displays information about the given command.", 1, false, ShowHelp),
-            new CRCCommand("msg", "/msg [nick] [message]", "Sends a private message to another user.", 2, true, SendQuery),
-            new CRCCommand("nick", "/nick [nick]", "Changes your nickname.", 1, true, ChangeNick),
-            new CRCCommand("reply", "/reply [message]", "Sends a private message to the last user who sent you one.", 1, true, SendReply),
-            new CRCCommand("pay", "/pay [nick] [amount]", "Send specified amount of in-game money to the player. Must be in-game.", 2, true, SendMoney),
+            new CRCCommand("commands", "/commands", CRCStrings.Localize("command_commands"), 0, false, ShowCommands),
+            new CRCCommand("help", CRCStrings.Localize("command_help_usage"), CRCStrings.Localize("command_help_help"), 1, false, ShowHelp),
+            new CRCCommand("msg", CRCStrings.Localize("command_msg_usage"), CRCStrings.Localize("command_msg_help"), 2, true, SendQuery),
+            new CRCCommand("nick", CRCStrings.Localize("command_nick_usage"), CRCStrings.Localize("command_nick_help"), 1, true, ChangeNick),
+            new CRCCommand("reply", CRCStrings.Localize("command_reply_usage"), CRCStrings.Localize("command_reply_help"), 1, true, SendReply),
+            new CRCCommand("pay", CRCStrings.Localize("command_pay_usage"), CRCStrings.Localize("command_pay_help"), 2, true, SendMoney),
         };
 
         public static void ProcessCommand(string message, ICRCSendable output)
@@ -30,12 +30,12 @@ namespace Chernobyl_Relay_Chat
                     return;
                 }
             }
-            output.AddError("Command \"" + commandString + "\" not recognized. Use /commands to see all available commands.");
+            output.AddError(CRCStrings.Localize("command_not_recognized_1") + commandString + CRCStrings.Localize("command_not_recognized_2"));
         }
 
         private static void ShowCommands(List<string> args, ICRCSendable output)
         {
-            output.AddInformation("Available commands: " + string.Join(", ", commands));
+            output.AddInformation(CRCStrings.Localize("command_available_commands") + string.Join(", ", commands));
         }
 
         private static void ShowHelp(List<string> args, ICRCSendable output)
@@ -48,7 +48,7 @@ namespace Chernobyl_Relay_Chat
                     return;
                 }
             }
-            output.AddError("Command \"" + args[0] + "\" not recognized. Use /commands to see all available commands.");
+            output.AddError(CRCStrings.Localize("command_not_recognized_1") + args[0] + CRCStrings.Localize("command_not_recognized_2"));
         }
 
         private static void SendQuery(List<string> args, ICRCSendable output)
@@ -60,15 +60,19 @@ namespace Chernobyl_Relay_Chat
         {
             if (CRCGame.disable || CRCGame.processID == -1)
             {
-                output.AddError("You must be in-game to be able to send money!");
+                output.AddError(CRCStrings.Localize("command_pay_notingame"));
             }
-            else if (Regex.IsMatch(args[1], @"^\d+$"))
+            else if (CRCClient.InGameStatus.ContainsKey(args[0]) && CRCClient.InGameStatus[args[0]] == "False")
             {
-                CRCClient.SendMoney(args[0], args[1]);
+                output.AddError(CRCStrings.Localize("command_pay_usernotingame"));              
+            }
+            else if (!Regex.IsMatch(args[1], @"^\d+$"))
+            {
+                output.AddError("\"" + args[1] + CRCStrings.Localize("command_pay_notanumber"));
             }
             else
             {
-                output.AddError("\"" + args[1] + "\" is not a number. Please, input an amount of money you want to send.");
+                CRCClient.SendMoney(args[0], args[1]);
             }
         }
 
@@ -85,7 +89,7 @@ namespace Chernobyl_Relay_Chat
         private static void SendReply(List<string> args, ICRCSendable output)
         {
             if (!CRCClient.SendReply(args[0]))
-                output.AddError("You can't reply if you haven't been sent any messages yet.");
+                output.AddError(CRCStrings.Localize("command_reply_error"));
         }
     }
 }

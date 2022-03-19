@@ -176,6 +176,20 @@
 			<string>Senior Sergeant</string>
 			<string>Sergeant</string>
 		</actor_army>
+		<actor_isg>
+			<string>Captain</string>
+			<string>Junior Lieutenant</string>
+			<string>Junior Sergeant</string>
+			<string>Lieutenant</string>
+			<string>Master Sergeant</string>
+			<string>Private</string>
+			<string>Senior Lieutenant</string>
+			<string>Senior Private</string>
+			<string>Senior Sergeant</string>
+			<string>Sergeant</string>
+			<string>Researcher</string>
+			<string>Junior researcher</string>
+		</actor_isg>
 	</eng>
 	
 	<rus>
@@ -354,5 +368,18 @@
 			<string>Ст. лейтенант</string>
 			<string>Капитан</string>
 		</actor_army>
+		<actor_isg>
+			<string>Рядовой</string>
+			<string>Ефрейтор</string>
+			<string>Мл. сержант</string>
+			<string>Сержант</string>
+			<string>Ст. Сержант</string>
+			<string>Старшина</string>
+			<string>Мл. лейтенант</string>
+			<string>Лейтенант</string>
+			<string>Ст. лейтенант</string>
+			<string>Капитан</string>
+			<string>Младшний исследователь</string>
+		</actor_isg>
 	</rus>
 </root>

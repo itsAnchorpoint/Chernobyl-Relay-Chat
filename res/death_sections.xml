@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
 	<eng>
-	
+		<karlik>
+			<string>got attacked by karliks</string>
+			<string>was killed by a midget</string>
+		</karlik>
 	</eng>
 	
 	<rus>
-	
+		<karlik>
+			<string>Карлики напали целой толпой</string>
+			<string>Помер от рук карлика</string>
+		</karlik>
 	</rus>
 </root>

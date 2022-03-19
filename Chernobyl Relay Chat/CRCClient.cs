@@ -21,7 +21,10 @@ namespace Chernobyl_Relay_Chat
 
         private static IrcClient client = new IrcClient();
         private static Dictionary<string, string> crcNicks = new Dictionary<string, string>();
+        public static Dictionary<string, string> InGameStatus = new Dictionary<string , string>();
         private static DateTime lastDeath = new DateTime();
+        private static DateTime lastPay = new DateTime();
+        private static bool lastStatus = false;
         private static string lastName, lastChannel, lastQuery, lastFaction;
         private static bool retry = false;
 
@@ -107,6 +110,18 @@ namespace Chernobyl_Relay_Chat
             }
         }
 
+        public static void UpdateStatus()
+        {
+            if (CRCGame.IsInGame != lastStatus)
+            {
+                foreach (string nick in InGameStatus.Keys)
+                {
+                    client.SendMessage(SendType.CtcpReply, nick, "STATUS " + CRCGame.IsInGame.ToString());
+                }
+                lastStatus = CRCGame.IsInGame;
+            }
+        }
+
         public static void ChangeNick(string nick)
         {
             CRCOptions.Name = nick;
@@ -140,6 +155,12 @@ namespace Chernobyl_Relay_Chat
         {
             int amount;
             bool acceptable = int.TryParse(message, out amount);
+            if ((DateTime.Now - lastPay).TotalSeconds < 120)
+            {
+                CRCGame.AddError(CRCStrings.Localize("crc_money_cooldown"));
+                CRCDisplay.AddError(CRCStrings.Localize("crc_money_cooldown"));
+                return;
+            }    
             if (acceptable && amount <=1000000)
             {
                 if (amount > CRCGame.ActorMoney)
@@ -153,6 +174,7 @@ namespace Chernobyl_Relay_Chat
                     client.SendMessage(SendType.Message, nick, CRCOptions.GetFaction() + " pay " + META_DELIM + amount.ToString());
                     CRCDisplay.OnMoneySent(CRCOptions.Name, nick, amount.ToString());
                     CRCGame.OnMoneySent(CRCOptions.Name, nick, CRCOptions.GetFaction(), amount.ToString());
+                    lastPay = DateTime.Now;
                 }
             }
             else
@@ -215,7 +237,7 @@ namespace Chernobyl_Relay_Chat
             switch(e.CtcpCommand.ToUpper())
             {
                 case "CLIENTINFO":
-                    client.SendMessage(SendType.CtcpReply, from, "CLIENTINFO Supported CTCP commands: CLIENTINFO FACTION PING VERSION");
+                    client.SendMessage(SendType.CtcpReply, from, "CLIENTINFO Supported CTCP commands: CLIENTINFO FACTION PING VERSION STATUS");
                     break;
                 case "FACTION":
                     if(!crcNicks.ContainsKey(from))
@@ -231,6 +253,14 @@ namespace Chernobyl_Relay_Chat
                 case "VERSION":
                     client.SendMessage(SendType.CtcpReply, from, "VERSION Chernobyl Relay Chat Rebirth " + Application.ProductVersion);
                     break;
+                case "STATUS":
+                    if (!InGameStatus.ContainsKey(from))
+                    {
+                        InGameStatus[from] = "False";
+                        client.SendMessage(SendType.CtcpRequest, from, "STATUS");
+                    }
+                    client.SendMessage(SendType.CtcpReply, from, "STATUS " + CRCGame.IsInGame.ToString());
+                    break;
             }
         }
 
@@ -245,9 +275,19 @@ namespace Chernobyl_Relay_Chat
                         crcNicks[from] = "actor_stalker";
                         client.SendMessage(SendType.CtcpRequest, from, "FACTION");
                     }
+                    if(e.CtcpParameter.Contains("STATUS"))
+                    {
+                        InGameStatus[from] = "False";
+                        client.SendMessage(SendType.CtcpRequest, from, "STATUS");
+                    }
                     break;
                 case "FACTION":
                     crcNicks[from] = CRCStrings.ValidateFaction(e.CtcpParameter);
+                    break;
+                case "STATUS":
+                    InGameStatus[from] = e.CtcpParameter;
+                    CRCGame.UpdateUsers();
+                    CRCDisplay.UpdateUsers();
                     break;
             }
         }
@@ -256,17 +296,23 @@ namespace Chernobyl_Relay_Chat
         {
             Users.Clear();
             crcNicks.Clear();
+            InGameStatus.Clear();
             lastName = CRCOptions.Name;
             lastChannel = CRCOptions.ChannelProxy();
             lastFaction = CRCOptions.GetFaction();
             client.Login(CRCOptions.Name, CRCStrings.Localize("crc_name") + " " + Application.ProductVersion);
             client.RfcJoin(CRCOptions.ChannelProxy());
+            InGameStatus[CRCOptions.Name] = CRCGame.IsInGame.ToString();
         }
 
         private static void OnChannelActiveSynced(object sender, IrcEventArgs e)
         {
             foreach (ChannelUser user in client.GetChannel(e.Data.Channel).Users.Values)
+            {
                 Users.Add(user.Nick);
+                InGameStatus[user.Nick] = "False";
+                client.SendMessage(SendType.CtcpRequest, user.Nick, "STATUS");
+            }
             Users.Sort();
             CRCDisplay.UpdateUsers();
             CRCGame.UpdateUsers();
@@ -309,7 +355,23 @@ namespace Chernobyl_Relay_Chat
                 if (fakeNick == null)
                 {
                     nick = e.Data.Nick;
-                    faction = crcNicks.ContainsKey(nick) ? crcNicks[nick] : "actor_stalker";
+                    //faction = crcNicks.ContainsKey(nick) ? crcNicks[nick] : "actor_stalker";
+                    if (crcNicks.ContainsKey(nick) && CRCOptions.GetFaction() == "actor_isg")
+                    {
+                        faction = crcNicks[nick];
+                    }
+                    else if (crcNicks.ContainsKey(nick) && crcNicks[nick] == "actor_isg" && CRCOptions.GetFaction() != "actor_isg")
+                    {
+                        faction = "actor_anonymous";
+                    }
+                    else if (crcNicks.ContainsKey(nick) && crcNicks[nick] != "actor_isg")
+                    {
+                        faction = crcNicks[nick];
+                    }
+                    else
+                    {
+                        faction = "actor_stalker";
+                    }
                 }
                 else if (CRCOptions.ReceiveDeath && (DateTime.Now - lastDeath).TotalSeconds > CRCOptions.DeathInterval)
                 {
@@ -342,7 +404,7 @@ namespace Chernobyl_Relay_Chat
                 string fakeNick, faction;
                 string message = GetMetadata(e.Data.Message, out fakeNick, out faction);
                 string nick = e.Data.Nick;
-                faction = crcNicks.ContainsKey(nick) ? crcNicks[nick] : "actor_stalker";
+                //faction = crcNicks.ContainsKey(nick) ? crcNicks[nick] : "actor_stalker";
                 CRCDisplay.OnMoneyRecv(nick, message);
                 CRCGame.OnMoneyRecv(nick, message);
             }
@@ -353,7 +415,23 @@ namespace Chernobyl_Relay_Chat
                 string fakeNick, faction;
                 string message = GetMetadata(e.Data.Message, out fakeNick, out faction);
                 string nick = e.Data.Nick;
-                faction = crcNicks.ContainsKey(nick) ? crcNicks[nick] : "actor_stalker";
+                //faction = crcNicks.ContainsKey(nick) ? crcNicks[nick] : "actor_stalker";
+                if (crcNicks.ContainsKey(nick) && CRCOptions.GetFaction() == "actor_isg")
+                {
+                    faction = crcNicks[nick];
+                }
+                else if (crcNicks.ContainsKey(nick) && crcNicks[nick] == "actor_isg" && CRCOptions.GetFaction() != "actor_isg")
+                {
+                    faction = "actor_anonymous";
+                }
+                else if (crcNicks.ContainsKey(nick) && crcNicks[nick] != "actor_isg")
+                {
+                    faction = crcNicks[nick];
+                }
+                else
+                {
+                    faction = "actor_stalker";
+                }
                 CRCDisplay.OnQueryMessage(nick, CRCOptions.Name, message);
                 CRCGame.OnQueryMessage(nick, CRCOptions.Name, faction, message);
             }
@@ -364,6 +442,7 @@ namespace Chernobyl_Relay_Chat
             if (e.Who != client.Nickname)
             {
                 Users.Add(e.Who);
+                InGameStatus[e.Who] = "False";
                 Users.Sort();
                 CRCDisplay.UpdateUsers();
                 CRCGame.UpdateUsers();
@@ -386,6 +465,7 @@ namespace Chernobyl_Relay_Chat
             if (e.Who != CRCOptions.Name)
             {
                 crcNicks.Remove(e.Who);
+                InGameStatus.Remove(e.Who);
                 Users.Remove(e.Who);
                 Users.Sort();
                 CRCDisplay.UpdateUsers();
@@ -405,6 +485,7 @@ namespace Chernobyl_Relay_Chat
         private static void OnQuit(object sender, QuitEventArgs e)
         {
             crcNicks.Remove(e.Who);
+            InGameStatus.Remove(e.Who);
             Users.Remove(e.Who);
             Users.Sort();
             CRCDisplay.UpdateUsers();
@@ -428,6 +509,7 @@ namespace Chernobyl_Relay_Chat
             else
             {
                 crcNicks.Remove(e.Who);
+                InGameStatus.Remove(e.Who);
                 Users.Remove(victim);
                 Users.Sort();
                 string message = victim + CRCStrings.Localize("client_kicked") + e.KickReason;
@@ -444,6 +526,9 @@ namespace Chernobyl_Relay_Chat
             string newNick = e.NewNickname;
             Users.Remove(oldNick);
             Users.Add(newNick);
+            InGameStatus.Remove(oldNick);
+            InGameStatus[newNick] = "False";
+            client.SendMessage(SendType.CtcpRequest, newNick, "STATUS");
             Users.Sort();
             CRCDisplay.UpdateUsers();
             CRCGame.UpdateUsers();
@@ -453,6 +538,11 @@ namespace Chernobyl_Relay_Chat
                 {
                     crcNicks[newNick] = crcNicks[oldNick];
                     crcNicks.Remove(oldNick);
+                }
+                if (InGameStatus.ContainsKey(oldNick))
+                {
+                    InGameStatus[newNick] = InGameStatus[oldNick];
+                    InGameStatus.Remove(oldNick);
                 }
                 string message = oldNick + CRCStrings.Localize("client_nick_change") + newNick;
                 CRCDisplay.AddInformation(message);
@@ -487,6 +577,11 @@ namespace Chernobyl_Relay_Chat
                 // Don't care
                 case ReplyCode.ErrorNoMotd:
                 case ReplyCode.ErrorNotRegistered:
+                    break;
+                case ReplyCode.ErrorNoSuchNickname:
+                    message = CRCStrings.Localize("error_no_such_nickname");
+                    CRCDisplay.AddError(message);
+                    CRCGame.AddError(message);
                     break;
                 default:
                     CRCDisplay.AddError(e.Data.Message);

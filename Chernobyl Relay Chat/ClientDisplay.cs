@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace Chernobyl_Relay_Chat
 {
@@ -118,7 +119,7 @@ namespace Chernobyl_Relay_Chat
             {
                 richTextBoxMessages.SelectionColor = Color.Black;
                 richTextBoxMessages.SelectionFont = timeFont;
-                richTextBoxMessages.AppendText(DateTime.Now.ToString("hh:mm:ss "));
+                richTextBoxMessages.AppendText(DateTime.Now.ToString("[hh:mm:ss] "));
             }
         }
 
@@ -171,7 +172,41 @@ namespace Chernobyl_Relay_Chat
             });
         }
 
-        public void UpdateUsers(List<string> users)
+        private void textBoxUsers_TextChanged(object sender, EventArgs e)
+        {
+            foreach (string user in CRCClient.InGameStatus.Keys)
+            {
+                if (textBoxUsers.Text.Contains(user))
+                {
+                    if (CRCClient.InGameStatus.ContainsKey(user) && CRCClient.InGameStatus[user] == "True")
+                    {
+                        textBoxUsers.Select(textBoxUsers.Text.IndexOf(user), user.Length);
+                        textBoxUsers.SelectedText = "⦿ " + user;
+                    }
+                    else
+                    {
+                        textBoxUsers.Select(textBoxUsers.Text.IndexOf(user), user.Length);
+                        textBoxUsers.SelectedText = "⦾ " + user;
+                    }
+
+                }
+                else return;
+            }
+            MatchCollection ingame = Regex.Matches(textBoxUsers.Text, "⦿");
+            MatchCollection offgame = Regex.Matches(textBoxUsers.Text, "⦾");
+            foreach (Match match in ingame)
+            {
+                textBoxUsers.Select(match.Index, match.Length);
+                textBoxUsers.SelectionColor = Color.Green;
+            }
+            foreach (Match match in offgame)
+            {
+                textBoxUsers.Select(match.Index, match.Length);
+                textBoxUsers.SelectionColor = Color.Red;
+            }
+        }
+
+            public void UpdateUsers(List<string> users)
         {
             Invoke(() =>
                 textBoxUsers.Text = string.Join("\r\n", users
@@ -181,6 +216,18 @@ namespace Chernobyl_Relay_Chat
         private void Invoke(Action action)
         {
             base.Invoke(action);
+        }
+    }
+    public static class RichTextBoxExtensions
+    {
+        public static void AppendText(this RichTextBox box, string text, Color color)
+        {
+            box.SelectionStart = box.TextLength;
+            box.SelectionLength = 0;
+
+            box.SelectionColor = color;
+            box.AppendText(text);
+            box.SelectionColor = box.ForeColor;
         }
     }
 }

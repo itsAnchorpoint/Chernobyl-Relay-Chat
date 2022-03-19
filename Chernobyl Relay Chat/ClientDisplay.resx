@@ -122,6 +122,9 @@
     <value>Top, Bottom, Left, Right</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="richTextBoxMessages.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt</value>
+  </data>
   <data name="richTextBoxMessages.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 12</value>
   </data>
@@ -153,11 +156,14 @@
   <data name="textBoxInput.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left, Right</value>
   </data>
+  <data name="textBoxInput.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt</value>
+  </data>
   <data name="textBoxInput.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 441</value>
   </data>
   <data name="textBoxInput.Size" type="System.Drawing.Size, System.Drawing">
-    <value>822, 20</value>
+    <value>822, 22</value>
   </data>
   <data name="textBoxInput.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -243,14 +249,11 @@
   <data name="textBoxUsers.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Right</value>
   </data>
+  <data name="textBoxUsers.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt</value>
+  </data>
   <data name="textBoxUsers.Location" type="System.Drawing.Point, System.Drawing">
     <value>840, 12</value>
-  </data>
-  <data name="textBoxUsers.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="textBoxUsers.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
-    <value>Vertical</value>
   </data>
   <data name="textBoxUsers.Size" type="System.Drawing.Size, System.Drawing">
     <value>156, 421</value>
@@ -258,11 +261,14 @@
   <data name="textBoxUsers.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
+  <data name="textBoxUsers.Text" xml:space="preserve">
+    <value />
+  </data>
   <data name="&gt;&gt;textBoxUsers.Name" xml:space="preserve">
     <value>textBoxUsers</value>
   </data>
   <data name="&gt;&gt;textBoxUsers.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textBoxUsers.Parent" xml:space="preserve">
     <value>$this</value>
@@ -283,7 +289,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1008, 474</value>
+    <value>1008, 475</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
