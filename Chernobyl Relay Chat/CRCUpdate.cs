@@ -14,7 +14,7 @@ namespace Chernobyl_Relay_Chat
 
         public static bool CheckFirstUpdate()
         {
-            UpdateChecker updateChecker = new UpdateChecker("itsAnchorpoint", "Chernobyl-Relay-Chat-Rebirth", "0.3.0");
+            UpdateChecker updateChecker = new UpdateChecker("itsAnchorpoint", "Chernobyl-Relay-Chat-Rebirth", "0.4.0");
             UpdateType updateType;
             try
             {
@@ -36,7 +36,8 @@ namespace Chernobyl_Relay_Chat
             if (updateType != UpdateType.None)
             {
                 string releaseNotes = updateChecker.RenderReleaseNotes().Result;
-                SystemSounds.Asterisk.Play();
+                if (CRCOptions.SoundNotifications)
+                    SystemSounds.Asterisk.Play();
                 using (UpdateForm updateForm = new UpdateForm((updateType == UpdateType.Major || updateType == UpdateType.Minor), releaseNotes))
                 {
                     DialogResult dialogResult = updateForm.ShowDialog();
@@ -65,14 +66,15 @@ namespace Chernobyl_Relay_Chat
             {
                 ae.Handle(ex =>
                 {
-                    return (ex is HttpRequestException);
+                    return ex is HttpRequestException;
                 });
                 return false;
             }
             if (updateType != UpdateType.None)
             {
                 string releaseNotes = await updateChecker.RenderReleaseNotes();
-                SystemSounds.Asterisk.Play();
+                if (CRCOptions.SoundNotifications)
+                    SystemSounds.Asterisk.Play();
                 CRCGame.OnUpdate(CRCStrings.Localize("update_notice"));
                 using (UpdateForm updateForm = new UpdateForm((updateType == UpdateType.Major || updateType == UpdateType.Minor), releaseNotes))
                 {

@@ -10,13 +10,17 @@ namespace Chernobyl_Relay_Chat
     public partial class ClientDisplay : Form, ICRCSendable
     {
         private Font mainFont, boldFont, timeFont;
+        public static ClientDisplay staticVar = null;
 
         public ClientDisplay()
         {
             InitializeComponent();
+            staticVar = this;
             Text = CRCStrings.Localize("crc_name") + " " + Application.ProductVersion;
             buttonSend.Text = CRCStrings.Localize("display_send");
             buttonOptions.Text = CRCStrings.Localize("display_options");
+            CRCClient.lastChannel = CRCOptions.ChannelProxy();
+            comboBoxChannel.SelectedIndex = channelToIndex[CRCOptions.Channel];
         }
 
         private void ClientDisplay_Load(object sender, EventArgs e)
@@ -51,7 +55,7 @@ namespace Chernobyl_Relay_Chat
 
         private void buttonOptions_Click(object sender, EventArgs e)
         {
-            new OptionsForm().Show();
+            new OptionsForm().ShowDialog();
         }
 
         private void buttonSend_Click(object sender, EventArgs e)
@@ -69,6 +73,18 @@ namespace Chernobyl_Relay_Chat
                 }
                 textBoxInput.Clear();
             }
+        }
+
+        public void OnChannelUpdateFromGame(int index)
+        {
+            comboBoxChannel.SelectedIndex = index;
+        }
+
+        private void comboBoxChannel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CRCOptions.Channel = indexToChannel[comboBoxChannel.SelectedIndex];
+            CRCClient.OnChannelSwitch();
+            CRCGame.OnChannelSwitch();
         }
 
         private void timerGameCheck_Tick(object sender, EventArgs e)
@@ -99,6 +115,7 @@ namespace Chernobyl_Relay_Chat
             {
                 buttonSend.Enabled = true;
                 buttonOptions.Enabled = true;
+                comboBoxChannel.Enabled = true;
             });
         }
 
@@ -108,6 +125,7 @@ namespace Chernobyl_Relay_Chat
             {
                 buttonSend.Enabled = false;
                 buttonOptions.Enabled = false;
+                comboBoxChannel.Enabled = false;
             });
         }
 
@@ -174,11 +192,11 @@ namespace Chernobyl_Relay_Chat
 
         private void textBoxUsers_TextChanged(object sender, EventArgs e)
         {
-            foreach (string user in CRCClient.InGameStatus.Keys)
+            foreach (string user in CRCClient.userData.Keys)
             {
                 if (textBoxUsers.Text.Contains(user))
                 {
-                    if (CRCClient.InGameStatus.ContainsKey(user) && CRCClient.InGameStatus[user] == "True")
+                    if (CRCClient.userData.ContainsKey(user) && CRCClient.userData[user].IsInGame == "True")
                     {
                         textBoxUsers.Select(textBoxUsers.Text.IndexOf(user), user.Length);
                         textBoxUsers.SelectedText = "⦿ " + user;
@@ -206,28 +224,41 @@ namespace Chernobyl_Relay_Chat
             }
         }
 
-            public void UpdateUsers(List<string> users)
+        public void UpdateUsers(Dictionary<string, Userdata> users)
         {
             Invoke(() =>
-                textBoxUsers.Text = string.Join("\r\n", users
-                ));
+            {
+                var nicknames = new List<string>();
+                foreach (string user in users.Keys)
+                    nicknames.Add(user);
+                nicknames.Sort();
+                textBoxUsers.Text = string.Join("\r\n", nicknames);
+            });
         }
 
         private void Invoke(Action action)
         {
             base.Invoke(action);
         }
-    }
-    public static class RichTextBoxExtensions
-    {
-        public static void AppendText(this RichTextBox box, string text, Color color)
-        {
-            box.SelectionStart = box.TextLength;
-            box.SelectionLength = 0;
 
-            box.SelectionColor = color;
-            box.AppendText(text);
-            box.SelectionColor = box.ForeColor;
-        }
+        private readonly Dictionary<string, int> channelToIndex = new Dictionary<string, int>()
+        {
+            ["#crcr_english"] = 0,
+            ["#crcr_english_rp"] = 1,
+            ["#crcr_english_shitposting"] = 2,
+            ["#crcr_russian"] = 3,
+            ["#crcr_russian_rp"] = 4,
+            ["#crcr_tech_support"] = 5,
+        };
+
+        private readonly Dictionary<int, string> indexToChannel = new Dictionary<int, string>()
+        {
+            [0] = "#crcr_english",
+            [1] = "#crcr_english_rp",
+            [2] = "#crcr_english_shitposting",
+            [3] = "#crcr_russian",
+            [4] = "#crcr_russian_rp",
+            [5] = "#crcr_tech_support",
+        };
     }
 }

@@ -38,6 +38,7 @@
             this.buttonOptions = new System.Windows.Forms.Button();
             this.textBoxUsers = new System.Windows.Forms.RichTextBox();
             this.timerCheckUpdate = new System.Windows.Forms.Timer(this.components);
+            this.comboBoxChannel = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // richTextBoxMessages
@@ -93,11 +94,29 @@
             this.timerCheckUpdate.Interval = 600000;
             this.timerCheckUpdate.Tick += new System.EventHandler(this.timerCheckUpdate_Tick);
             // 
+            // comboBoxChannel
+            // 
+            this.comboBoxChannel.AccessibleRole = System.Windows.Forms.AccessibleRole.ComboBox;
+            resources.ApplyResources(this.comboBoxChannel, "comboBoxChannel");
+            this.comboBoxChannel.CausesValidation = false;
+            this.comboBoxChannel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxChannel.FormattingEnabled = true;
+            this.comboBoxChannel.Items.AddRange(new object[] {
+            resources.GetString("comboBoxChannel.Items"),
+            resources.GetString("comboBoxChannel.Items1"),
+            resources.GetString("comboBoxChannel.Items2"),
+            resources.GetString("comboBoxChannel.Items3"),
+            resources.GetString("comboBoxChannel.Items4"),
+            resources.GetString("comboBoxChannel.Items5")});
+            this.comboBoxChannel.Name = "comboBoxChannel";
+            this.comboBoxChannel.SelectedIndexChanged += new System.EventHandler(this.comboBoxChannel_SelectedIndexChanged);
+            // 
             // ClientDisplay
             // 
             this.AcceptButton = this.buttonSend;
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.comboBoxChannel);
             this.Controls.Add(this.textBoxUsers);
             this.Controls.Add(this.buttonOptions);
             this.Controls.Add(this.buttonSend);
@@ -121,6 +140,7 @@
         private System.Windows.Forms.Button buttonOptions;
         private System.Windows.Forms.RichTextBox textBoxUsers;
         private System.Windows.Forms.Timer timerCheckUpdate;
+        private System.Windows.Forms.ComboBox comboBoxChannel;
     }
 }
 

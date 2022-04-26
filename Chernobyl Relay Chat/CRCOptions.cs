@@ -31,6 +31,7 @@ namespace Chernobyl_Relay_Chat
         public static bool ReceiveDeath;
         public static int DeathInterval;
         public static bool ShowTimestamps;
+        public static bool SoundNotifications;
 
         public static int NewsDuration;
         public static string ChatKey;
@@ -92,6 +93,7 @@ namespace Chernobyl_Relay_Chat
                 ReceiveDeath = Convert.ToBoolean((string)registry.GetValue("ReceiveDeath", "True"));
                 DeathInterval = (int)registry.GetValue("DeathInterval", 0);
                 ShowTimestamps = Convert.ToBoolean((string)registry.GetValue("ShowTimestamps", "True"));
+                SoundNotifications = Convert.ToBoolean((string)registry.GetValue("SoundNotifications", "True"));
 
                 NewsDuration = (int)registry.GetValue("NewsDuration", 10);
                 ChatKey = (string)registry.GetValue("ChatKey", "RETURN");
@@ -124,6 +126,7 @@ namespace Chernobyl_Relay_Chat
             registry.SetValue("ReceiveDeath", ReceiveDeath);
             registry.SetValue("DeathInterval", DeathInterval);
             registry.SetValue("ShowTimestamps", ShowTimestamps);
+            registry.SetValue("SoundNotifications", SoundNotifications);
 
             registry.SetValue("NewsDuration", NewsDuration);
             registry.SetValue("ChatKey", ChatKey);

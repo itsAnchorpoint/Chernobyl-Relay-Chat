@@ -4,9 +4,21 @@
 		<eng>Chernobyl Relay Chat Rebirth</eng>
 		<rus>Chernobyl Relay Chat Rebirth</rus>
 	</string>
+	<string id="welcome_msg">
+		<eng>Welcome to CRCR!
+This addon is currently in closed beta.
+You can join the official Discord server in the Options menu!</eng>
+		<rus>Добро пожаловать в CRCR!
+В данный момент аддон проходит стадию закрытого бета-тестирования.
+Загляните в "Опции", если хотите присоединиться к официальному серверу в Discord!</rus>
+	</string>
 	<string id="crc_seconds">
 		<eng>seconds</eng>
 		<rus>сек.</rus>
+	</string>
+	<string id="crc_connlost">
+		<eng>[SIGNAL LOST]</eng>
+		<rus>[НЕТ СИГНАЛА]</rus>
 	</string>
 	<string id="crc_error">
 		<eng>Error</eng>
@@ -36,6 +48,14 @@
 		<eng>Can't send that much. Maximum amount is 1 000 000 RUB.</eng>
 		<rus>Максимальная сумма перевода - 1 000 000 RUB.</rus>
 	</string>
+		<string id="crc_message_cooldown">
+		<eng>You are typing too fast.</eng>
+		<rus>Вы печатаете слишком быстро.</rus>
+	</string>
+	<string id="crc_debug_check">
+		<eng>You can't do that while in debug mode.</eng>
+		<rus>Это действие недоступно в режиме отладки.</rus>
+	</string>
 	<string id="registry_error">
 		<eng>CRCR was unable to access the registry, which is needed to preserve settings.\nPlease try running the application As Administrator.</eng>
 		<rus>CRCR не смог получить доступ к реестру, который необходим для сохранения настроек.\nПопробуйте запустить приложение с правами администратора.</rus>
@@ -46,8 +66,8 @@
 		<rus>Не удалось подключиться к IRC-серверу; CRCR теперь будет закрыт.\nПопробуйте запустить с правами администратора или выставить CRCR в исключения в брандмауэре.</rus>
 	</string>
 	<string id="client_connected">
-		<eng>You are now connected to the network</eng>
-		<rus>Теперь Вы подключены к сети</rus>
+		<eng>Connected to </eng>
+		<rus>Вы подключились к </rus>
 	</string>
 	<string id="client_topic">
 		<eng>Channel rules: </eng>
@@ -66,8 +86,8 @@
 		<rus> отключился</rus>
 	</string>
 	<string id="client_own_part">
-		<eng>Switching channel...</eng>
-		<rus>Меняем канал...</rus>
+		<eng>Disconnected from </eng>
+		<rus>Вы отключены от </rus>
 	</string>
 	<string id="client_nick_change">
 		<eng> is now known as </eng>
@@ -199,6 +219,18 @@
 	<string id="options_close_chat">
 		<eng>Close chat after sending</eng>
 		<rus>Закрыть чат после отправки</rus>
+	</string>
+	<string id="options_sound_notif">
+		<eng>Sound notifications</eng>
+		<rus>Звуковые уведомления</rus>
+	</string>
+	<string id="options_discord_link">
+		<eng>Join CRCR Discord</eng>
+		<rus>CRCR в Discord</rus>
+	</string>
+	<string id="options_discord_tooltip">
+		<eng>Get the latest news and support</eng>
+		<rus>Поддержка и обновления</rus>
 	</string>
 	<string id="command_commands">
 		<eng>Displays all available commands.</eng>

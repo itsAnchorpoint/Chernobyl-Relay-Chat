@@ -12,9 +12,11 @@ namespace Chernobyl_Relay_Chat
 {
     class CRCGame
     {
-        private const int SCRIPT_VERSION = 5;
+        private const int SCRIPT_VERSION = 6;
+        public static bool DEBUG = false;
         public static int ActorMoney = 0;
         public static bool IsInGame = false;
+        public static bool FakeConnLost = false;
         private static readonly CRCGameWrapper wrapper = new CRCGameWrapper();
         private static readonly Encoding encoding = Encoding.GetEncoding(1251);
         private static readonly Regex outputRx = new Regex("^(.+?)(?:/(.+))?$");
@@ -28,7 +30,7 @@ namespace Chernobyl_Relay_Chat
         private static StringBuilder sendQueue = new StringBuilder();
         private static object queueLock = new object();
 
-        private static ClientDisplay display;
+        private static ClientDisplay display = new ClientDisplay();
         private static CRCClient client;
 
         public CRCGame(ClientDisplay clientDisplay, CRCClient crcClient)
@@ -175,6 +177,37 @@ namespace Chernobyl_Relay_Chat
                             CRCClient.SendDeath(message);
                         }
                     }
+                    else if (type == "ConnLost")
+                    {
+                        if (typeMatch.Groups[2].Value == "true" && FakeConnLost == false)
+                        {
+                                CRCClient.OnSignalLost();
+                                FakeConnLost = true;
+                                new ConnLostForm().ShowDialog(ClientDisplay.staticVar);
+                        }
+                        else if (typeMatch.Groups[2].Value == "false")
+                        {
+                            if (ConnLostForm.staticVar != null)
+                            {
+                                ConnLostForm.staticVar.Close();
+                                CRCClient.OnSignalRestored();
+                                FakeConnLost = false;
+                            }
+                        }
+                    }
+                    else if (type == "DEBUG")
+                    {
+                        DEBUG = typeMatch.Groups[2].Value == "true";
+                    }
+                    else if (type == "Channel")
+                    {
+                        bool acceptable = int.TryParse(typeMatch.Groups[2].Value, out int index);
+                        if (acceptable)
+                        {
+                            CRCDisplay.OnChannelUpdateFromGame(index - 1);
+                        }
+                    }
+
                 }
             }
             catch (IOException) { }
@@ -207,16 +240,34 @@ namespace Chernobyl_Relay_Chat
             SendToGame("Setting/ChatKey/DIK_" + CRCOptions.ChatKey);
             SendToGame("Setting/NewsSound/" + CRCOptions.NewsSound);
             SendToGame("Setting/CloseChat/" + CRCOptions.CloseChat);
-            SendToGame("Setting/ActorMoney/Get");
+            SendToGame("Setting/ActorStatus/Get");
+            SendToGame("Setting/Channel/" + ChannelConvertToGame());
+        }
+
+        private static string ChannelConvertToGame()
+        {
+            var index = "";
+            if (CRCOptions.Channel == "#crcr_english")
+                index = "1";
+            if (CRCOptions.Channel == "#crcr_english_rp")
+                index = "2";
+            if (CRCOptions.Channel == "#crcr_english_shitposting")
+                index = "3";
+            if (CRCOptions.Channel == "#crcr_russian")
+                index = "4";
+            if (CRCOptions.Channel == "#crcr_russian_rp")
+                index = "5";
+            if (CRCOptions.Channel == "#crcr_tech_support")
+                index = "6";
+            return index;
         }
 
         public static void UpdateUsers()
         {
             string UserStatus = "";
-            foreach (KeyValuePair<string, string> item in CRCClient.InGameStatus)
+            foreach (KeyValuePair<string, Userdata> item in CRCClient.userData)
             {
-                UserStatus += item.Key + " = " + item.Value + "/";
-                System.Diagnostics.Debug.WriteLine(item.Key + " IS " + item.Value);
+                UserStatus += item.Key + " = " + item.Value.IsInGame + "/";
             }
             SendToGame("Users/" + UserStatus.TrimEnd('/'));
 #if DEBUG
@@ -276,5 +327,20 @@ namespace Chernobyl_Relay_Chat
         {
             SendToGame("MoneyRecv/" + from + "/" + message);
         }
+
+        public static void OnChannelSwitch()
+        {
+            SendToGame("Setting/Channel/" + ChannelConvertToGame());
+        }
+
+        private static readonly Dictionary<int, string> gameIndexToChannelName = new Dictionary<int, string>()
+        {
+            [1] = "Main Channel (Eng)",
+            [2] = "Roleplay Channel (Eng)",
+            [3] = "Unmoderated Channel (Eng)",
+            [4] = "Основной Канал (Русский)",
+            [5] = "Ролевой Канал (Русский)",
+            [6] = "Tech Support/Техподдержка",
+        };
     }
 }

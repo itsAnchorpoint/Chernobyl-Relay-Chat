@@ -4,7 +4,7 @@
 --| By TKGP
 --| CRCR additions by Anchorpoint
 
-local SCRIPT_VERSION = 5
+local SCRIPT_VERSION = 6
 
 -- Constants
 local UPDATE_INTERVAL = 250
@@ -36,6 +36,7 @@ local users = {}
 local knownIcons = {}
 local prev_money = 0
 
+
 local function gt(id)
 	local result = game.translate_string(id)
 	if result == id then
@@ -44,12 +45,26 @@ local function gt(id)
 		return result
 	end
 end
-	
+
+local function soundPicker(messageType)
+	local result
+	if messageType == gt("crc_info") then result = "pda_welcome" return result
+	elseif messageType == gt("crc_error") then result = "pda_alarm" return result
+	else result = "pda_tips" return result end
+end
+
 local function addMessage(icon, title, text)
+	local messageLoglength = size_table(messageLog)
+	if messageLoglength > 15 then
+		local toRemove = messageLoglength - 15
+		for i = toRemove, 1, -1 do
+			table.remove(messageLog, 1)
+		end
+	end
 	table.insert(messageLog, {title = title, text = text, icon = icon})
 	db.actor:give_game_news(title, text, icon, 0, option.newsDuration)
 	if option.newsSound then
-		xr_sound.set_sound_play(db.actor:id(), "pda_tips")
+		xr_sound.set_sound_play(db.actor:id(), soundPicker(title))
 	end
 	if chatBox then
 		chatBox:UpdateMessages()
@@ -136,24 +151,24 @@ local inputActions = {
 			option.newsSound = value == "True"
 		elseif setting == "CloseChat" then
 			option.closeChat = value == "True"
-		elseif setting == "ActorMoney" then
+		elseif setting == "ActorStatus" then
 			send("Money/%s", db.actor:money())
+			send("ConnLost/%s", fake_conn_lost())
+			send("DEBUG/%s", DEV_DEBUG)
+		elseif setting == "Channel" then
+			prevChannel = tonumber(value)
 		end
 	end,
 	Users = function (body)
 		users = {}
-		--printf("RAW user data: "..body)
-		--for user in body:gmatch("[^/]+") do
 		for k, v in body:gmatch("([^/]+)%s=%s([^/]+)") do
-			--table.insert(users, user)
 			users[k] = v
-			--printf("received user data: "..k.." is "..v)
 		end
 		if chatBox then
 			chatBox:UpdateUsers()
 		end
 	end,
-	}
+	}	
 
 local function update()
 	if chatBox and not chatBox.focus then
@@ -218,18 +233,26 @@ local function onDeath(whoID)
 		if class == "AI_STL_S" then
 			class = who:community()
 		end
+	end	
+	if not isDead then --possible fix for death message spam
+		send("Death/%s/%s/%s/%s", db.actor:character_community(), level.name(), class:upper(), section)
+		isDead = true
 	end
 	if chatBox then
 		ChatBox:Cancel()
 	end
-	ChatBoxEnabled = false	
-	send("Death/%s/%s/%s/%s", db.actor:character_community(), level.name(), class:upper(), section)
+	ChatBoxEnabled = false
 end
 
 local function onKeyPress(dik)
 	if dik == option.chatKey and not chatBox then
-		-- Defer to next update to avoid this keypress being sent to the UI as well
-		showChatBox = true
+		if fake_conn_lost() then
+			db.actor:give_game_news(gt("crc_info"), gt("crc_signallost"), crc_icons.info, 0, option.newsDuration)
+			xr_sound.set_sound_play(db.actor:id(), "pda_tips")
+		else
+			-- Defer to next update to avoid this keypress being sent to the UI as well
+			showChatBox = true
+		end
 	end
 end
 
@@ -241,19 +264,37 @@ function update_money()
 	send("Money/%s", cur_money)
 end
 
-function on_game_start()
-	ChatBoxEnabled = true
-	AddUniqueCall(update)
-	RegisterScriptCallback("actor_on_before_death", onDeath)
-	RegisterScriptCallback("actor_on_update", actor_on_update)
-	RegisterScriptCallback("actor_on_net_destroy", actor_on_net_destroy)
-	-- Not using axr_keybind for old version compatibility
-	RegisterScriptCallback("on_key_press", onKeyPress)
-	send("Handshake/%s", SCRIPT_VERSION)
+function fake_conn_lost_update_client()
+	cur_fake_conn_status = fake_conn_lost()
+	if prev_fake_conn_status == cur_fake_conn_status then return end
+	prev_fake_conn_status = cur_fake_conn_status
+	send("ConnLost/%s", cur_fake_conn_status)
+	printf("Connection status updated to client - "..tostring(cur_fake_conn_status))
+end
+
+function fake_conn_lost()
+	if (level_weathers.bLevelUnderground or xr_conditions.surge_started()) then
+		if chatBox then
+			ChatBox:Cancel()
+		end
+		return true
+	end
+	return false
 end
 
 function actor_on_update()
     update_money()
+	fake_conn_lost_update_client()
+end
+
+function save_state(m_data)
+	m_data.connstatus = prev_fake_conn_status
+	m_data.prevChannel = prevChannel
+end
+
+function load_state(m_data)
+	prev_fake_conn_status = m_data.connstatus or false
+	prevChannel = m_data.prevChannel or 1
 end
 
 function actor_on_net_destroy()
@@ -261,7 +302,21 @@ function actor_on_net_destroy()
 		ChatBox:Cancel()
 	end	
 end
-----------------------------------------------------------------------------------------------------
+
+function on_game_start()
+	isDead = false
+	ChatBoxEnabled = true
+	AddUniqueCall(update)
+	RegisterScriptCallback("save_state", save_state)
+	RegisterScriptCallback("load_state", load_state)
+	RegisterScriptCallback("actor_on_before_death", onDeath)
+	RegisterScriptCallback("actor_on_update", actor_on_update)
+	RegisterScriptCallback("actor_on_net_destroy", actor_on_net_destroy)
+	-- Not using axr_keybind for old version compatibility
+	RegisterScriptCallback("on_key_press", onKeyPress)
+	send("Handshake/%s", SCRIPT_VERSION)
+end
+----------------------------------------------GUI------------------------------------------------------
 
 class "ChatBox" (CUIScriptWnd)
 function ChatBox:__init() super()
@@ -269,18 +324,50 @@ function ChatBox:__init() super()
 	self:SetWndRect(Frect():set(0, 0, 1024, 768))
 	self.xml = CScriptXmlInit()
 	self.xml:ParseFile("crc_chatbox.xml")
+	
 	self.xml:InitStatic("background", self)
+	self.xml:InitStatic("background_userlist", self)
+	self.xml:InitFrame("frame", self)
 	
 	self.editBox = self.xml:InitEditBox("edit_box", self)
+	self.list_channel = self.xml:InitComboBox("list_channel", self)
+	self.scroll = self.xml:InitScrollView("scroll", self)
+	
+	self:Register(self.list_channel, "list_channel")
 	self:Register(self.xml:Init3tButton("button_send", self), "button_send")
 	self:Register(self.xml:Init3tButton("button_close", self), "button_close")
+	
 	self:AddCallback("button_send", ui_events.BUTTON_CLICKED, self.Send, self)
 	self:AddCallback("button_close", ui_events.BUTTON_CLICKED, self.Cancel, self)
+	self:AddCallback("list_channel", ui_events.LIST_ITEM_SELECT, self.OnSelectChannel, self)
 	self.users = {}
 	self:UpdateUsers()
 	self.messages = {}
 	self:UpdateMessages()
+
+	self.table_channel = {
+		"#crcr_english",
+		"#crcr_english_rp",
+		"#crcr_english_shitposting",
+		"#crcr_russian",
+		"#crcr_russian_rp",
+		"#crcr_tech_support",
+	}
+	
+	for i=1,#self.table_channel do
+		self.list_channel:AddItem(gt(self.table_channel[i]), i)
+	end
+	
+	local index = prevChannel or 1
+	self.list_channel:SetText(gt(self.table_channel[index]))
+
 	self.focus = false
+end
+
+function ChatBox:OnSelectChannel()
+	if prevChannel == self.list_channel:CurrentID() then return end
+	prevChannel = self.list_channel:CurrentID()
+	send("Channel/%s", prevChannel)
 end
 
 function ChatBox:OnKeyboard(dik, keyboard_action)
@@ -289,6 +376,7 @@ function ChatBox:OnKeyboard(dik, keyboard_action)
 		if dik == DIK_keys.DIK_RETURN or dik == DIK_keys.DIK_NUMPADENTER then
 			self:Send()
 		elseif dik == DIK_keys.DIK_ESCAPE then
+			currChannel = self.currChannel
 			self:Cancel()
 		end
 	end
@@ -296,24 +384,13 @@ function ChatBox:OnKeyboard(dik, keyboard_action)
 end
 
 function ChatBox:UpdateUsers()
-	for _, user in ipairs(self.users) do
-		self:DetachChild(user)
-	end
-	self.users = {}
-	--[[for index, name in ipairs(users) do
-		local user = self.xml:InitStatic("user", self)
-		local newPos = vector2():set(0, user:GetWndPos().y + (index - 1) * user:GetHeight())
-		user:SetWndPos(newPos)
-		self.xml:InitStatic("user:icon", user):InitTexture(knownIcons[name] or crc_icons.unknown)
-		self.xml:InitStatic("user:name", user):TextControl():SetText(name)
-		table.insert(self.users, user)
-	end--]]
+	self.scroll:Clear()
+	
 	local index = 1
+	
 	for k, v in pairs(users) do
 		IsInGame = v == "True"
-		local user = self.xml:InitStatic("user", self)
-		local newPos = vector2():set(0, user:GetWndPos().y + (index - 1) * user:GetHeight())
-		user:SetWndPos(newPos)
+		local user = self.xml:InitStatic("user", nil)
 		self.xml:InitStatic("user:icon", user):InitTexture(knownIcons[k] or crc_icons.unknown)
 		self.xml:InitStatic("user:name", user):TextControl():SetText(k)
 		self.user_status = self.xml:InitStatic("user:status", user)
@@ -324,8 +401,8 @@ function ChatBox:UpdateUsers()
 			self.user_status:TextControl():SetText(gt("crc_notingame"))
 			self.user_status:TextControl():SetTextColor(GetARGB(255, 255, 128, 128))
 		end
-		table.insert(self.users, user)
-		index = index + 1
+		self.scroll:AddWindow(user, true)
+		user:SetAutoDelete(true)
 	end
 end
 
@@ -360,7 +437,6 @@ end
 
 function ChatBox:Cancel()
 	chatBox:HideDialog()
+	Unregister_UI("ChatBox") --possible fix to a stack trace: 0x000000014014D6CA (moved this BEFORE = nil)
 	chatBox = nil
-	-- Re-enable keypress callback when done
-	Unregister_UI("ChatBox")
 end

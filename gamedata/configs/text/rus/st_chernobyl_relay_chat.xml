@@ -33,7 +33,10 @@
 	<string id="crc_close">
 		<text>Закрыть</text>
 	</string>
-	
+	<string id="crc_signallost">
+		<text>[НЕТ СИГНАЛА]</text>
+	</string>
+
 	<string id="crc_actor_bandit">
 		<text>Бандиты</text>
 	</string>
@@ -75,5 +78,24 @@
 	</string>
 	<string id="crc_actor_anonymous">
 		<text>Анонимно</text>
+	</string>
+	
+	<string id="#crcr_english">
+		<text>Main Channel (Eng)</text>
+	</string>
+	<string id="#crcr_english_rp">
+		<text>Roleplay Channel (Eng)</text>
+	</string>
+	<string id="#crcr_english_shitposting">
+		<text>Unmoderated Channel (Eng)</text>
+	</string>
+	<string id="#crcr_russian">
+		<text>Основной Канал (Русский)</text>
+	</string>
+	<string id="#crcr_russian_rp">
+		<text>Ролевой Канал (Русский)</text>
+	</string>
+	<string id="#crcr_tech_support">
+		<text>Tech Support/Техподдержка</text>
 	</string>
 </string_table>

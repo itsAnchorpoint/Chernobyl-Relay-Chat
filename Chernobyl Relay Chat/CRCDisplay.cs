@@ -9,7 +9,6 @@ namespace Chernobyl_Relay_Chat
     class CRCDisplay
     {
         private static ClientDisplay clientDisplay;
-        private static List<string> UsersAndStatuses = new List<string>();
 
         public static void Start()
         {
@@ -43,7 +42,7 @@ namespace Chernobyl_Relay_Chat
 
         public static void UpdateUsers()
         {
-            clientDisplay?.UpdateUsers(CRCClient.Users);
+            clientDisplay?.UpdateUsers(CRCClient.userData);
         }
 
         public static void OnHighlightMessage(string nick, string message)
@@ -63,25 +62,33 @@ namespace Chernobyl_Relay_Chat
 
         public static void OnQueryMessage(string from, string to, string message)
         {
-            SystemSounds.Asterisk.Play();
+            if (CRCOptions.SoundNotifications)
+                SystemSounds.Asterisk.Play();
             clientDisplay?.AddMessage(from + " -> " + to, message, Color.DeepPink);
         }
 
         public static void OnMoneySent(string from, string to, string message)
         {
-            SystemSounds.Asterisk.Play();
+            if (CRCOptions.SoundNotifications)
+                SystemSounds.Asterisk.Play();
             clientDisplay?.AddMessage(from + CRCStrings.Localize("crc_money") + to, message + " RUB", Color.DarkBlue);
         }
 
         public static void OnMoneyRecv(string from, string message)
         {
-            SystemSounds.Asterisk.Play();
+            if (CRCOptions.SoundNotifications)
+                SystemSounds.Asterisk.Play();
             clientDisplay?.AddMessage(from + CRCStrings.Localize("crc_money_recv"), message + " RUB!", Color.DarkBlue);
         }
 
         public static void OnGotKicked()
         {
             clientDisplay?.Disable();
+        }
+
+        public static void OnChannelUpdateFromGame(int index)
+        {
+            clientDisplay?.OnChannelUpdateFromGame(index);
         }
     }
 }

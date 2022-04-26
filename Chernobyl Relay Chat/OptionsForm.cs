@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace Chernobyl_Relay_Chat
 {
@@ -16,7 +17,6 @@ namespace Chernobyl_Relay_Chat
             tabControl1.TabPages[1].Text = CRCStrings.Localize("options_tab_game");
 
             labelLanguage.Text = CRCStrings.Localize("options_language");
-            labelChannel.Text = CRCStrings.Localize("options_channel");
             radioButtonFactionAuto.Text = CRCStrings.Localize("options_auto_faction");
             radioButtonFactionManual.Text = CRCStrings.Localize("options_manual_faction");
             labelName.Text = CRCStrings.Localize("options_name");
@@ -33,12 +33,15 @@ namespace Chernobyl_Relay_Chat
             buttonChatKey.Text = CRCStrings.Localize("options_chat_key_change");
             checkBoxNewsSound.Text = CRCStrings.Localize("options_news_sound");
             checkBoxCloseChat.Text = CRCStrings.Localize("options_close_chat");
+            checkBoxSoundToggle.Text = CRCStrings.Localize("options_sound_notif");
+
+            linkLabelDiscord.Text = CRCStrings.Localize("options_discord_link");
+            toolTip1.SetToolTip(linkLabelDiscord, CRCStrings.Localize("options_discord_tooltip"));
         }
 
         private void OptionsForm_Load(object sender, EventArgs e)
         {
-            comboBoxLanguage.SelectedIndex = languageToIndex[CRCOptions.Language];
-            comboBoxChannel.SelectedIndex = channelToIndex[CRCOptions.Channel];
+            comboBoxLanguage.SelectedIndex = languageToIndex[CRCOptions.Language];           
             radioButtonFactionAuto.Checked = CRCOptions.AutoFaction;
             radioButtonFactionManual.Checked = !CRCOptions.AutoFaction;
             textBoxName.Text = CRCOptions.Name;
@@ -47,6 +50,7 @@ namespace Chernobyl_Relay_Chat
             checkBoxDeathSend.Checked = CRCOptions.SendDeath;
             checkBoxDeathReceive.Checked = CRCOptions.ReceiveDeath;
             numericUpDownDeath.Value = CRCOptions.DeathInterval;
+            checkBoxSoundToggle.Checked = CRCOptions.SoundNotifications;
 
             numericUpDownNewsDuration.Value = CRCOptions.NewsDuration;
             textBoxChatKey.Text = CRCOptions.ChatKey;
@@ -71,7 +75,6 @@ namespace Chernobyl_Relay_Chat
                 MessageBox.Show(CRCStrings.Localize("options_language_restart"), CRCStrings.Localize("crc_name"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             
-            CRCOptions.Channel = indexToChannel[comboBoxChannel.SelectedIndex];
             CRCOptions.AutoFaction = radioButtonFactionAuto.Checked;
             CRCOptions.ManualFaction = indexToFaction[comboBoxFaction.SelectedIndex];
             CRCOptions.Name = name;
@@ -79,6 +82,7 @@ namespace Chernobyl_Relay_Chat
             CRCOptions.SendDeath = checkBoxDeathSend.Checked;
             CRCOptions.ReceiveDeath = checkBoxDeathReceive.Checked;
             CRCOptions.DeathInterval = (int)numericUpDownDeath.Value;
+            CRCOptions.SoundNotifications = checkBoxSoundToggle.Checked;
 
             CRCOptions.NewsDuration = (int)numericUpDownNewsDuration.Value;
             CRCOptions.ChatKey = textBoxChatKey.Text;
@@ -112,6 +116,11 @@ namespace Chernobyl_Relay_Chat
             numericUpDownDeath.Enabled = checkBoxDeathReceive.Checked;
         }
 
+        private void checkBoxSoundToggle_CheckedChanged(object sender, EventArgs e)
+        {
+            CRCOptions.SoundNotifications = checkBoxSoundToggle.Checked;
+        }
+
         private void buttonChatKey_Click(object sender, EventArgs e)
         {
             using (KeyPromptForm keyPromptForm = new KeyPromptForm())
@@ -132,26 +141,6 @@ namespace Chernobyl_Relay_Chat
         {
             [0] = "eng",
             [1] = "rus",
-        };
-
-        private readonly Dictionary<string, int> channelToIndex = new Dictionary<string, int>()
-        {
-            ["#crcr_english"] = 0,
-            ["#crcr_english_rp"] = 1,
-            ["#crcr_english_shitposting"] = 2,
-            ["#crcr_russian"] = 3,
-            ["#crcr_russian_rp"] = 4,
-            ["#crcr_tech_support"] = 5,
-        };
-
-        private readonly Dictionary<int, string> indexToChannel = new Dictionary<int, string>()
-        {
-            [0] = "#crcr_english",
-            [1] = "#crcr_english_rp",
-            [2] = "#crcr_english_shitposting",
-            [3] = "#crcr_russian",
-            [4] = "#crcr_russian_rp",
-            [5] = "#crcr_tech_support",
         };
 
         private readonly Dictionary<string, int> factionToIndex = new Dictionary<string, int>()
@@ -184,7 +173,11 @@ namespace Chernobyl_Relay_Chat
 
         private void toolTip1_Popup(object sender, PopupEventArgs e)
         {
+        }
 
+        private void linkLabelDiscord_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("explorer.exe", "https://discord.gg/m9yfGYq8Sy");
         }
     }
 }

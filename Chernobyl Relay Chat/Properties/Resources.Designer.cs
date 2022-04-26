@@ -59,5 +59,15 @@ namespace Chernobyl_Relay_Chat.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap discord_icon_200x200 {
+            get {
+                object obj = ResourceManager.GetObject("discord_icon_200x200", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

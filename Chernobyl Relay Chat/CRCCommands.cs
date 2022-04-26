@@ -58,11 +58,18 @@ namespace Chernobyl_Relay_Chat
 
         private static void SendMoney(List<string> args, ICRCSendable output)
         {
+            if (CRCGame.DEBUG)
+            {
+                CRCGame.AddError(CRCStrings.Localize("crc_debug_check"));
+                CRCDisplay.AddError(CRCStrings.Localize("crc_debug_check"));
+                return;
+            }
+
             if (CRCGame.disable || CRCGame.processID == -1)
             {
                 output.AddError(CRCStrings.Localize("command_pay_notingame"));
             }
-            else if (CRCClient.InGameStatus.ContainsKey(args[0]) && CRCClient.InGameStatus[args[0]] == "False")
+            else if (CRCClient.userData.ContainsKey(args[0]) && CRCClient.userData[args[0]].IsInGame == "False")
             {
                 output.AddError(CRCStrings.Localize("command_pay_usernotingame"));              
             }
