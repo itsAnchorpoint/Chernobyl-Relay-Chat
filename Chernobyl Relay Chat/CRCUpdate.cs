@@ -51,7 +51,7 @@ namespace Chernobyl_Relay_Chat
 
         public static async Task<bool> CheckUpdate()
         {
-            UpdateChecker updateChecker = new UpdateChecker("itsAnchorpoint", "Chernobyl-Relay-Chat-Rebirth", "0.3.0");
+            UpdateChecker updateChecker = new UpdateChecker("itsAnchorpoint", "Chernobyl-Relay-Chat-Rebirth", "0.4.0");
             UpdateType updateType;
             try
             {
@@ -66,7 +66,7 @@ namespace Chernobyl_Relay_Chat
             {
                 ae.Handle(ex =>
                 {
-                    return ex is HttpRequestException;
+                    return (ex is HttpRequestException);
                 });
                 return false;
             }
