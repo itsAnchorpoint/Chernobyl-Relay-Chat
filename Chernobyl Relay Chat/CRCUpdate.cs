@@ -14,7 +14,7 @@ namespace Chernobyl_Relay_Chat
 
         public static bool CheckFirstUpdate()
         {
-            UpdateChecker updateChecker = new UpdateChecker("itsAnchorpoint", "Chernobyl-Relay-Chat-Rebirth", "0.4.0");
+            UpdateChecker updateChecker = new UpdateChecker("itsAnchorpoint", "Chernobyl-Relay-Chat-Rebirth", "0.4.1");
             UpdateType updateType;
             try
             {
@@ -51,7 +51,7 @@ namespace Chernobyl_Relay_Chat
 
         public static async Task<bool> CheckUpdate()
         {
-            UpdateChecker updateChecker = new UpdateChecker("itsAnchorpoint", "Chernobyl-Relay-Chat-Rebirth", "0.4.0");
+            UpdateChecker updateChecker = new UpdateChecker("itsAnchorpoint", "Chernobyl-Relay-Chat-Rebirth", "0.4.1");
             UpdateType updateType;
             try
             {
