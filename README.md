@@ -5,8 +5,7 @@ Original mod by TKGP. Please, hit me up if you are against me trying to revive t
 An IRC-based chat app for Anomaly, originally developed by TKGP for CoC. Features an independent client as well as in-game chat, automatic death messages, and compatibility with all other addons.
 
 # Official CRCR Discord Server
-Join to get help, leave feedback or just to hang out! 
-https://discord.gg/m9yfGYq8Sy
+[Join](https://discord.gg/crcr) to get help, leave feedback or just to hang out! 
 
 # Installation
 1. Install the [.NET framework](https://www.microsoft.com/net/download/framework) if you don't have it already  
