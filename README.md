@@ -9,7 +9,8 @@ An IRC-based chat app for Anomaly, originally developed by TKGP for CoC. Feature
 
 # Installation
 1. Install the [.NET framework](https://www.microsoft.com/net/download/framework) if you don't have it already  
-2. Copy the included gamedata folder to your game directory (MOD MANAGERS WILL NOT WORK) 
+2. Extract the contents of the CRCR.zip wherever you like
+3. Copy the included gamedata folder to your game directory (MOD MANAGERS WILL NOT WORK) 
 
 # Usage
 Run Chernobyl Relay Chat Rebirth.exe; the application must be running for in-game chat to work.  
