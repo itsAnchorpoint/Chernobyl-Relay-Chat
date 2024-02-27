@@ -1,0 +1,75 @@
+--| Chernobyl Relay Chat
+--| Interface for external application
+--| By TKGP
+--| crc additions by Anchorpoint
+
+local SCRIPT_VERSION = 6
+
+-- Constants
+local UPDATE_INTERVAL = 250
+local INPATH = getFS():update_path("$game_config$", "").."\\crc_input.txt"
+local OUTPATH = getFS():update_path("$game_config$", "").."\\crc_output.txt"
+local QUERY_COLOR = "%c[255,255,192,192]"
+local ERROR_COLOR = "%c[255,255,128,128]"
+local HIGHLIGHT_COLOR = "%c[255,255,255,128]"
+local MONEY_COLOR = "%c[255,255,139,1]"
+local INGAME_COLOR = "%c[255,128,255,154]"
+
+local lastUpdate = 0
+local sendQueue = {}
+
+function send(message, ...)
+	local line = message:format(...).."\n"
+	table.insert(sendQueue, line)
+end
+
+local function update()
+    if not db.actor or time_global() < lastUpdate + UPDATE_INTERVAL then 
+        return 
+    end
+
+    lastUpdate = time_global()
+
+    if #sendQueue > 0 then
+		local output = io.open(OUTPATH, "a")
+		if output then
+			for _, line in ipairs(sendQueue) do
+				output:write(line)
+			end
+			output:close()
+			sendQueue = {}
+		end
+	end
+
+    local input = io.open(INPATH, "r")
+	
+    if input then
+		local receiveQueue = {}
+		for line in input:lines() do
+			table.insert(receiveQueue, line)
+		end
+		input:close()
+		input = io.open(INPATH, "w")
+		if input then
+			input:close()
+			for _, line in ipairs(receiveQueue) do
+				local type, body = line:match("([^/]+)/(.+)")
+				local action = crc_actions.actions[type]
+
+				if action then
+					action(body)
+				else
+                    printf("CRC Error: unknown action! Action: ", type)
+				end
+			end
+		end
+	end
+end
+
+function handshake()
+    send("Handshake/%s", SCRIPT_VERSION)
+end
+
+function on_game_start()
+	AddUniqueCall(update)
+end

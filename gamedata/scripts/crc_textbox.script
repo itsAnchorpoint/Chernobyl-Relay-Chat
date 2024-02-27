@@ -1,0 +1,229 @@
+local CURSOR_PDA_TO_UI = 0
+local focus_id = 0
+local unfocus_id = 0
+
+class "crc_textbox_fakeui" (CUIScriptWnd)
+function crc_textbox_fakeui:__init(parent) super()
+    self.__parent = parent
+end
+
+function crc_textbox_fakeui:OnKeyboard(dik, keyboard_action)
+	local res = CUIScriptWnd.OnKeyboard(self,dik,keyboard_action)
+
+	if res == false then
+		if keyboard_action == ui_events.WINDOW_KEY_PRESSED then
+            if self.handle_key_press ~= nil then
+                self.handle_key_press(self.__parent, dik)
+            end
+        
+        elseif keyboard_action == ui_events.WINDOW_KEY_RELEASED then
+            if self.handle_key_release ~= nil then
+                self.handle_key_release(self.__parent, dik)
+            end
+		end
+	end
+
+	return res
+end
+
+class "crc_textbox"
+function crc_textbox:__init(xml, xml_tag, parent)
+    self.parent = parent
+    self.button = xml:InitCheck(xml_tag, self.parent)
+    self.button:TextControl():SetFont(GetFontLetterica16Russian())
+    self.selector_pos = 1
+    self.selector_char = ''
+
+    self.name = "crc_textbox_"..xml_tag.."_btn"
+    self.value = ""
+    self.edit_mode = false
+    self.capital_mode = false
+    self.last_pressed_key = nil
+    self.fake_ui = crc_textbox_fakeui(self)
+
+    self:Clear()
+    self:SetSelectorPos(0)
+
+    self.parent:Register(self.button, self.name)
+    self.parent:AddCallback(self.name, ui_events.BUTTON_CLICKED, self.__handle_click, self)
+    
+    self.fake_ui.handle_key_press = self.__handle_key_press
+    self.fake_ui.handle_key_release = self.__handle_key_release
+end
+
+
+function crc_textbox:SetSelectorPos(target)
+    self.selector_pos = math.min(math.max(target, 0), self.value:len())
+    self:__insert_cursor()
+end
+
+function crc_textbox:__txt_before_selector()
+    if self.selector_pos > 0 then
+        return self.value:sub(1, self.selector_pos)
+    else
+        return ''
+    end
+end
+
+function crc_textbox:__txt_after_selector()
+    if self.selector_pos > 0 then
+        return self.value:sub(self.selector_pos+1)
+    else
+        return self.value
+    end
+end
+
+function crc_textbox:__insert_cursor()
+    self.button:TextControl():SetText(self:__txt_before_selector() .. self.selector_char .. self:__txt_after_selector())
+end
+
+function crc_textbox:__add_leter(letter)
+    self.value = self:__txt_before_selector() .. letter .. self:__txt_after_selector()
+    self:SetSelectorPos(self.selector_pos + 1)
+end
+
+function crc_textbox:__remove_leter()
+    self.value = self:__txt_before_selector():sub(1, -2) .. self:__txt_after_selector()
+    self:SetSelectorPos(self.selector_pos - 1)
+end
+
+function crc_textbox:__remove_leter_after()
+    self:SetText(self:__txt_before_selector() .. self:__txt_after_selector():sub(2))
+end
+
+function crc_textbox:SetText(value)
+    self.value = value
+    self:__insert_cursor()
+end
+
+function crc_textbox:Clear()
+    self:SetText("")
+    self:__display_placeholder()
+end
+
+function crc_textbox:__display_placeholder()
+    if not self.edit_mode and self.value:len() == 0 then
+        self.button:TextControl():SetText(game.translate_string('crc_entermessage'))
+    end
+end
+
+function crc_textbox:GetText()
+    return self.value
+end
+
+function crc_textbox:Show(value)
+    self.button:Show(value)
+end
+
+function crc_textbox:Enable(value)
+    self.button:Enable(value)
+end
+
+function crc_textbox:Focus()
+    self.edit_mode = true
+    self.button:SetCheck(true)
+    self.fake_ui:ShowDialog()
+    self.selector_char = '|'
+    self:__insert_cursor()
+
+    Register_UI("crc_fake_ui", "crc_textbox")
+    
+    SetCursorPosition(GetCursorPosition():set(2000, 2000))
+    CreateTimeEvent("crc_textbox", "hide_mouse", 0.5, function()
+        SetCursorPosition(GetCursorPosition():set(2000, 2000))
+        return false
+    end)
+end
+
+function crc_textbox:Unfocus()
+    self.edit_mode = false
+    self.button:SetCheck(false)
+    self.fake_ui:HideDialog()
+    self.selector_char = ''
+    self:__insert_cursor()
+    self:__display_placeholder()
+    RemoveTimeEvent("crc_textbox", "hide_mouse")
+    Unregister_UI("crc_fake_ui")
+end
+
+function crc_textbox:IsFocused()
+    return self.edit_mode
+end
+
+function crc_textbox:__handle_key_press(key)
+    if key == DIK_keys.DIK_LSHIFT or key == DIK_keys.DIK_RSHIFT then
+        self.capital_mode = true
+    end
+
+    if not self:IsFocused() then
+        return
+    end
+
+    if key == DIK_keys.MOUSE_1 or key == DIK_keys.MOUSE_2 or key == DIK_keys.DIK_ESCAPE then
+        self:Unfocus()
+        return
+    end
+
+    if key == crc_config.config.chat_key then
+        self:Unfocus()
+        crc_shortcut.on_key_release(key)
+        return
+    end
+
+    self.last_pressed_key = key
+    self:__handle_edit(key)
+    
+    RemoveTimeEvent("crc_textbox:__handle_edit", "edit")
+    CreateTimeEvent("crc_textbox:__handle_edit", "edit", 0.5, function()
+        return self:__handle_edit(self.last_pressed_key)
+    end)
+end
+
+function crc_textbox:__handle_edit(key)
+    if key == nil then
+        return true
+    end
+
+    if key == DIK_keys.DIK_BACK then
+        self:__remove_leter()
+        return
+    end
+
+    if key == DIK_keys.DIK_DELETE then
+        self:__remove_leter_after()
+        return
+    end
+
+
+    if key == DIK_keys.DIK_LEFT then
+        self:SetSelectorPos(self.selector_pos - 1)
+        return
+    end
+
+    if key == DIK_keys.DIK_RIGHT then
+        self:SetSelectorPos(self.selector_pos + 1)
+        return
+    end
+
+    local char = crc_dik.to_char(key, self.capital_mode)
+
+    if char then
+        self:__add_leter(char)
+    end
+end
+
+function crc_textbox:__handle_key_release(key)
+    if key == DIK_keys.DIK_LSHIFT or key == DIK_keys.DIK_RSHIFT then
+        self.capital_mode = false
+    end
+
+    if key == self.last_pressed_key then
+        self.last_pressed_key = nil
+    end
+end
+
+function crc_textbox:__handle_click()
+    if not self:IsFocused() then
+        self:Focus()
+   end
+end

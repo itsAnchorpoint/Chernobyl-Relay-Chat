@@ -1,0 +1,83 @@
+<!-- PDA version of the CRC gui by Amon -->
+<w>
+    <main_wnd x="0" y="0" width="1024" height="768" update_delay="2900"/>
+
+	<frame1 x="28" y="41" width="764" height="90" stretch="1">
+        <texture>ui_inGame2_pda_buttons_background</texture>
+	</frame1>
+
+	<frame2 x="28" y="137" width="600" height="571" stretch="1">
+		<texture>ui_inGame2_pda_buttons_background</texture>
+		
+		<auto_frameline x="6" y="15" width="585" height="23" vertical="0">
+			<texture>ui_inGame2_pda_ranking_center_caption</texture>
+		</auto_frameline>
+	</frame2>
+
+	<frame3 x="632" y="137" width="160" height="571" stretch="1">
+		<texture>ui_inGame2_pda_buttons_background</texture>
+		
+		<auto_frameline x="6" y="15" width="145" height="23" vertical="0">
+			<texture>ui_inGame2_pda_ranking_center_caption</texture>
+		</auto_frameline>
+	</frame3>
+
+	<list_channel_list x="50" y="122" width="160" height="100" item_height="21" always_show_scroll="1" />
+	<list_channel x="50" y="100" width="160" height="21">
+		<texture>ui_crc_list</texture>
+		<text align="l" font="letterica16" />
+    </list_channel>
+
+    <messages_caption x="44" y="157" width="520" height="16">
+		<text align="l" font="letterica16" r="100" g="100" b="100"/>
+	</messages_caption>
+
+	<messages x="36" y="176" width="585" height="499" item_height="50" always_show_scroll="1" inverse_dir="0">
+		<font font="letterica18" color="ui_4"/>
+	</messages>
+
+	<message x="0" y="0" width="565" height="50">
+		<date_static x="44" y="11" width="80" height="14">
+			<text align="l" font="letterica16" color="ui_3"/>
+		</date_static>
+		<caption_static x="124" y="11" width="441" height="14">
+			<text align="l" font="letterica16" color="ui_1"/>
+		</caption_static>
+		<text_static x="44" y="26" width="517" height="14" complex_mode="1">
+			<text align="l" font="letterica16" color="ui_4"/>
+		</text_static>
+		<image x="0" y="12" width="39" height="29" stretch="1"/>
+	</message>
+
+    <users_caption x="640" y="157" width="137" height="16">
+		<text align="l" font="letterica16" r="100" g="100" b="100"/>
+	</users_caption>
+
+	<users x="640" y="176" width="145" height="523" item_height="39" always_show_scroll="1"/>
+	<user x="0" y="0" width="124" height="39">
+		<icon x="83" y="5" width="41" height="29" stretch="1"/>
+		
+		<name x="-50" y="0" width="124" height="29">
+			<text font="letterica16" align="r" vert_align="c"/>
+		</name>
+		
+		<status x="-50" y="15" width="124" height="29">
+			<text font="letterica16" align="r" vert_align="c"/>
+		</status>
+	</user>
+
+	<edit_box x="36" y="675" width="500" height="27" frame_mode="0" stretch="1">
+		<texture>ui_crc_textbox</texture>
+		<text x="-490" y="2" align="l" vert_align="c" font="letterica18"></text>
+	</edit_box>
+
+	<button_send x="515" y="675" width="100" height="27" frame_mode="0" stretch="1">
+		<texture>ui_crc_button</texture>
+		<text font="letterica18" align="c">crc_send</text>
+	</button_send>
+
+	<connection_lost x="0" y="0" width="800" height="800" stretch="1">
+		<texture>ui\crc_log_background</texture>
+		<text y="100" font="graffiti22" color="pda_red" vert_align="c" align="c">crc_signallost</text>
+	</connection_lost>
+</w>

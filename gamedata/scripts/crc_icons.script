@@ -1,8 +1,7 @@
-
 --| Chernobyl Relay Chat
 --| Texture ID-getting utility for chernobyl_relay_chat.script
 --| By TKGP
---| CRCR edits by Anchorpoint
+--| crc edits by Anchorpoint
 
 anchorpoint = "crc_icon_tkgp"
 info = "crc_icon_info"

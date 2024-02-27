@@ -1,0 +1,31 @@
+--| Chernobyl Relay Chat
+--| crc Config by Amon
+--| Inspirated by iTheon's PDA Tasbar
+
+local function load_defaults()
+	local t = {}
+	local op = crc_mcm.op
+	for i, v in ipairs(op.gr) do
+		if v.def ~= nil then
+			t[v.id] = v.def
+		end
+	end
+	return t
+end
+
+config = load_defaults()
+
+local function load_settings()
+	config = load_defaults()
+	if ui_mcm then
+		for k, v in pairs(config) do
+			config[k] = ui_mcm.get("crc/" .. k)
+		end
+	end
+end
+
+
+function on_game_start()
+	RegisterScriptCallback("on_game_load", load_settings)
+	RegisterScriptCallback("on_option_change", load_settings)
+end

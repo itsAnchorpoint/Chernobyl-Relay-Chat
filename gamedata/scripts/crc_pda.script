@@ -1,0 +1,238 @@
+--| Chernobyl Relay Chat
+--| Interface for external application By TKGP
+--| crc additions by Anchorpoint
+--| PDA version by Amon
+--| PDA implementation inspirated by iTheon's PDA Tasbar
+
+start_channel = 1
+
+local xml = CScriptXmlInit()
+xml:ParseFile("pda_crc_chat.xml")
+
+local SINGLETON = nil
+--| Return 
+function get_ui()
+    SINGLETON = SINGLETON or pda_crc_tab()
+    return SINGLETON
+end
+
+local function get_translation(id)
+	local result = game.translate_string(id)
+	if result == id then
+		return nil
+	else
+		return result
+	end
+end
+
+-- selects pda sound by message type
+local function soundPicker(messageType)
+	local result
+	if messageType == get_translation("crc_info") then result = "pda_welcome" return result
+	elseif messageType == get_translation("crc_error") then result = "pda_alarm" return result
+	else result = "pda_tips" return result end
+end
+
+-- adds recived message to pda chat and log
+function addMessage(icon, title, text)
+    local maxMessages = crc_config.config.max_messages_size
+	local messagesLen = size_table(get_ui().messages) 
+
+	if messagesLen > maxMessages then
+		for i=maxMessages, messagesLen, 1 do
+			table.remove(get_ui().messages, i)
+		end
+	end
+
+    table.insert(get_ui().messages, 1, {title = title, text = text, icon = icon})
+
+	if not get_ui():is_open() then
+		-- TODO -> Change give_game_news to custom PDA NEW implementation
+		db.actor:give_game_news(title, text, icon, 0, crc_config.config.news_duration)
+	end
+
+    if crc_config.config.news_sound then
+		xr_sound.set_sound_play(db.actor:id(), soundPicker(title))
+	end
+
+	if get_ui():is_open() then
+		get_ui():update_messages()
+	end
+end
+
+
+-- Constructor.
+class "pda_crc_tab" (CUIScriptWnd)
+function pda_crc_tab:__init() super()
+    self.messages = {}
+    self.message_nodes = {}
+
+    self.channel = start_channel
+	self.table_channel = {
+		"#crcr_english",
+		"#crcr_english_rp",
+		"#crcr_english_shitposting",
+		"#crcr_russian",
+		"#crcr_russian_rp",
+		"#crcr_tech_support",
+	}
+
+    self.users = {}
+    self.knownIcons = {}
+
+	self:InitControls()
+end
+
+-- Initialise the interface.
+function pda_crc_tab:InitControls()
+	self:SetWndRect(Frect():set(0, 0, 1024, 768))
+
+    xml:ParseFile("pda_crc_chat.xml")
+	xml:InitFrame("frame1", self)
+	xml:InitFrame("frame2", self)
+	xml:InitFrame("frame3", self)
+
+	self.list_channel = crc_list.crc_list(xml, 'list_channel', self)
+    -- self:__init_channel_list()
+
+    self.messages_caption = xml:InitTextWnd("messages_caption", self)
+    self.messages_caption:SetText(game.translate_string('crc_pda_messages'))
+
+    self.users_caption = xml:InitTextWnd("users_caption", self)
+    self.users_caption:SetText(game.translate_string('crc_pda_users'))
+
+    self.message_list = xml:InitScrollView("messages", self) 
+	self.user_list = xml:InitScrollView("users", self) 
+
+	self.edit_box = crc_textbox.crc_textbox(xml, 'edit_box', self)
+
+	self.no_connection_error = xml:InitStatic("connection_lost", self)
+	self.no_connection_error:Show(false)
+
+	self.button_send = xml:Init3tButton('button_send', self)
+	self:Register(self.button_send, 'button_send')
+	self:AddCallback("button_send", ui_events.BUTTON_CLICKED, self.send, self)
+
+    self.messages = {}
+end
+
+function pda_crc_tab:__init_channel_list()
+    for i=1, #self.table_channel do
+		self.list_channel:AddItem(get_translation(self.table_channel[i]), i)
+	end
+end
+
+function pda_crc_tab:SetChannel(channel)
+    self.channel = channel
+    self.list_channel:SetText(get_translation(self.table_channel[self.channel]))
+end
+
+function pda_crc_tab:OnSelectChannel()
+	if self.channel == self.list_channel:CurrentID() then 
+        return 
+    end
+	
+    self.channel = self.list_channel:CurrentID()
+	cro_io.send("Channel/%s", self.channel)
+end
+
+function pda_crc_tab:send()
+	local input = self.edit_box:GetText()
+    news_manager.send_tip(db.actor, input, nil, nil, 1)
+
+	if input and input ~= "" then
+		self.edit_box:Clear()
+		crc_io.send("Message/%s/%s", db.actor:character_community(), input)
+	end
+
+	if crc_config.config.close_chat then
+		local pda_menu = ActorMenu.get_pda_menu()
+		local pda3d = get_console_cmd(1,"g_3d_pda")
+
+		if (pda3d) then
+			db.actor:activate_slot(0)
+		else
+			pda_menu:HideDialog()
+		end
+	end
+end
+
+function pda_crc_tab:is_open()
+    return self:IsShown()
+end
+
+function pda_crc_tab:show_UI()
+	self:update_users()
+	self:update_messages()
+end
+
+function pda_crc_tab:hide_UI()
+	Unregister_UI("ChatBox")
+end
+
+function pda_crc_tab:update_users()
+	self.user_list:Clear()
+
+	for k, v in pairs(self.users) do
+		is_in_game = v == "True"
+
+		local user = xml:InitStatic("user", nil)
+
+		xml:InitStatic("user:icon", user):InitTexture(self.knownIcons[k] or crc_icons.unknown)
+		xml:InitStatic("user:name", user):TextControl():SetText(k:sub(1, 20))
+		local user_status = xml:InitStatic("user:status", user)
+
+		if is_in_game then
+			user_status:TextControl():SetText(get_translation("crc_ingame"))
+			user_status:TextControl():SetTextColor(GetARGB(255, 128, 255, 154))
+		else
+			user_status:TextControl():SetText(get_translation("crc_notingame"))
+			user_status:TextControl():SetTextColor(GetARGB(255, 255, 128, 128))
+		end
+
+		self.user_list:AddWindow(user, true)
+		user:SetAutoDelete(true)
+	end
+end
+
+function pda_crc_tab:update_messages()
+    self.message_list:Clear()
+
+	for index, messageData in ipairs(self.messages) do
+        local message = xml:InitStatic("message", nil)
+
+        xml:InitStatic("message:image", message):InitTexture(messageData.icon)
+        xml:InitStatic("message:date_static", message):TextControl():SetText(game.get_game_time():dateToString())
+        xml:InitStatic("message:caption_static", message):TextControl():SetText(messageData.title)
+        xml:InitStatic("message:text_static", message):TextControl():SetText(messageData.text)
+
+	    self.message_list:AddWindow(message, true)
+	 	message:SetAutoDelete(true)
+	end
+end
+
+function pda_crc_tab:connection_lost(state)
+    self.no_connection_error:Show(state)
+    self.edit_box:Enable(not state)
+    self.button_send:Enable(not state)
+end
+
+function pda_crc_tab:save_icon(name, icon)
+    self.knownIcons[name] = icon
+end
+
+function pda_crc_tab:get_user(user)
+    return self.users[user]
+end
+
+function pda_crc_tab:set_users(users)
+    self.users = {}
+
+    for k, v in users do
+        self.users[k] = v
+    end
+
+    if self:is_open() then
+        self:update_users()
+    end
+end
