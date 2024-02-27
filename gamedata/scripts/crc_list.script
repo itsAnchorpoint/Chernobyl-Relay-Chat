@@ -1,0 +1,62 @@
+class "crc_list"
+function crc_list:__init(xml, xml_tag, parent)
+    self.parent = parent
+    self.xml = xml
+    self.xml_tag = xml_tag
+    self.button = xml:Init3tButton(xml_tag, self.parent)
+    self.list = xml:InitScrollView(xml_tag.."_list", self.parent)
+    self.list:Show(false)
+
+    self.button:TextControl():SetText("Where are you?")
+    self.selector_pos = 1
+    self.selector_char = ''
+
+    self.name = "crc_list"..xml_tag.."_btn"
+    self.value = 0
+    self.options = {}
+
+    self.parent:Register(self.button, self.name)
+    self.parent:AddCallback(self.name, ui_events.BUTTON_CLICKED, self.__handle_click, self)
+
+    RegisterScriptCallback("on_key_press", function(key) self:__handle_key_press(key) end)
+end
+
+function crc_list:SetText(text)
+    self.button:TextControl():SetText(text)
+end
+
+function crc_list:AddItem(text, id)
+    printf("AddItem text: %s id: %s", text, id)
+    table.insert(self.options, id, text)
+end
+
+function crc_list:__handle_click()
+    if self.list:IsShown() then
+        self.list:Show(false)
+        return
+    end
+
+    self.list:Clear()
+    
+	for index, messageData in ipairs(self.options) do
+        local message = self.xml:Init3tButton(self.xml_tag, nil)
+        message:SetText(text)
+
+        self.list:AddWindow(message, true)
+        message:SetAutoDelete(false)
+    end
+
+    self.list:Show(true)
+end
+
+function crc_list:__handle_key_press(key)
+    if self.button:IsCursorOverWindow() or self.list:IsCursorOverWindow() then
+        return
+    end
+    
+    if self.list:IsShown() then
+        if key == DIK_keys.MOUSE_1 or key == DIK_keys.MOUSE_2 or key == DIK_keys.DIK_ESCAPE then
+            self.list:Show(false)
+        end
+    end
+end

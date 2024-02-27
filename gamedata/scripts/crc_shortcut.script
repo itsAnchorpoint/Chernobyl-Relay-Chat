@@ -1,0 +1,39 @@
+--| Chernobyl Relay Chat
+--| Opening pda chat by clicking a button
+--| By Amon
+--| Inspirated by iTheon's PDA Tasbar
+
+function on_key_release(key)
+    if key == crc_config.config.chat_key then
+        local pda_menu = ActorMenu.get_pda_menu()
+        local pda3d = get_console_cmd(1,"g_3d_pda")
+        
+        if not (pda_menu:IsShown()) and db.actor:item_in_slot(8) then
+            if (pda3d) then
+                db.actor:activate_slot(8)
+            else
+                pda_menu:ShowDialog(true)
+            end
+            
+            pda_menu:SetActiveSubdialog("eptChat")
+            
+        elseif (pda_menu:IsShown()) then
+            if (not crc_pda.get_ui():is_open()) then
+                pda_menu:SetActiveSubdialog("eptChat")
+                return
+            end
+
+            if (pda3d) then
+                db.actor:activate_slot(0)
+            else
+                pda_menu:HideDialog()
+            end
+        end
+    end
+end
+
+function on_game_start()
+	RegisterScriptCallback("on_key_release", on_key_release)
+end
+
+db.actor:give_game_news(title, text, icon, 0, crc_config.config.news_duration)

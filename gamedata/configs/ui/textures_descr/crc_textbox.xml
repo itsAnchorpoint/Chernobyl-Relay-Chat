@@ -1,0 +1,18 @@
+<w>
+	<file name="ui\ui_crc_textbox">
+        <texture id="ui_crc_textbox_e" x="0" y="0" width="500" height="27" />
+	    <texture id="ui_crc_textbox_h" x="0" y="31" width="500" height="27" />
+	    <texture id="ui_crc_textbox_t" x="0" y="64" width="500" height="27" />
+	    <texture id="ui_crc_textbox_d" x="0" y="64" width="500" height="27" />
+
+        <texture id="ui_crc_button_e" x="0" y="99" width="100" height="27" />
+	    <texture id="ui_crc_button_h" x="0" y="130" width="100" height="27" />
+	    <texture id="ui_crc_button_t" x="0" y="163" width="100" height="27" />
+	    <texture id="ui_crc_button_d" x="0" y="163" width="100" height="27" />
+
+		<texture id="ui_crc_list_e" x="0" y="300" width="1" height="1" />
+	    <texture id="ui_crc_list_h" x="0" y="300" width="1" height="1" />
+	    <texture id="ui_crc_list_t" x="0" y="300" width="1" height="1" />
+	    <texture id="ui_crc_list_d" x="0" y="300" width="1" height="1" />
+	</file>
+</w>

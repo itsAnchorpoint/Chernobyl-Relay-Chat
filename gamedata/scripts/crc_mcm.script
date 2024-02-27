@@ -1,0 +1,27 @@
+--| Chernobyl Relay Chat
+--| integration of the crc Config with MCM by Amon
+--| Inspirated by iTheon's PDA Tasbar
+
+config = {
+	taskboard_key = DIK_keys.DIK_HOME,
+	newsDuration = 10000,
+	chatKey = DIK_keys.DIK_RETURN,
+	newsSound = true,
+	closeChat = true,
+	max_messages_size = 50,
+}
+
+op = {
+	id = "crc", sh = true, gr = {
+		{id = "chat_key", type = "key_bind", val = 2, def = config.taskboard_key},
+		{id = "news_duration", type = "input", val = 2, def = config.newsDuration},
+		{id = "news_sound", type = "check", val = 1, def = config.newsSound},
+		{id = "close_chat", type = "check", val = 1, def = config.closeChat},
+		{id = "max_messages_size", type = "input", val = 2, def = config.max_messages_size},
+	}
+}
+
+
+function on_mcm_load()
+    return op
+end

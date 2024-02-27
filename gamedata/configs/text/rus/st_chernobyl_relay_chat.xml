@@ -1,101 +1,104 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <string_table>
+	<string id="crc_pda_tab">
+		<text>пїЅпїЅпїЅ</text>
+	</string>
 	<string id="crc_info">
-		<text>Информация</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_error">
-		<text>Ошибка</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_money">
-		<text>отправил деньги</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_money_recv">
-		<text>отправил вам деньги</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_ingame">
-		<text>В Зоне</text>
+		<text>пїЅ пїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_notingame">
-		<text>Вне Зоны</text>
+		<text>пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ</text>
 	</string>	
 	<string id="crc_ccon">
-		<text>«О-Сознание»</text>
+		<text>пїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_admin">
-		<text>Администратор</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_unknown">
-		<text>Неизвестный</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_send">
-		<text>Отправить</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_close">
-		<text>Закрыть</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_signallost">
-		<text>[НЕТ СИГНАЛА]</text>
+		<text>[пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ]</text>
 	</string>
 
 	<string id="crc_actor_bandit">
-		<text>Бандиты</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_actor_csky">
-		<text>Чистое Небо</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_actor_dolg">
-		<text>Долг</text>
+		<text>пїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_actor_ecolog">
-		<text>Учёные</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_actor_freedom">
-		<text>Свобода</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_actor_stalker">
-		<text>Одиночки</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_actor_killer">
-		<text>Наёмники</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_actor_army">
-		<text>Военные</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_actor_monolith">
-		<text>Монолит</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_actor_zombied">
-		<text>Зомбированные</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_actor_renegade">
-		<text>Ренегаты</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_actor_greh">
-		<text>Грех</text>
+		<text>пїЅпїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_actor_isg">
-		<text>ИИГ</text>
+		<text>пїЅпїЅпїЅ</text>
 	</string>
 	<string id="crc_actor_anonymous">
-		<text>Анонимно</text>
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 	
-	<string id="#crcr_english">
+	<string id="#crc_english">
 		<text>Main Channel (Eng)</text>
 	</string>
-	<string id="#crcr_english_rp">
+	<string id="#crc_english_rp">
 		<text>Roleplay Channel (Eng)</text>
 	</string>
-	<string id="#crcr_english_shitposting">
+	<string id="#crc_english_shitposting">
 		<text>Unmoderated Channel (Eng)</text>
 	</string>
-	<string id="#crcr_russian">
-		<text>Основной Канал (Русский)</text>
+	<string id="#crc_russian">
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)</text>
 	</string>
-	<string id="#crcr_russian_rp">
-		<text>Ролевой Канал (Русский)</text>
+	<string id="#crc_russian_rp">
+		<text>пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)</text>
 	</string>
-	<string id="#crcr_tech_support">
-		<text>Tech Support/Техподдержка</text>
+	<string id="#crc_tech_support">
+		<text>Tech Support/пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</text>
 	</string>
 </string_table>

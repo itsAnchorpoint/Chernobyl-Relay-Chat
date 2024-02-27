@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <string_table>
+	<string id="crc_pda_tab">
+		<text>Chat</text>
+	</string>
 	<string id="crc_info">
 		<text>Information</text>
 	</string>
@@ -33,6 +36,11 @@
 	<string id="crc_close">
 		<text>Close</text>
 	</string>
+
+	<string id="crc_entermessage">
+		<text>Enter your message here</text>
+	</string>
+
 	<string id="crc_signallost">
 		<text>[SIGNAL LOST]</text>
 	</string>
@@ -80,22 +88,54 @@
 		<text>Anonymous</text>
 	</string>
 	
-	<string id="#crcr_english">
+	<string id="#crc_english">
 		<text>Main Channel (Eng)</text>
 	</string>
-	<string id="#crcr_english_rp">
+	<string id="#crc_english_rp">
 		<text>Roleplay Channel (Eng)</text>
 	</string>
-	<string id="#crcr_english_shitposting">
+	<string id="#crc_english_shitposting">
 		<text>Unmoderated Channel (Eng)</text>
 	</string>
-	<string id="#crcr_russian">
+	<string id="#crc_russian">
 		<text>Main Channel (Rus)</text>
 	</string>
-	<string id="#crcr_russian_rp">
+	<string id="#crc_russian_rp">
 		<text>Roleplay Channel (Rus)</text>
 	</string>
-	<string id="#crcr_tech_support">
+	<string id="#crc_tech_support">
 		<text>Tech Support</text>
+	</string>
+
+	<string id="crc_pda_messages">
+		<text>Chat Messages</text>
+	</string>
+
+	<string id="crc_pda_users">
+		<text>Users</text>
+	</string>
+
+	<string id="ui_mcm_menu_crc">
+		<text>CRC - Chat</text>
+	</string>
+
+	<string id="ui_mcm_crc_chat_key">
+		<text>Open/Close chat button</text>
+	</string>
+
+	<string id="ui_mcm_crc_news_duration">
+		<text>How long the message will be displayed</text>
+	</string>
+
+	<string id="ui_mcm_crc_news_sound">
+		<text>Play message sound</text>
+	</string>
+
+	<string id="ui_mcm_crc_close_chat">
+		<text>Close chat after sending</text>
+	</string>
+
+	<string id="ui_mcm_crc_max_messages_size">
+		<text>Save last n messages</text>
 	</string>
 </string_table>
