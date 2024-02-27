@@ -4,10 +4,14 @@ function crc_list:__init(xml, xml_tag, parent)
     self.xml = xml
     self.xml_tag = xml_tag
     self.button = xml:Init3tButton(xml_tag, self.parent)
-    self.list = xml:InitScrollView(xml_tag.."_list", self.parent)
-    self.list:Show(false)
+    self.list = xml:InitListBox(xml_tag.."_list", nil)
+    self.list_background = xml:InitFrame(xml_tag.."_list_background", nil)
 
-    self.button:TextControl():SetText("Where are you?")
+    self.parent:AttachChild(self.list_background)
+    self.parent:AttachChild(self.list)
+    self:Close()
+
+    self.button:TextControl():SetText("list")
     self.selector_pos = 1
     self.selector_char = ''
 
@@ -21,42 +25,91 @@ function crc_list:__init(xml, xml_tag, parent)
     RegisterScriptCallback("on_key_press", function(key) self:__handle_key_press(key) end)
 end
 
+function crc_list:Enable(value)
+    self.button:Enable(value)
+
+    if not value then
+        self:Close()
+    end
+end
+
 function crc_list:SetText(text)
     self.button:TextControl():SetText(text)
 end
 
 function crc_list:AddItem(text, id)
-    printf("AddItem text: %s id: %s", text, id)
     table.insert(self.options, id, text)
 end
 
-function crc_list:__handle_click()
+function crc_list:Close()
+    self.list_background:Show(false)
+    self.list:Show(false)
+end
+
+function crc_list:Open()
     if self.list:IsShown() then
-        self.list:Show(false)
         return
     end
+
+    self.parent:DetachChild(self.list_background)
+    self.parent:DetachChild(self.list)
+
+    self.parent:AttachChild(self.list_background)
+    self.parent:AttachChild(self.list)
 
     self.list:Clear()
     
-	for index, messageData in ipairs(self.options) do
-        local message = self.xml:Init3tButton(self.xml_tag, nil)
-        message:SetText(text)
-
-        self.list:AddWindow(message, true)
-        message:SetAutoDelete(false)
+    for index, text in ipairs(self.options) do
+        self.list:AddTextItem(text)
     end
-
+    
+    self.list_background:Show(true)
     self.list:Show(true)
 end
 
-function crc_list:__handle_key_press(key)
-    if self.button:IsCursorOverWindow() or self.list:IsCursorOverWindow() then
+
+function crc_list:__handle_click()
+    if self.list:IsShown() then
+        self:Close()
         return
     end
+
+    self:Open()
+end
+
+function crc_list:__handle_key_press(key)
+    if self.button:IsCursorOverWindow() then
+        return
+    end
+
+    if self.list_background:IsCursorOverWindow() then
+        if key ~= DIK_keys.MOUSE_1 then
+            return
+        end
+
+        for index, text in ipairs(self.options) do
+            local option = self.list:GetItemByIndex(index - 1) -- First ListBox item has id 0
+            
+            printf("Option is null: %s", option == nil)
+
+            if option and option:IsCursorOverWindow() then
+                printf("Selected: %s", text)
+                self:Close()
+                self.button:TextControl():SetText(text)
+
+                if self.on_select ~= null then 
+                    self.on_select(index, text)
+                end
+
+                return;
+            end
+        end
+    end
+
     
     if self.list:IsShown() then
         if key == DIK_keys.MOUSE_1 or key == DIK_keys.MOUSE_2 or key == DIK_keys.DIK_ESCAPE then
-            self.list:Show(false)
+            self:Close()
         end
     end
 end

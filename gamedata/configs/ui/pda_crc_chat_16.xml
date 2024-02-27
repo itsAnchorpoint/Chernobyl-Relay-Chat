@@ -22,12 +22,6 @@
 		</auto_frameline>
 	</frame3>
 
-	<list_channel_list x="50" y="122" width="160" height="100" item_height="21" always_show_scroll="1" />
-	<list_channel x="50" y="100" width="160" height="21">
-		<texture>ui_crc_list</texture>
-		<text align="l" font="letterica16" />
-    </list_channel>
-
     <messages_caption x="44" y="157" width="520" height="16">
 		<text align="l" font="letterica16" r="100" g="100" b="100"/>
 	</messages_caption>
@@ -76,6 +70,16 @@
 		<text font="letterica18" align="c">crc_send</text>
 	</button_send>
 
+	<list_channel x="36" y="100" width="160" height="21">
+		<texture>ui_crc_list</texture>
+		<text x="5" y="2" align="l" font="letterica16" />
+    </list_channel>
+
+	<list_channel_list x="36" y="124" width="160" height="100" item_height="21" always_show_scroll="1" frame_mode="0" />
+	<list_channel_list_background x="34" y="122" width="164" height="104" stretch="1" frame_mode="0">
+		<texture>ui_crc_list_background</texture>
+	</list_channel_list_background>
+ 
 	<connection_lost x="0" y="0" width="800" height="800" stretch="1">
 		<texture>ui\crc_log_background</texture>
 		<text y="100" font="graffiti22" color="pda_red" vert_align="c" align="c">crc_signallost</text>
