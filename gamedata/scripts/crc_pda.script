@@ -47,7 +47,7 @@ function addMessage(icon, title, text)
     table.insert(get_ui().messages, 1, {title = title, text = text, icon = icon})
 
 	if not get_ui():is_open() then
-		-- TODO -> Change give_game_news to custom PDA NEW implementation
+		-- TODO -> Change give_game_news to custom news implementation
 		db.actor:give_game_news(title, text, icon, 0, crc_config.config.news_duration)
 	end
 
@@ -93,7 +93,8 @@ function pda_crc_tab:InitControls()
 	xml:InitFrame("frame3", self)
 
 	self.list_channel = crc_list.crc_list(xml, 'list_channel', self)
-    -- self:__init_channel_list()
+	self.list_channel.on_select = function(id) self:OnSelectChannel(id) end
+    self:__init_channel_list()
 
     self.messages_caption = xml:InitTextWnd("messages_caption", self)
     self.messages_caption:SetText(game.translate_string('crc_pda_messages'))
@@ -117,6 +118,8 @@ function pda_crc_tab:InitControls()
 end
 
 function pda_crc_tab:__init_channel_list()
+	self.list_channel:SetText(game.translate_string(self.table_channel[self.channel]))
+
     for i=1, #self.table_channel do
 		self.list_channel:AddItem(get_translation(self.table_channel[i]), i)
 	end
@@ -127,13 +130,11 @@ function pda_crc_tab:SetChannel(channel)
     self.list_channel:SetText(get_translation(self.table_channel[self.channel]))
 end
 
-function pda_crc_tab:OnSelectChannel()
-	if self.channel == self.list_channel:CurrentID() then 
-        return 
+function pda_crc_tab:OnSelectChannel(channel)
+	if self.channel ~= channel then 
+		self.channel = channel
+		crc_io.send("Channel/%s", self.channel)
     end
-	
-    self.channel = self.list_channel:CurrentID()
-	cro_io.send("Channel/%s", self.channel)
 end
 
 function pda_crc_tab:send()
@@ -215,6 +216,7 @@ function pda_crc_tab:connection_lost(state)
     self.no_connection_error:Show(state)
     self.edit_box:Enable(not state)
     self.button_send:Enable(not state)
+	self.list_channel:Enable(not state)
 end
 
 function pda_crc_tab:save_icon(name, icon)

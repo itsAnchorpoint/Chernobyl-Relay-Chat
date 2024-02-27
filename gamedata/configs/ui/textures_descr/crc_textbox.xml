@@ -10,9 +10,19 @@
 	    <texture id="ui_crc_button_t" x="0" y="163" width="100" height="27" />
 	    <texture id="ui_crc_button_d" x="0" y="163" width="100" height="27" />
 
-		<texture id="ui_crc_list_e" x="0" y="300" width="1" height="1" />
-	    <texture id="ui_crc_list_h" x="0" y="300" width="1" height="1" />
-	    <texture id="ui_crc_list_t" x="0" y="300" width="1" height="1" />
-	    <texture id="ui_crc_list_d" x="0" y="300" width="1" height="1" />
+		<texture id="ui_crc_list_e" x="106" y="99" width="175" height="19" />
+	    <texture id="ui_crc_list_h" x="106" y="130" width="175" height="19" />
+	    <texture id="ui_crc_list_t" x="106" y="130" width="175" height="19" />
+	    <texture id="ui_crc_list_d" x="106" y="130" width="175" height="19" />
+
+		<texture id="ui_crc_list_background_lt"   x="106" y="163" width="20" height="19" />
+	    <texture id="ui_crc_list_background_l"    x="106" y="172" width="20" height="11" />
+	    <texture id="ui_crc_list_background_lb"   x="106" y="186" width="20" height="11" />
+	    <texture id="ui_crc_list_background_t"    x="128" y="163" width="56" height="19" />
+	    <texture id="ui_crc_list_background_back" x="123" y="171" width="56" height="11" />
+	    <texture id="ui_crc_list_background_b"    x="121" y="186" width="56" height="11" />
+	    <texture id="ui_crc_list_background_rt"   x="182" y="163" width="20" height="19" />
+	    <texture id="ui_crc_list_background_r"    x="182" y="172" width="20" height="11" />
+	    <texture id="ui_crc_list_background_rb"   x="182" y="186" width="20" height="11" />
 	</file>
 </w>

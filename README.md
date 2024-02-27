@@ -24,7 +24,6 @@ IF ANYONE IS WILLING TO HELP WITH ANY OF THIS FEATURES, FEEL FREE TO HIT ME ON D
 - Advanced anti-spam and moderation features
 - New interface
 - (possibly) Own private IRC-server
-- New In-game chat GUI and (possibly) integrating it in Anomaly's 3D PDA  
 
 # Credits
 TKGP: Original CRC  
@@ -36,3 +35,4 @@ nixx quality: GitHubUpdate
   
 av661194, OWL, XMODER, Anchorpoint: Russian translation  
 Rebirth changes: Anchorpoint
+PDA Integration AmonDeShir
