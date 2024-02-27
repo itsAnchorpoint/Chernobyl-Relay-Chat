@@ -88,22 +88,22 @@
 		<text>Anonymous</text>
 	</string>
 	
-	<string id="#crc_english">
+	<string id="#crcr_english">
 		<text>Main Channel (Eng)</text>
 	</string>
-	<string id="#crc_english_rp">
+	<string id="#crcr_english_rp">
 		<text>Roleplay Channel (Eng)</text>
 	</string>
-	<string id="#crc_english_shitposting">
+	<string id="#crcr_english_shitposting">
 		<text>Unmoderated Channel (Eng)</text>
 	</string>
-	<string id="#crc_russian">
+	<string id="#crcr_russian">
 		<text>Main Channel (Rus)</text>
 	</string>
-	<string id="#crc_russian_rp">
+	<string id="#crcr_russian_rp">
 		<text>Roleplay Channel (Rus)</text>
 	</string>
-	<string id="#crc_tech_support">
+	<string id="#crcr_tech_support">
 		<text>Tech Support</text>
 	</string>
 
