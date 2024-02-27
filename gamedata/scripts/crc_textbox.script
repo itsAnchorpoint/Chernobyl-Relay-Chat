@@ -117,6 +117,10 @@ end
 
 function crc_textbox:Enable(value)
     self.button:Enable(value)
+
+    if not value then
+        self:Unfocus()
+    end
 end
 
 function crc_textbox:Focus()
