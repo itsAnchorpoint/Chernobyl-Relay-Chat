@@ -106,6 +106,7 @@ function pda_crc_tab:InitControls()
 	self.user_list = xml:InitScrollView("users", self) 
 
 	self.edit_box = crc_textbox.crc_textbox(xml, 'edit_box', self)
+	self.edit_box.on_key_press = function(key) return self:handleEditKeyPress(key) end
 
 	self.no_connection_error = xml:InitStatic("connection_lost", self)
 	self.no_connection_error:Show(false)
@@ -135,6 +136,20 @@ function pda_crc_tab:OnSelectChannel(channel)
 		self.channel = channel
 		crc_io.send("Channel/%s", self.channel)
     end
+end
+
+function pda_crc_tab:handleEditKeyPress(key)
+	if key == crc_config.config.chat_key then
+        crc_shortcut.on_key_release(key)
+        return true
+    end
+
+	if key == DIK_keys.DIK_RETURN then
+        self:send()
+        return true
+    end
+
+	return false
 end
 
 function pda_crc_tab:send()
