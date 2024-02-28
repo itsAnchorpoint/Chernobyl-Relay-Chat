@@ -1,0 +1,4 @@
+{
+    "editor.tabSize": 4,
+    "Lua.misc.parameters": ["--develop=true"],
+}
