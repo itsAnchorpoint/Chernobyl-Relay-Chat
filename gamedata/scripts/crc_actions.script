@@ -1,125 +1,133 @@
---| Chernobyl Relay Chat
---| Commands accepted by CRC Client
---| By TKGP
---| crc additions by Anchorpoint
+--| Commands accepted by CRC Client <br>
+--| By TKGP, Anchorpoint, Amon
 
 -- Constants
-local UPDATE_INTERVAL = 250
-local INPATH = getFS():update_path("$game_config$", "").."\\crc_input.txt"
-local OUTPATH = getFS():update_path("$game_config$", "").."\\crc_output.txt"
 local QUERY_COLOR = "%c[255,255,192,192]"
 local ERROR_COLOR = "%c[255,255,128,128]"
 local HIGHLIGHT_COLOR = "%c[255,255,255,128]"
 local MONEY_COLOR = "%c[255,255,139,1]"
 local INGAME_COLOR = "%c[255,128,255,154]"
 
-local function get_translation(id)
-	local result = game.translate_string(id)
-	if result == id then
-		return nil
-	else
-		return result
-	end
-end
-
+--- All available commands
 actions = {
+
+	--- Adds an info message to the chat and logs in the PDA.
+	--- @param body string
 	Information = function (body)
-		icon = crc_icons.info
-		title = get_translation("crc_info")
-		text = body
-		crc_pda.addMessage(icon, title, text)
+		local icon = crc_user.info
+		local title = game.translate_string("crc_info")
+		local text = body
+		crc_pda.add_message(icon, title, text)
 	end,
 
+	--- Adds an error message to the chat and logs in the PDA.
+	--- @param body string
 	Error = function (body)
-		icon = crc_icons.error
-		title = get_translation("crc_error")
-		text = ERROR_COLOR..body
-        
-		crc_pda.addMessage(icon, title, text)
+		local icon = crc_user.error
+		local title = game.translate_string("crc_error")
+		local text = ERROR_COLOR .. body
+
+		crc_pda.add_message(icon, title, text)
 	end,
 
+	--- Adds an error message to the chat and logs in the PDA.
+	--- @param body string
 	Message = function (body)
 		local faction, name, highlight, message = body:match("([^/]+)/([^/]+)/([^/]+)/(.+)")
 		highlight = highlight == "True"
-		
-        icon = crc_icons.getIcon(name, faction)
+
+        local icon = crc_user.get_icon(name, faction)
 		crc_pda.get_ui():save_icon(name, icon)
-		
+
         if crc_pda.get_ui():is_open() then
 	    	crc_pda.get_ui():update_users()
 	    end
 
-		title = name..", "..(name == "Anchorpoint" and get_translation("crc_admin")
-			or get_translation("crc_"..faction) or get_translation("crc_actor_anonymous") or get_translation("crc_unknown"))
+		local text = ""
+		local title = crc_user.get_full_name(name, faction)
+
 		if highlight then
-			text = HIGHLIGHT_COLOR..message
+			text = HIGHLIGHT_COLOR .. message
 		else
 			text = message
 		end
 
-		crc_pda.addMessage(icon, title, text)
+		crc_pda.add_message(icon, title, text)
 	end,
 
+	--- Adds a direct messages bettwen two players
+	--- @param body string
 	Query = function (body)
 		local faction, from, to, message = body:match("([^/]+)/([^/]+)/([^/]+)/(.+)")
-		
-        icon = crc_icons.getIcon(from, faction)
-		crc_pda.get_ui():save_icon(name, icon)
+
+        local icon = crc_user.getIcon(from, faction)
+		crc_pda.get_ui():save_icon(from, icon)
 
         if crc_pda.get_ui():is_open() then
 	    	crc_pda.get_ui():update_users()
 	    end
 
-		title = from.." -> "..to
-		text = QUERY_COLOR..message
-        
-		crc_pda.addMessage(icon, title, text)
+		local title = from .. " -> " .. to
+		local text = QUERY_COLOR..message
+
+		crc_pda.add_message(icon, title, text)
 	end,
 
+	--- Sends money to somebody
+	--- @param body string
 	Money = function(body)
 		local from, to, message = body:match("([^/]+)/([^/]+)/(.+)")
-		icon = crc_icons.info
-       
+		local icon = crc_user.info
+
         if crc_pda.get_ui():is_open() then
 	    	crc_pda.get_ui():update_users()
 	    end
 
-		title = from.." "..(get_translation("crc_money")).." "..to
-		text = MONEY_COLOR..message.." RUB"
-		
-        crc_pda.addMessage(icon, title, text)
-		
+		local title = from .. " " .. (game.translate_string("crc_money")) .. " " .. to
+		local text = MONEY_COLOR..message.." RUB"
+
+        crc_pda.add_message(icon, title, text)
+
         if crc_pda.get_ui():get_user(from) then
 			db.actor:give_money(-message)
 		end
 	end,
 
+	--- Reciving money from somebody
+	--- @param body string
 	MoneyRecv = function(body)
 		local from, message = body:match("([^/]+)/(.+)")
-		icon = crc_icons.info
-		
+		local icon = crc_user.info
+
         if crc_pda.get_ui():is_open() then
 	    	crc_pda.get_ui():update_users()
 	    end
 
-		title = from.." "..(get_translation("crc_money_recv"))
-		text = MONEY_COLOR..message.." RUB"
+		local title = from .. " " .. (game.translate_string("crc_money_recv"))
+		local text = MONEY_COLOR .. message .. " RUB"
 
-		crc_pda.addMessage(icon, title, text)
-		db.actor:give_money(message)		
+		crc_pda.add_message(icon, title, text)
+		db.actor:give_money(message)
 	end,
 
+	--- Sending player info or updating ingame settings
+	--- @param body string
 	Setting = function (body)
 		local setting, value = body:match("([^/]+)/(.+)")
         if setting == "ActorStatus" then
 			crc_io.send("Money/%s", db.actor:money())
-			crc_io.send("ConnLost/%s", crc_player_events.fake_conn_lost())
+			crc_io.send("ConnLost/%s", crc_player_events.is_connection_lost())
 			crc_io.send("DEBUG/%s", DEV_DEBUG)
 		elseif setting == "Channel" then
 			crc_pda.get_ui().channel = tonumber(value)
 		end
+
+		--- try update the mod settings
+		crc_config.load_settings_from_exe_app(body)
 	end,
 
+	--- Receives user list
+	--- @param body string
 	Users = function (body)
 		crc_pda.get_ui():set_users(body:gmatch("([^/]+)%s=%s([^/]+)"))
 	end,

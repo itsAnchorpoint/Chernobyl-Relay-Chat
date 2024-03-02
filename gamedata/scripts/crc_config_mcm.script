@@ -1,0 +1,6 @@
+--| Chernobyl Relay Chat
+--| integration of the crc Config with MCM by Amon
+
+function on_mcm_load()
+    return crc_config.get_mcm_config()
+end

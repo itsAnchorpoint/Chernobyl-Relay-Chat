@@ -1,22 +1,41 @@
-class "crc_list"
-function crc_list:__init(xml, xml_tag, parent)
+--| UI selectbox implementation for PDA 
+--| By Amon
+
+--- Simple select component
+class "CRCList"
+
+--- @param xml CScriptXmlInit
+--- @param xml_tag string
+--- @param parent CUIScriptWnd
+function CRCList:__init(xml, xml_tag, parent)
     self.parent = parent
     self.xml = xml
     self.xml_tag = xml_tag
+
+    --- The function that is executed after changing the selected list item
+    --- @type (fun(id: number, item: string): nil) | nil
+    self.on_select = nil
+
+    -- The component consists of three elements. A button which is used to display an acutely selected list item as well as to open and close it. 
+    -- And a scrollable List which is used to display all available options, this list displays when the player clicks on the button. 
+    -- In addition, there is a Fram which displays the background of the list.
+    --
+    -- We want the list, when opened, to always be displayed at the top. The GUI in stalker displays the most recently 
+    -- added item on the top. However, when we set a parent other than nil during initialization, the game crashes when using DetachChild method.
     self.button = xml:Init3tButton(xml_tag, self.parent)
     self.list = xml:InitListBox(xml_tag.."_list", nil)
     self.list_background = xml:InitFrame(xml_tag.."_list_background", nil)
 
     self.parent:AttachChild(self.list_background)
     self.parent:AttachChild(self.list)
-    self:Close()
+    self:close()
 
     self.button:TextControl():SetText("list")
-    self.selector_pos = 1
-    self.selector_char = ''
 
-    self.name = "crc_list"..xml_tag.."_btn"
-    self.value = 0
+    self.name = "CRCList"..xml_tag.."_btn"
+    self.selcted = 0
+
+    --- @type string[]
     self.options = {}
 
     self.parent:Register(self.button, self.name)
@@ -25,79 +44,96 @@ function crc_list:__init(xml, xml_tag, parent)
     RegisterScriptCallback("on_key_press", function(key) self:__handle_key_press(key) end)
 end
 
-function crc_list:Enable(value)
+--- Removes/Adds the ability to change the selected item
+--- @param value boolean
+function CRCList:enable(value)
     self.button:Enable(value)
 
     if not value then
-        self:Close()
+        self:close()
     end
 end
 
-function crc_list:SetText(text)
-    self.button:TextControl():SetText(text)
+--- @param item number
+function CRCList:select_item(item)
+    self.button:TextControl():SetText(self.options[item])
 end
 
-function crc_list:AddItem(text, id)
+--- Adds a new item top the list
+--- @param text string
+--- @param id number | nil
+function CRCList:add_item(text, id)
+    if id == nil then
+        id = #self.options + 1
+    end
+
     table.insert(self.options, id, text)
 end
 
-function crc_list:Close()
+--- Closes the list
+function CRCList:close()
     self.list_background:Show(false)
     self.list:Show(false)
 end
 
-function crc_list:Open()
+--- Redraws the list and displays the list
+function CRCList:open()
     if self.list:IsShown() then
         return
     end
 
+    --- We add and remove the list to make sure it is the last item added and will be displayed at the top
     self.parent:DetachChild(self.list_background)
-    self.parent:DetachChild(self.list)
-
+    self.parent:DetachChild(self.list) 
     self.parent:AttachChild(self.list_background)
     self.parent:AttachChild(self.list)
 
     self.list:Clear()
-    
-    for index, text in ipairs(self.options) do
+
+    for _, text in ipairs(self.options) do
         self.list:AddTextItem(text)
     end
-    
+
     self.list_background:Show(true)
     self.list:Show(true)
 end
 
 
-function crc_list:__handle_click()
+--- @private function that opens and hides a list when clicked on
+function CRCList:__handle_click()
     if self.list:IsShown() then
-        self:Close()
+        self:close()
         return
     end
 
-    self:Open()
+    self:open()
 end
 
-function crc_list:__handle_key_press(key)
+--- @private function that changes the selected list item (by reacting to the LMB click event)
+function CRCList:__handle_key_press(key)
+    -- ignore the clicking on the button we handle via CRCList:__handle_click()
     if self.button:IsCursorOverWindow() then
         return
     end
 
+    -- selecting item from list
     if self.list_background:IsCursorOverWindow() then
+        -- we only care about LMB
         if key ~= DIK_keys.MOUSE_1 then
             return
         end
 
         for index, text in ipairs(self.options) do
             local option = self.list:GetItemByIndex(index - 1) -- First ListBox item has id 0
-            
-            printf("Option is null: %s", option == nil)
 
+            -- is item from options list selected?
+            -- then update selected item and close option menu
             if option and option:IsCursorOverWindow() then
-                printf("Selected: %s", text)
-                self:Close()
+                self:close()
                 self.button:TextControl():SetText(text)
 
-                if self.on_select ~= null then 
+                -- run event handler if defined
+                if self.on_select ~= nil then
                     self.on_select(index, text)
                 end
 
@@ -106,10 +142,10 @@ function crc_list:__handle_key_press(key)
         end
     end
 
-    
+    --- close list if user clicked on other gui element
     if self.list:IsShown() then
         if key == DIK_keys.MOUSE_1 or key == DIK_keys.MOUSE_2 or key == DIK_keys.DIK_ESCAPE then
-            self:Close()
+            self:close()
         end
     end
 end

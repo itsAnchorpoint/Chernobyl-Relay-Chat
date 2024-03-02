@@ -1,52 +1,37 @@
+--| Sending information about the death of the player, 
+--| and simulating the connection lost during the emission
+--| By TKGP, Anchorpoint, Amon
+
 local prev_fake_conn_status = nil
 local prev_money = nil
-local isDead = false
+local is_dead = false
 
-local function get_translation(id)
-	local result = game.translate_string(id)
-	if result == id then
-		return nil
-	else
-		return result
+--- Updates the player's connection status
+function fake_conn_lost_update_client()
+	local cur_fake_conn_status = is_connection_lost()
+    crc_pda:get_ui():connection_lost(cur_fake_conn_status)
+
+	--- update connection status
+    if prev_fake_conn_status ~= cur_fake_conn_status then
+		prev_fake_conn_status = cur_fake_conn_status
+		crc_io.send("ConnLost/%s", cur_fake_conn_status)
+		printf("Connection status updated to client - "..tostring(cur_fake_conn_status))
 	end
 end
 
-function fake_conn_lost_update_client()
-	local cur_fake_conn_status = fake_conn_lost()
-    crc_pda:get_ui():connection_lost(cur_fake_conn_status)
-
-    if prev_fake_conn_status == cur_fake_conn_status then 
-        return 
-    end
-	
-    prev_fake_conn_status = cur_fake_conn_status
-	crc_io.send("ConnLost/%s", cur_fake_conn_status)
-	printf("Connection status updated to client - "..tostring(cur_fake_conn_status))
-end
-
-function fake_conn_lost()
+--- Returns true if the player is underground or there is an emission.
+function is_connection_lost()
 	return level_weathers.bLevelUnderground or xr_conditions.surge_started()
 end
 
-function load_state(m_data)
-	prev_fake_conn_status = m_data.connstatus or false
-	crc_pda.start_channel = m_data.prevChannel or 1
-end
-
-function save_state(m_data)
-	m_data.connstatus = prev_fake_conn_status
-	m_data.prevChannel = crc_pda:get_ui().channel
-end
-
+--- updates the EXE application information about the player's money
 function update_money()
     local cur_money = db.actor:money()
-    if prev_money == cur_money 
-        then return 
+
+    if prev_money ~= cur_money then
+		prev_money = cur_money
+		crc_io.send("Money/%s", cur_money)
     end
-    
-    -- munie changed here
-    prev_money = cur_money
-	crc_io.send("Money/%s", cur_money)
 end
 
 function actor_on_update()
@@ -54,6 +39,7 @@ function actor_on_update()
 	fake_conn_lost_update_client()
 end
 
+--- send message about player's death
 local function onDeath(whoID)
 	local section, class
 	local who = whoID and alife():object(whoID)
@@ -64,24 +50,36 @@ local function onDeath(whoID)
 	else
 		section = who:section_name()
 		class = ini_sys:r_string_ex(section, "kind") or ini_sys:r_string_ex(section, "class")
+
 		if class == "AI_STL_S" then
 			class = who:community()
 		end
-	end	
+	end
 
-	if not isDead then --possible fix for death message spam
+	--- allow only a single player death message to be sent
+	if not is_dead then
 		crc_io.send("Death/%s/%s/%s/%s", db.actor:character_community(), level.name(), class:upper(), section)
-		isDead = true
+		is_dead = true
 	end
 end
 
+--- Saves information about the selected channel and current connection status before player exit the game
+function save_state(m_data)
+	m_data.connstatus = prev_fake_conn_status
+	m_data.prevChannel = crc_pda:get_ui().channel
+end
+
+--- Loads information about the selected channel and current connection status the from save file
+function load_state(m_data)
+	prev_fake_conn_status = m_data.connstatus or false
+	crc_pda.start_channel = m_data.prevChannel or 1
+end
 
 function on_game_start()
-    isDead = false
+    is_dead = false
 
 	RegisterScriptCallback("save_state", save_state)
 	RegisterScriptCallback("load_state", load_state)
     RegisterScriptCallback("actor_on_before_death", onDeath)
 	RegisterScriptCallback("actor_on_update", actor_on_update)
-    RegisterScriptCallback("actor_on_first_update", handshake)
 end

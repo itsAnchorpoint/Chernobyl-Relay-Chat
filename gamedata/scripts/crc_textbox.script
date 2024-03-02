@@ -1,13 +1,25 @@
-local CURSOR_PDA_TO_UI = 0
-local focus_id = 0
-local unfocus_id = 0
+--| UI textbox implementation for PDA 
+--| By Amon
 
-class "crc_textbox_fakeui" (CUIScriptWnd)
-function crc_textbox_fakeui:__init(parent) super()
+--- An empty UI class that displays nothing. Stalker gives you the ability 
+--- to block keyboard-related actions, such as player movement, when displaying the UI. 
+--- However, this does not work with anything displayed inside the PDA. That's why we need a fake ui for this.
+class "CRCTextboxFakeui" (CUIScriptWnd)
+
+function CRCTextboxFakeui:__init(parent) super()
     self.__parent = parent
+
+    --- @type fun(self: any, key: number) | nil
+    self.handle_key_press = nil
+
+    --- @type fun(self: any, key: number) | nil
+    self.handle_key_release = nil
 end
 
-function crc_textbox_fakeui:OnKeyboard(dik, keyboard_action)
+--- Pass the checkbox press/release event to the corresponding handler. 
+--- When Fakeui is displayed then all keyboard related events are handled by this method and not by the corresponding PDA's method. 
+--- Therefore, the following redirection of events is needed.
+function CRCTextboxFakeui:OnKeyboard(dik, keyboard_action)
 	local res = CUIScriptWnd.OnKeyboard(self,dik,keyboard_action)
 
 	if res == false then
@@ -15,7 +27,7 @@ function crc_textbox_fakeui:OnKeyboard(dik, keyboard_action)
             if self.handle_key_press ~= nil then
                 self.handle_key_press(self.__parent, dik)
             end
-        
+
         elseif keyboard_action == ui_events.WINDOW_KEY_RELEASED then
             if self.handle_key_release ~= nil then
                 self.handle_key_release(self.__parent, dik)
@@ -26,38 +38,83 @@ function crc_textbox_fakeui:OnKeyboard(dik, keyboard_action)
 	return res
 end
 
-class "crc_textbox"
-function crc_textbox:__init(xml, xml_tag, parent)
+--- A simple checkbox based textbox implementation. <br><br>
+--- Unfortunately stalker's textbox is not adapted to be displayed in gui in 3D pda. 
+--- This results in a ton of bugs, for example, a single key press results in typing a random number of letters, 
+--- not to mention not locking keyboard shortcuts while typing, resulting in funny systulations such as the PDA being thrown away while typing a word with the letter 'g'.
+--- This implementation solves these problems.
+class "CRCTextbox"
+
+function CRCTextbox:__init(xml, xml_tag, parent)
+    --- CECTextbox is not actually a gui element (it does not inherit under CUIScriptWnd) 
+    --- all ui elements and events are registered and added actually to its parent.
+    --- @type CUIScriptWnd
     self.parent = parent
-    self.button = xml:InitCheck(xml_tag, self.parent)
-    self.button:TextControl():SetFont(GetFontLetterica16Russian())
+
+    --- CECTextbox is actually a checkbox that changes its text after pressing a key on the keyboard
+    self.checkbox = xml:InitCheck(xml_tag, self.parent)
+    self.checkbox:TextControl():SetFont(GetFontLetterica16Russian())
+
+    --- position of the cursor inside the textbox
+    --- @type number
     self.selector_pos = 1
+
+    --- The character representing the cursor. I'm unable to measure the text dimensions, 
+    --- so the cursor is just the "|" character displayed in the checkbox text
+    --- @type string
     self.selector_char = ''
 
-    self.name = "crc_textbox_"..xml_tag.."_btn"
+    --- is selector displayed?
+    --- @type boolean
+    self.show_selector = false
+
+    --- @type string
+    self.name = "CRCTextbox_" .. xml_tag .. "_btn"
+
+    --- text inside the textbox
+    --- @type string
     self.value = ""
-    self.edit_mode = false
+
+    --- is shit pressed?
+    --- @type boolean
     self.capital_mode = false
+
+    --- store the last key pressed
+    --- @type number|nil
     self.last_pressed_key = nil
-    self.fake_ui = crc_textbox_fakeui(self)
 
-    self:Clear()
-    self:SetSelectorPos(0)
+    --- fakeui used to block keyboard-related actions, such as player movement
+    --- @type CRCTextboxFakeui
+    self.fake_ui = CRCTextboxFakeui(self)
 
-    self.parent:Register(self.button, self.name)
+    self:clear()
+    self:set_selector_pos(0)
+
+    self.parent:Register(self.checkbox, self.name)
     self.parent:AddCallback(self.name, ui_events.BUTTON_CLICKED, self.__handle_click, self)
-    
+    printf("Textbox functing registerd~!!!!!!!!!!!!!!!!!!")
+
     self.fake_ui.handle_key_press = self.__handle_key_press
     self.fake_ui.handle_key_release = self.__handle_key_release
+
+    --- A function that is executed when the textbox is in edit mode and a button is pressed, just before the letter is added to the textbox. 
+    --- If this function returns true the letter will not be added and the textbox will exit edit mode. <br><br>
+    ---
+    --- It's useful for handling all sorts of keyboard shortcuts such as sending a message when the enter key is pressed
+    --- @type (fun(key: number): boolean) | nil
+    self.on_key_press = nil
 end
 
-
-function crc_textbox:SetSelectorPos(target)
+--- sets the cursor position
+--- @param target number
+function CRCTextbox:set_selector_pos(target)
     self.selector_pos = math.min(math.max(target, 0), self.value:len())
     self:__insert_cursor()
 end
 
-function crc_textbox:__txt_before_selector()
+--- returns text after the cursor
+--- @return string
+function CRCTextbox:__txt_before_selector()
     if self.selector_pos > 0 then
         return self.value:sub(1, self.selector_pos)
     else
@@ -65,7 +122,9 @@ function crc_textbox:__txt_before_selector()
     end
 end
 
-function crc_textbox:__txt_after_selector()
+--- returns text before the cursor
+--- @return string
+function CRCTextbox:__txt_after_selector()
     if self.selector_pos > 0 then
         return self.value:sub(self.selector_pos+1)
     else
@@ -73,149 +132,206 @@ function crc_textbox:__txt_after_selector()
     end
 end
 
-function crc_textbox:__insert_cursor()
-    self.button:TextControl():SetText(self:__txt_before_selector() .. self.selector_char .. self:__txt_after_selector())
+--- modifies the checkbox's text, inserting a cursor character 
+--- at the location specified by the selector_pos variable
+function CRCTextbox:__insert_cursor()
+    self.checkbox:TextControl():SetText(self:__txt_before_selector() .. self.selector_char .. self:__txt_after_selector())
 end
 
-function crc_textbox:__add_leter(letter)
+--- adds a letter to the checkbox's text after the cursor, and updates its position.
+--- @param letter string
+function CRCTextbox:__add_letter(letter)
     self.value = self:__txt_before_selector() .. letter .. self:__txt_after_selector()
-    self:SetSelectorPos(self.selector_pos + 1)
+    self:set_selector_pos(self.selector_pos + 1)
 end
 
-function crc_textbox:__remove_leter()
+--- removes a letter from the checkbox's text before the cursor, and updates its position.
+function CRCTextbox:__remove_letter()
     self.value = self:__txt_before_selector():sub(1, -2) .. self:__txt_after_selector()
-    self:SetSelectorPos(self.selector_pos - 1)
+    self:set_selector_pos(self.selector_pos - 1)
 end
 
-function crc_textbox:__remove_leter_after()
-    self:SetText(self:__txt_before_selector() .. self:__txt_after_selector():sub(2))
+--- removes a letter from the checkbox's text, after the cursor
+function CRCTextbox:__remove_letter_after()
+    self:set_text(self:__txt_before_selector() .. self:__txt_after_selector():sub(2))
 end
 
-function crc_textbox:SetText(value)
+--- returns the current textbox's text
+--- @return string
+function CRCTextbox:get_text()
+    return self.value
+end
+
+--- changes the textbox's text, and updates the cursor position
+--- @param value string
+function CRCTextbox:set_text(value)
     self.value = value
     self:__insert_cursor()
 end
 
-function crc_textbox:Clear()
-    self:SetText("")
+--- makes the textbox's text an empty string and displays the paceholder text instead.
+function CRCTextbox:clear()
+    self:set_text("")
     self:__display_placeholder()
 end
 
-function crc_textbox:__display_placeholder()
-    if not self.edit_mode and self.value:len() == 0 then
-        self.button:TextControl():SetText(game.translate_string('crc_entermessage'))
+--- displays a placeholder text if the textbox is not in the edit mode and has no content in it.
+function CRCTextbox:__display_placeholder()
+    if not self.show_selector and self.value:len() == 0 then
+        self.checkbox:TextControl():SetText(game.translate_string('crc_entermessage'))
     end
 end
 
-function crc_textbox:GetText()
-    return self.value
+--- makes textbox visable/hidden
+--- @param value boolean
+function CRCTextbox:show(value)
+    self.checkbox:Show(value)
 end
 
-function crc_textbox:Show(value)
-    self.button:Show(value)
-end
-
-function crc_textbox:Enable(value)
-    self.button:Enable(value)
+--- removes/adds the ability to edit the textbox text
+--- @param value boolean
+function CRCTextbox:enable(value)
+    self.checkbox:Enable(value)
 
     if not value then
-        self:Unfocus()
+        self:unfocus()
     end
 end
 
-function crc_textbox:Focus()
-    self.edit_mode = true
-    self.button:SetCheck(true)
+--- is textbox in edit_mode?
+--- @return boolean
+function CRCTextbox:is_focused()
+    return self.show_selector
+end
+
+--- Setting textbox into the edit mode, displays the cursor, blocks all game's keyboard actions, hides the mouse cursor
+function CRCTextbox:focus()
+    printf("focusing!!!!!")
+
+    --- make checkbox pressed to indicate the edit mode
+    self.checkbox:SetCheck(true)
+    --- show the fakeui to block character movement
     self.fake_ui:ShowDialog()
+    --- display the edit cursor
     self.selector_char = '|'
+    self.show_selector = true
     self:__insert_cursor()
 
-    Register_UI("crc_fake_ui", "crc_textbox")
-    
+    --- block all game's shortcuts registered in lua
+    Register_UI("crc_fake_ui", "CRCTextbox")
+
+    --- move the mouse cursor off the screen to have the effect of hiding it
+    --- The cursor must be hidden because switching between the UI and Pda's UI resets its position to that of the previous ui. 
+    --- Manually fixing the cursor position to the one before the switch also doesn't work because the cursor position 
+    --- is relative to the displayed UI (for normal ui - game scrreen, for pda - pda screen)
     SetCursorPosition(GetCursorPosition():set(2000, 2000))
-    CreateTimeEvent("crc_textbox", "hide_mouse", 0.5, function()
+    CreateTimeEvent("CRCTextbox", "hide_mouse", 0.5, function()
         SetCursorPosition(GetCursorPosition():set(2000, 2000))
         return false
     end)
+
+    printf("focusing done!!!!!")
 end
 
-function crc_textbox:Unfocus()
-    self.edit_mode = false
-    self.button:SetCheck(false)
+--- Setting textbox into the display mode
+function CRCTextbox:unfocus()
+    --- make checkbox unpressed to indicate the display mode
+    self.checkbox:SetCheck(false)
+    --- hide the fakeui to unlock the character movement
     self.fake_ui:HideDialog()
+
+    --- hide the edit cursor
     self.selector_char = ''
+    self.show_selector = false
     self:__insert_cursor()
+
+    --- display placeholder if the textbox text is an empty string
     self:__display_placeholder()
-    RemoveTimeEvent("crc_textbox", "hide_mouse")
+
+    --- make the mouse cursor 'visable' by stoping moving it off the screen
+    RemoveTimeEvent("CRCTextbox", "hide_mouse")
+
+    --- unlock all game's shortcuts registered in lua
+    --- this will also reset the cursor position to its original position ( i.e. before entering the edit mode).
     Unregister_UI("crc_fake_ui")
 end
 
-function crc_textbox:IsFocused()
-    return self.edit_mode
-end
-
-function crc_textbox:__handle_key_press(key)
+--- Reacts to the keys pressed by the player. After pressing the appropriate key, it exits the editing mode, changes the size of letters, moves the cursor. 
+--- When a key has no special action assigned to it, it writes its value into the textbox.
+--- @param key number
+function CRCTextbox:__handle_key_press(key)
+    --- enable the shift mode
     if key == DIK_keys.DIK_LSHIFT or key == DIK_keys.DIK_RSHIFT then
         self.capital_mode = true
     end
 
-    if not self:IsFocused() then
+    --- exit if textbox isn't in the edit mode
+    if not self:is_focused() then
         return
     end
 
+    --- run the gui handler from the parent class to react to its events.
     if self.on_key_press ~= nil and self.on_key_press(key) then
-        self:Unfocus()
+        self:unfocus()
         return
     end
-    
+
+    --- exit the edit mode after clicking any mouse button or esc key
     if key == DIK_keys.MOUSE_1 or key == DIK_keys.MOUSE_2 or key == DIK_keys.DIK_ESCAPE then
-        self:Unfocus()
+        self:unfocus()
         return
     end
 
     self.last_pressed_key = key
     self:__handle_edit(key)
-    
-    RemoveTimeEvent("crc_textbox:__handle_edit", "edit")
-    CreateTimeEvent("crc_textbox:__handle_edit", "edit", 0.5, function()
+
+    --- react to holding a key for more than 0.5s by performing the action assigned to it again and again
+    RemoveTimeEvent("CRCTextbox:__handle_edit", "edit")
+    CreateTimeEvent("CRCTextbox:__handle_edit", "edit", 0.5, function()
         return self:__handle_edit(self.last_pressed_key)
     end)
 end
 
-function crc_textbox:__handle_edit(key)
+--- Reacts to the pressed key. After pressing the appropriate key, it moves the cursor or remove a letter.
+--- When a key has no special action assigned to it, it writes its value into the textbox.
+--- @param key number|nil
+function CRCTextbox:__handle_edit(key)
     if key == nil then
-        return true
+        return
     end
 
     if key == DIK_keys.DIK_BACK then
-        self:__remove_leter()
+        self:__remove_letter()
         return
     end
 
     if key == DIK_keys.DIK_DELETE then
-        self:__remove_leter_after()
+        self:__remove_letter_after()
         return
     end
 
-
     if key == DIK_keys.DIK_LEFT then
-        self:SetSelectorPos(self.selector_pos - 1)
+        self:set_selector_pos(self.selector_pos - 1)
         return
     end
 
     if key == DIK_keys.DIK_RIGHT then
-        self:SetSelectorPos(self.selector_pos + 1)
+        self:set_selector_pos(self.selector_pos + 1)
         return
     end
 
+    --- convert DIK code to the key character
     local char = crc_dik.to_char(key, self.capital_mode)
 
     if char then
-        self:__add_leter(char)
+        self:__add_letter(char)
     end
 end
 
-function crc_textbox:__handle_key_release(key)
+--- Reacts to the release of the keyboard key
+--- @param key number
+function CRCTextbox:__handle_key_release(key)
+    --- disable the shift mode
     if key == DIK_keys.DIK_LSHIFT or key == DIK_keys.DIK_RSHIFT then
         self.capital_mode = false
     end
@@ -223,10 +339,15 @@ function crc_textbox:__handle_key_release(key)
     if key == self.last_pressed_key then
         self.last_pressed_key = nil
     end
+
+    RemoveTimeEvent("CRCTextbox:__handle_edit", "edit")
 end
 
-function crc_textbox:__handle_click()
-    if not self:IsFocused() then
-        self:Focus()
+--- enters edit mode after clicking on the checkbox
+function CRCTextbox:__handle_click()
+    if not self:is_focused() then
+        self:focus()
    end
+
+   printf("is in edit mode: %s", self:is_focused())
 end

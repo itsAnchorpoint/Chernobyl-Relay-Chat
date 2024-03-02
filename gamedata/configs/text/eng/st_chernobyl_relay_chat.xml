@@ -3,36 +3,56 @@
 	<string id="crc_pda_tab">
 		<text>Chat</text>
 	</string>
+
 	<string id="crc_info">
 		<text>Information</text>
 	</string>
+
 	<string id="crc_error">
 		<text>Error</text>
 	</string>
+
+
 	<string id="crc_money">
 		<text>has sent money to</text>
 	</string>
+
 	<string id="crc_money_recv">
 		<text>has sent you money</text>
 	</string>
+
 	<string id="crc_ingame">
 		<text>In the Zone</text>
 	</string>
+
 	<string id="crc_notingame">
 		<text>Not in the Zone</text>
 	</string>
+
+	<string id="crc_role_admin">
+		<text>Network Administrator</text>
+	</string>
+
+	<string id="crc_role_dev">
+		<text>CRCR Developer</text>
+	</string>
+
+	<string id="crc_role_creator">
+		<text>CRC Creator</text>
+	</string>
+
 	<string id="crc_ccon">
 		<text>C-Consciousness</text>
 	</string>
-	<string id="crc_admin">
-		<text>Network Administrator</text>
-	</string>
+
 	<string id="crc_unknown">
 		<text>Unknown</text>
 	</string>
+
 	<string id="crc_send">
 		<text>Send</text>
 	</string>
+
 	<string id="crc_close">
 		<text>Close</text>
 	</string>
@@ -48,42 +68,55 @@
 	<string id="crc_actor_bandit">
 		<text>Bandit</text>
 	</string>
+
 	<string id="crc_actor_csky">
 		<text>Clear Sky</text>
 	</string>
+
 	<string id="crc_actor_dolg">
 		<text>Duty</text>
 	</string>
+
 	<string id="crc_actor_ecolog">
 		<text>Ecologist</text>
 	</string>
+
 	<string id="crc_actor_freedom">
 		<text>Freedom</text>
 	</string>
+
 	<string id="crc_actor_stalker">
 		<text>Loner</text>
 	</string>
+
 	<string id="crc_actor_killer">
 		<text>Mercenary</text>
 	</string>
+	
 	<string id="crc_actor_army">
 		<text>Military</text>
 	</string>
+
 	<string id="crc_actor_monolith">
 		<text>Monolith</text>
 	</string>
+
 	<string id="crc_actor_zombied">
 		<text>Zombie</text>
 	</string>
+
 	<string id="crc_actor_renegade">
 		<text>Renegade</text>
 	</string>
+
 	<string id="crc_actor_greh">
 		<text>Sin</text>
 	</string>
+
 	<string id="crc_actor_isg">
 		<text>UNISG</text>
 	</string>
+
 	<string id="crc_actor_anonymous">
 		<text>Anonymous</text>
 	</string>
@@ -91,18 +124,23 @@
 	<string id="#crcr_english">
 		<text>Main Channel (Eng)</text>
 	</string>
+
 	<string id="#crcr_english_rp">
 		<text>Roleplay Channel (Eng)</text>
 	</string>
+
 	<string id="#crcr_english_shitposting">
 		<text>Unmoderated Channel (Eng)</text>
 	</string>
+
 	<string id="#crcr_russian">
 		<text>Main Channel (Rus)</text>
 	</string>
+
 	<string id="#crcr_russian_rp">
 		<text>Roleplay Channel (Rus)</text>
 	</string>
+
 	<string id="#crcr_tech_support">
 		<text>Tech Support</text>
 	</string>

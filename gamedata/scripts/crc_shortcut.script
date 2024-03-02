@@ -1,32 +1,78 @@
---| Chernobyl Relay Chat
---| Opening pda chat by clicking a button
+--| Keyboard shortcut to quickly open PDA Chat
 --| By Amon
---| Inspirated by iTheon's PDA Tasbar
+
+--- @alias PDA { ui: unknown, pda3d: unknown | nil }
+
+--- get reference to pda user interface and optional 3d PDA version.
+--- @return PDA
+function load_pda()
+    return {
+        ui = ActorMenu.get_pda_menu(),
+        pda3d = get_console_cmd(1,"g_3d_pda"),
+    }
+end
+
+--- returns true if the pda ui is not shown and the pda item is in the corresponding slot.
+--- @param pda PDA
+function can_pda_be_open(pda)
+    return not pda.ui:IsShown() and db.actor:item_in_slot(8)
+end
+
+--- show the pda's ui, use 3d version if available
+--- @param pda PDA
+function show_pda(pda)
+    if pda.pda3d then
+        db.actor:activate_slot(8)
+    else
+        pda.ui:ShowDialog(true)
+    end
+end
+
+--- close the pda's ui, use 3d version if available
+--- @param pda PDA
+function hide_pda(pda)
+    if pda.pda3d then
+        db.actor:activate_slot(0)
+    else
+        pda_menu:HideDialog()
+    end
+end
+
+--- open the pda chat menu
+--- @param pda PDA
+function open_crcr_gui(pda)
+    pda.ui:SetActiveSubdialog("eptChat")
+end
+
+--- returns true if pda currently in use
+--- @param pda PDA
+--- @return boolean
+function is_pda_open(pda)
+    return pda.ui:IsShown()
+end
+
+--- returns true if pda's chat tab is currently displayed
+--- @return boolean
+function is_crcr_tab_selected()
+    return crc_pda.get_ui():is_open()
+end
 
 function on_key_release(key)
-    if key == crc_config.config.chat_key then
-        local pda_menu = ActorMenu.get_pda_menu()
-        local pda3d = get_console_cmd(1,"g_3d_pda")
-        
-        if not (pda_menu:IsShown()) and db.actor:item_in_slot(8) then
-            if (pda3d) then
-                db.actor:activate_slot(8)
-            else
-                pda_menu:ShowDialog(true)
-            end
-            
-            pda_menu:SetActiveSubdialog("eptChat")
-            
-        elseif (pda_menu:IsShown()) then
-            if (not crc_pda.get_ui():is_open()) then
-                pda_menu:SetActiveSubdialog("eptChat")
-                return
-            end
+    --- Open/Close chat window after pressing the keyboard shortcut
+    if key == crc_config.get().chat_key then
+        local pda = load_pda()
 
-            if (pda3d) then
-                db.actor:activate_slot(0)
+        --- open pda if it's closed
+        if can_pda_be_open(pda) then
+            show_pda(pda)
+            open_crcr_gui(pda)
+
+        --- if open tab is Chat close pda, otherwise change tab to chat
+        elseif is_pda_open(pda) then
+            if not is_crcr_tab_selected() then
+                open_crcr_gui(pda)
             else
-                pda_menu:HideDialog()
+                hide_pda(pda)
             end
         end
     end
@@ -35,5 +81,3 @@ end
 function on_game_start()
 	RegisterScriptCallback("on_key_release", on_key_release)
 end
-
-db.actor:give_game_news(title, text, icon, 0, crc_config.config.news_duration)

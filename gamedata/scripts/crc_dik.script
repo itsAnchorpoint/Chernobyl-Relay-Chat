@@ -1,4 +1,8 @@
-local alphaNumericKeys = {
+--| Utility functions for dealing with DIK keys
+--| By Amon
+
+--- DIK to character (lowercase)
+local alpha_numeric_keys = {
     [2] = '1',
     [3] = '2',
     [4] = '3',
@@ -63,7 +67,8 @@ local alphaNumericKeys = {
     [83] = ',',
 }
 
-local alphaNumericKeysCapital = {
+--- DIK to character (uppercase)
+local alpha_numeric_keys_capital = {
     [2] = '!',
     [3] = '@',
     [4] = '#',
@@ -128,13 +133,20 @@ local alphaNumericKeysCapital = {
     [83] = ',',
 }
 
+--- TODO Add support for russian language
+--- replaces DIK key number with coresponding character.
+--- will return uppercase character if capital true
+--- <br> returns false if key is an unsupported DIK key 
+--- @param key number
+--- @param capital boolean
+---@return string | false
 function to_char(key, capital)
-    if alphaNumericKeys[key] ~= nil then
+    if alpha_numeric_keys[key] ~= nil then
         if capital then
-            return alphaNumericKeysCapital[key]
+            return alpha_numeric_keys_capital[key]
         end
-        
-        return alphaNumericKeys[key]
+
+        return alpha_numeric_keys[key]
     end
 
     return false
