@@ -1,0 +1,95 @@
+--| Texture ID-getting utility
+--| By TKGP, Anchorpoint, Amon
+
+info = "crc_icon_info"
+error = "crc_icon_error"
+unknown = "crc_icon_unknown"
+admin_icon = "crc_icon_admin"
+
+local ADMIN = "Anchorpoint"
+local ORIGINAL_CREATOR = "TKGP"
+local DEVELOPER = "Amon"
+
+factions = {
+	actor_bandit = 18,
+	actor_csky = 20,
+	actor_dolg = 10,
+	actor_ecolog = 7,
+	actor_freedom = 16,
+	actor_stalker = 20,
+	actor_killer = 14,
+	actor_army = 16,
+	actor_monolith = 8,
+	actor_zombied = 18,
+	actor_renegade = 10,
+	actor_greh = 8,
+	actor_isg = 10,
+}
+
+--- Selects the suitable icon for a player depending on his name and faction.
+--- @param name string
+--- @param faction string
+--- @return string
+function get_icon(name, faction)
+	if name == ADMIN then
+		return admin_icon
+	else
+		-- There's a reason for this extreme wank but I don't remember what it is
+		local oldRandom = math.random()
+		local seed = 0
+		for _, charValue in ipairs({name:byte(1, #name)}) do
+			seed = seed + charValue
+		end
+
+		seed = seed / #name
+		seed = math.floor((seed - math.floor(seed)) * 10000)
+		math.randomseed(seed)
+
+		local count = factions[faction]
+		if count then
+			local index = math.random(factions[faction])
+			math.randomseed(oldRandom)
+			return "crc_icon_"..faction.."_"..index
+		else
+			return unknown
+		end
+	end
+end
+
+--- Returns user's faction or unkown if it not exist (is from mod for example)
+--- @param faction string
+--- @return string
+function get_faction(faction)
+	return  game.translate_string("crc_" .. faction) or game.translate_string("crc_actor_anonymous") or game.translate_string("crc_unknown")
+end
+
+--- Returns user's role or an empty string. Format "(ROLE)"
+--- @param name string
+--- @return string | nil
+function get_role(name)
+	local role = nil
+
+	if (name == ADMIN) then
+		role = game.translate_string("crc_role_admin");
+	elseif (name == ORIGINAL_CREATOR) then
+		role = game.translate_string("crc_role_creator");
+	elseif (name == DEVELOPER) then
+		role = game.translate_string("crc_role_dev");
+	end
+
+	if role ~= nil then
+		return " (" .. role .. ")"
+	end
+
+	return ""
+end
+
+--- Returns user text in format: NAME (ROLE), FACTION
+--- @param name string
+--- @param faction string
+function get_full_name(name, faction)
+	local role = get_role(name)
+	local fraction = get_faction(faction)
+
+	return name .. role .. ', ' ..  fraction
+end

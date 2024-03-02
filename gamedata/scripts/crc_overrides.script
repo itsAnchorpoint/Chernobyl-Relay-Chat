@@ -1,14 +1,19 @@
---| Chernobyl Relay Chat
---| PDA tabs extension by Amon
+--| Adding a new tab to the pda
 --| Inspirated by iTheon's PDA Tasbar
 
+--- here are all the modifications the mod makes to the game's original functions
 function create_overrides()
+    --- A function that displays the selected gui inside the pda
     local original_set_active_subdialog = pda.set_active_subdialog
+
+    --- I added the display of the CRCR GUI inside the pda.
+    --- @param section string
     pda.set_active_subdialog = function (section)
         if (section == "eptChat") then
             crc_pda.get_ui():show_UI()
+
             return crc_pda.get_ui()
-        else        
+        else
             return original_set_active_subdialog(section)
         end
     end

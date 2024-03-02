@@ -1,8 +1,5 @@
---| Chernobyl Relay Chat
---| Interface for external application By TKGP
---| crc additions by Anchorpoint
---| PDA version by Amon
---| PDA implementation inspirated by iTheon's PDA Tasbar
+--| Chernobyl Relay Chat GUI
+--| By TKGP, Anchorpoint, Amon
 
 start_channel = 1
 
@@ -10,36 +7,38 @@ local xml = CScriptXmlInit()
 xml:ParseFile("pda_crc_chat.xml")
 
 local SINGLETON = nil
---| Return 
+
+--- returns the pda ui instance
+--- @return CRCPda
 function get_ui()
-    SINGLETON = SINGLETON or pda_crc_tab()
+    SINGLETON = SINGLETON or CRCPda()
     return SINGLETON
 end
 
-local function get_translation(id)
-	local result = game.translate_string(id)
-	if result == id then
-		return nil
+--- selects pda sound by message type
+--- @param message_type string
+--- @return string
+local function sound_picker(message_type)
+	if message_type == game.translate_string("crc_info") then
+		return "pda_welcome"
+
+	elseif message_type == game.translate_string("crc_error") then
+		return "pda_alarm"
+
 	else
-		return result
+		return "pda_tips"
 	end
 end
 
--- selects pda sound by message type
-local function soundPicker(messageType)
-	local result
-	if messageType == get_translation("crc_info") then result = "pda_welcome" return result
-	elseif messageType == get_translation("crc_error") then result = "pda_alarm" return result
-	else result = "pda_tips" return result end
-end
+--- adds recived message to pda chat and log
+function add_message(icon, title, text)
+    local max_messages = crc_config.get().max_messages_size
+	local messages_len = size_table(get_ui().messages)
 
--- adds recived message to pda chat and log
-function addMessage(icon, title, text)
-    local maxMessages = crc_config.config.max_messages_size
-	local messagesLen = size_table(get_ui().messages) 
+	printf("max: %s type: %s, len: %s type %s", max_messages, type(max_messages), messages_len, type(messages_len))
 
-	if messagesLen > maxMessages then
-		for i=maxMessages, messagesLen, 1 do
+	if messages_len > max_messages then
+		for i=max_messages, messages_len, 1 do
 			table.remove(get_ui().messages, i)
 		end
 	end
@@ -48,11 +47,11 @@ function addMessage(icon, title, text)
 
 	if not get_ui():is_open() then
 		-- TODO -> Change give_game_news to custom news implementation
-		db.actor:give_game_news(title, text, icon, 0, crc_config.config.news_duration)
+		db.actor:give_game_news(title, text, icon, 0, crc_config.get().news_duration)
 	end
 
-    if crc_config.config.news_sound then
-		xr_sound.set_sound_play(db.actor:id(), soundPicker(title))
+    if crc_config.get().news_sound then
+		xr_sound.set_sound_play(db.actor:id(), sound_picker(title))
 	end
 
 	if get_ui():is_open() then
@@ -60,10 +59,9 @@ function addMessage(icon, title, text)
 	end
 end
 
-
 -- Constructor.
-class "pda_crc_tab" (CUIScriptWnd)
-function pda_crc_tab:__init() super()
+class "CRCPda" (CUIScriptWnd)
+function CRCPda:__init() super()
     self.messages = {}
     self.message_nodes = {}
 
@@ -78,13 +76,13 @@ function pda_crc_tab:__init() super()
 	}
 
     self.users = {}
-    self.knownIcons = {}
+    self.known_icons = {}
 
-	self:InitControls()
+	self:init_controls()
 end
 
 -- Initialise the interface.
-function pda_crc_tab:InitControls()
+function CRCPda:init_controls()
 	self:SetWndRect(Frect():set(0, 0, 1024, 768))
 
     xml:ParseFile("pda_crc_chat.xml")
@@ -92,8 +90,8 @@ function pda_crc_tab:InitControls()
 	xml:InitFrame("frame2", self)
 	xml:InitFrame("frame3", self)
 
-	self.list_channel = crc_list.crc_list(xml, 'list_channel', self)
-	self.list_channel.on_select = function(id) self:OnSelectChannel(id) end
+	self.list_channel = crc_list.CRCList(xml, 'list_channel', self)
+	self.list_channel.on_select = function(id) self:on_select_channel(id) end
     self:__init_channel_list()
 
     self.messages_caption = xml:InitTextWnd("messages_caption", self)
@@ -105,8 +103,8 @@ function pda_crc_tab:InitControls()
     self.message_list = xml:InitScrollView("messages", self) 
 	self.user_list = xml:InitScrollView("users", self) 
 
-	self.edit_box = crc_textbox.crc_textbox(xml, 'edit_box', self)
-	self.edit_box.on_key_press = function(key) return self:handleEditKeyPress(key) end
+	self.edit_box = crc_textbox.CRCTextbox(xml, 'edit_box', self)
+	self.edit_box.on_key_press = function(key) return self:handle_edit_key_press(key) end
 
 	self.no_connection_error = xml:InitStatic("connection_lost", self)
 	self.no_connection_error:Show(false)
@@ -118,28 +116,28 @@ function pda_crc_tab:InitControls()
     self.messages = {}
 end
 
-function pda_crc_tab:__init_channel_list()
-	self.list_channel:SetText(game.translate_string(self.table_channel[self.channel]))
-
+function CRCPda:__init_channel_list()
     for i=1, #self.table_channel do
-		self.list_channel:AddItem(get_translation(self.table_channel[i]), i)
+		self.list_channel:add_item(game.translate_string(self.table_channel[i]), i)
 	end
+
+	self.list_channel:select_item(self.channel)
 end
 
-function pda_crc_tab:SetChannel(channel)
+function CRCPda:set_channel(channel)
     self.channel = channel
-    self.list_channel:SetText(get_translation(self.table_channel[self.channel]))
+	self.list_channel:select_item(self.channel)
 end
 
-function pda_crc_tab:OnSelectChannel(channel)
+function CRCPda:on_select_channel(channel)
 	if self.channel ~= channel then 
 		self.channel = channel
 		crc_io.send("Channel/%s", self.channel)
     end
 end
 
-function pda_crc_tab:handleEditKeyPress(key)
-	if key == crc_config.config.chat_key then
+function CRCPda:handle_edit_key_press(key)
+	if key == crc_config.get().chat_key then
         crc_shortcut.on_key_release(key)
         return true
     end
@@ -152,57 +150,48 @@ function pda_crc_tab:handleEditKeyPress(key)
 	return false
 end
 
-function pda_crc_tab:send()
-	local input = self.edit_box:GetText()
+function CRCPda:send()
+	local input = self.edit_box:get_text()
     news_manager.send_tip(db.actor, input, nil, nil, 1)
 
 	if input and input ~= "" then
-		self.edit_box:Clear()
+		self.edit_box:clear()
 		crc_io.send("Message/%s/%s", db.actor:character_community(), input)
 	end
 
-	if crc_config.config.close_chat then
-		local pda_menu = ActorMenu.get_pda_menu()
-		local pda3d = get_console_cmd(1,"g_3d_pda")
-
-		if (pda3d) then
-			db.actor:activate_slot(0)
-		else
-			pda_menu:HideDialog()
-		end
+	if crc_config.get().close_chat then
+		crc_shortcut.hide_pda(crc_shortcut.load_pda())
 	end
 end
 
-function pda_crc_tab:is_open()
+--- Returns true when the Chat menu is displayed inside the PDA
+--- @return boolean
+function CRCPda:is_open()
     return self:IsShown()
 end
 
-function pda_crc_tab:show_UI()
+function CRCPda:show_UI()
 	self:update_users()
 	self:update_messages()
 end
 
-function pda_crc_tab:hide_UI()
-	Unregister_UI("ChatBox")
-end
-
-function pda_crc_tab:update_users()
+--- Redraw the user list
+function CRCPda:update_users()
 	self.user_list:Clear()
 
 	for k, v in pairs(self.users) do
-		is_in_game = v == "True"
-
+		local is_in_game = v == "True"
 		local user = xml:InitStatic("user", nil)
 
-		xml:InitStatic("user:icon", user):InitTexture(self.knownIcons[k] or crc_icons.unknown)
+		xml:InitStatic("user:icon", user):InitTexture(self.known_icons[k] or crc_user.unknown)
 		xml:InitStatic("user:name", user):TextControl():SetText(k:sub(1, 20))
 		local user_status = xml:InitStatic("user:status", user)
 
 		if is_in_game then
-			user_status:TextControl():SetText(get_translation("crc_ingame"))
+			user_status:TextControl():SetText(game.translate_string("crc_ingame"))
 			user_status:TextControl():SetTextColor(GetARGB(255, 128, 255, 154))
 		else
-			user_status:TextControl():SetText(get_translation("crc_notingame"))
+			user_status:TextControl():SetText(game.translate_string("crc_notingame"))
 			user_status:TextControl():SetTextColor(GetARGB(255, 255, 128, 128))
 		end
 
@@ -211,10 +200,10 @@ function pda_crc_tab:update_users()
 	end
 end
 
-function pda_crc_tab:update_messages()
+function CRCPda:update_messages()
     self.message_list:Clear()
 
-	for index, messageData in ipairs(self.messages) do
+	for _, messageData in ipairs(self.messages) do
         local message = xml:InitStatic("message", nil)
 
         xml:InitStatic("message:image", message):InitTexture(messageData.icon)
@@ -227,22 +216,26 @@ function pda_crc_tab:update_messages()
 	end
 end
 
-function pda_crc_tab:connection_lost(state)
+function CRCPda:connection_lost(state)
     self.no_connection_error:Show(state)
-    self.edit_box:Enable(not state)
+    self.edit_box:enable(not state)
     self.button_send:Enable(not state)
-	self.list_channel:Enable(not state)
+	self.list_channel:enable(not state)
 end
 
-function pda_crc_tab:save_icon(name, icon)
-    self.knownIcons[name] = icon
+--- Saves the player's icon, for later use 
+--- (displaying messages sent by that player, user list).
+--- @param name string
+--- @param icon string
+function CRCPda:save_icon(name, icon)
+    self.known_icons[name] = icon
 end
 
-function pda_crc_tab:get_user(user)
+function CRCPda:get_user(user)
     return self.users[user]
 end
 
-function pda_crc_tab:set_users(users)
+function CRCPda:set_users(users)
     self.users = {}
 
     for k, v in users do

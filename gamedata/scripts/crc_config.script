@@ -1,31 +1,90 @@
---| Chernobyl Relay Chat
---| crc Config by Amon
---| Inspirated by iTheon's PDA Tasbar
+--| CRC configuration
+--| By Amon
 
-local function load_defaults()
-	local t = {}
-	local op = crc_mcm.op
-	for i, v in ipairs(op.gr) do
-		if v.def ~= nil then
-			t[v.id] = v.def
-		end
-	end
-	return t
+local MAX_VALUE = 2^1023
+
+--- default configuration
+local config = {
+	chat_key = DIK_keys.DIK_HOME,
+	news_duration = 10000,
+	news_sound = true,
+	close_chat = true,
+	max_messages_size = 50,
+}
+
+--- MCM Config
+local mcm_config = {
+	id = "crc", sh = true, gr = {
+		{id = "chat_key", type = "key_bind", val = 2, def = config.chat_key},
+		{id = "news_duration", type = "input", val = 2, def = config.news_duration,  min = 0, max=MAX_VALUE},
+		{id = "news_sound", type = "check", val = 1, def = config.news_sound},
+		{id = "close_chat", type = "check", val = 1, def = config.close_chat},
+		{id = "max_messages_size", type = "input", val = 2, def = config.max_messages_size, min = 0, max=MAX_VALUE},
+	}
+}
+--- returns CRCR Configuration
+function get()
+	return config
 end
 
-config = load_defaults()
-
-local function load_settings()
-	config = load_defaults()
+--- change single config option, and update MCM
+--- @param key string
+--- @param value any
+function set(key, value)
 	if ui_mcm then
-		for k, v in pairs(config) do
-			config[k] = ui_mcm.get("crc/" .. k)
+		ui_mcm.set("crc/" .. key, value)
+	end
+
+	config[key] = value
+end
+
+--- load settings from the EXE app message if the MCM mod isn't loaded
+--- @param message string
+function load_settings_from_exe_app(message)
+	local setting, value = message:match("([^/]+)/(.+)")
+
+	if ui_mcm == nil then
+		if setting == "NewsDuration" then
+			set('news_duration', tonumber(value))
+
+		elseif setting == "chat_key" then
+			set('chat_key', DIK_keys[value])
+
+		elseif setting == "NewsSound" then
+			set('news_sound', value == "True")
+
+		elseif setting == "CloseChat" then
+			set('close_chat', value == "True")
 		end
 	end
 end
 
+--- load CRCR settings from MCM
+local function load_settings()
+	if ui_mcm then
+		for key, old_value in pairs(config) do
+			--- @as string
+			local value = ui_mcm.get("crc/" .. key)
+			local original_type = type(old_value)
+
+			--- MCM returns string so we need to convert it to previous type
+			if original_type == "number" then
+				value = tonumber(value)
+			elseif original_type == "boolean" then
+				value = value == "true"
+			end
+
+			config[key] = value
+		end
+	end
+end
 
 function on_game_start()
 	RegisterScriptCallback("on_game_load", load_settings)
 	RegisterScriptCallback("on_option_change", load_settings)
+end
+
+--- returns the CRCR's settings MCM menu
+function get_mcm_config()
+    return mcm_config
 end
