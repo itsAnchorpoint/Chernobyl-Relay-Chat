@@ -4,6 +4,22 @@
 		<text>Chat</text>
 	</string>
 
+	<string id="crc_sort_by_date">
+		<text>Sort messages by newest</text>
+	</string>
+
+	<string id="crc_use_cyrillic">
+		<text>Type in cyrillic</text>
+	</string>
+
+	<string id="crc_ignore_outsiders">
+		<text>Show in-Zone messages only</text>
+	</string>
+	
+	<string id="crc_pda_tab">
+		<text>Chat</text>
+	</string>
+
 	<string id="crc_info">
 		<text>Information</text>
 	</string>
@@ -11,7 +27,6 @@
 	<string id="crc_error">
 		<text>Error</text>
 	</string>
-
 
 	<string id="crc_money">
 		<text>has sent money to</text>

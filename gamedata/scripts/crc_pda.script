@@ -83,6 +83,10 @@ function CRCPda:init_controls()
 	self:Register(self.button_send, 'button_send')
 	self:AddCallback("button_send", ui_events.BUTTON_CLICKED, self.send, self)
 
+	self.sort_by_date = xml:InitCheck('sort_by_date', self)
+	self.use_cyrillic = xml:InitCheck('use_cyrillic', self)
+	self.ignore_outsiders = xml:InitCheck('ignore_outsiders', self)
+
     self.messages = {}
 end
 

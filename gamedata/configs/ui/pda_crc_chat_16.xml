@@ -84,4 +84,19 @@
 		<texture>ui\crc_log_background</texture>
 		<text y="100" font="graffiti22" color="pda_red" vert_align="c" align="c">crc_signallost</text>
 	</connection_lost>
+
+	<sort_by_date x="200" y="94" width="30" height="30">
+        <texture>ui_inGame2_checkbox</texture>
+		<text x="-60" y="2" font="letterica16" r="170" g="170" b="170" align="l">crc_sort_by_date</text>
+	</sort_by_date>
+
+	<use_cyrillic x="350" y="94" width="30" height="30">
+        <texture>ui_inGame2_checkbox</texture>
+		<text x="-60" y="2" font="letterica16" r="170" g="170" b="170" align="l">crc_use_cyrillic</text>
+	</use_cyrillic>
+
+	<ignore_outsiders x="620" y="94" width="30" height="30">
+        <texture>ui_inGame2_checkbox</texture>
+		<text x="-60" y="2" font="letterica16" r="170" g="170" b="170" align="l">crc_ignore_outsiders</text>
+	</ignore_outsiders>
 </w>
