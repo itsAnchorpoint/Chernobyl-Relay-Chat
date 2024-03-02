@@ -34,5 +34,5 @@ Mirco Bauer: SmartIrc4Net
 nixx quality: GitHubUpdate  
   
 av661194, OWL, XMODER, Anchorpoint: Russian translation  
-Rebirth changes: Anchorpoint
+Rebirth changes: Anchorpoint  
 PDA Integration AmonDeShir
