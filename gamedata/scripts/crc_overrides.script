@@ -10,7 +10,7 @@ function create_overrides()
     --- @param section string
     pda.set_active_subdialog = function (section)
         if (section == "eptChat") then
-            crc_pda.get_ui():show_UI()
+            crc_pda.get_ui():update_ui()
 
             return crc_pda.get_ui()
         else

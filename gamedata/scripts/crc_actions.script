@@ -17,7 +17,7 @@ actions = {
 		local icon = crc_user.info
 		local title = game.translate_string("crc_info")
 		local text = body
-		crc_pda.add_message(icon, title, text)
+		crc_pda.get_ui():add_message(icon, title, text)
 	end,
 
 	--- Adds an error message to the chat and logs in the PDA.
@@ -27,7 +27,7 @@ actions = {
 		local title = game.translate_string("crc_error")
 		local text = ERROR_COLOR .. body
 
-		crc_pda.add_message(icon, title, text)
+		crc_pda.get_ui():add_message(icon, title, text)
 	end,
 
 	--- Adds an error message to the chat and logs in the PDA.
@@ -52,7 +52,7 @@ actions = {
 			text = message
 		end
 
-		crc_pda.add_message(icon, title, text)
+		crc_pda.get_ui():add_message(icon, title, text)
 	end,
 
 	--- Adds a direct messages bettwen two players
@@ -70,7 +70,7 @@ actions = {
 		local title = from .. " -> " .. to
 		local text = QUERY_COLOR..message
 
-		crc_pda.add_message(icon, title, text)
+		crc_pda.get_ui():add_message(icon, title, text)
 	end,
 
 	--- Sends money to somebody
@@ -86,7 +86,7 @@ actions = {
 		local title = from .. " " .. (game.translate_string("crc_money")) .. " " .. to
 		local text = MONEY_COLOR..message.." RUB"
 
-        crc_pda.add_message(icon, title, text)
+        crc_pda.get_ui():add_message(icon, title, text)
 
         if crc_pda.get_ui():get_user(from) then
 			db.actor:give_money(-message)
@@ -106,7 +106,7 @@ actions = {
 		local title = from .. " " .. (game.translate_string("crc_money_recv"))
 		local text = MONEY_COLOR .. message .. " RUB"
 
-		crc_pda.add_message(icon, title, text)
+		crc_pda.get_ui():add_message(icon, title, text)
 		db.actor:give_money(message)
 	end,
 
@@ -119,7 +119,7 @@ actions = {
 			crc_io.send("ConnLost/%s", crc_player_events.is_connection_lost())
 			crc_io.send("DEBUG/%s", DEV_DEBUG)
 		elseif setting == "Channel" then
-			crc_pda.get_ui().channel = tonumber(value)
+			crc_pda.get_ui():load_channel_from_settings(value)
 		end
 
 		--- try update the mod settings
@@ -129,6 +129,6 @@ actions = {
 	--- Receives user list
 	--- @param body string
 	Users = function (body)
-		crc_pda.get_ui():set_users(body:gmatch("([^/]+)%s=%s([^/]+)"))
+		crc_pda.get_ui():load_users(body:gmatch("([^/]+)%s=%s([^/]+)"))
 	end,
 }

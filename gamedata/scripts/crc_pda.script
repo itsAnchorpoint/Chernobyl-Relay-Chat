@@ -1,8 +1,6 @@
 --| Chernobyl Relay Chat GUI
 --| By TKGP, Anchorpoint, Amon
 
-start_channel = 1
-
 local xml = CScriptXmlInit()
 xml:ParseFile("pda_crc_chat.xml")
 
@@ -15,57 +13,23 @@ function get_ui()
     return SINGLETON
 end
 
---- selects pda sound by message type
---- @param message_type string
---- @return string
-local function sound_picker(message_type)
-	if message_type == game.translate_string("crc_info") then
-		return "pda_welcome"
-
-	elseif message_type == game.translate_string("crc_error") then
-		return "pda_alarm"
-
-	else
-		return "pda_tips"
-	end
+--- loads information about the last selected channel from the save file
+local start_channel = 1
+function load_state(m_data)
+	start_channel = m_data.prevChannel or 1
 end
 
---- adds recived message to pda chat and log
-function add_message(icon, title, text)
-    local max_messages = crc_config.get().max_messages_size
-	local messages_len = size_table(get_ui().messages)
+--- @alias Message { icon: string, text: string, title: string }
 
-	printf("max: %s type: %s, len: %s type %s", max_messages, type(max_messages), messages_len, type(messages_len))
-
-	if messages_len > max_messages then
-		for i=max_messages, messages_len, 1 do
-			table.remove(get_ui().messages, i)
-		end
-	end
-
-    table.insert(get_ui().messages, 1, {title = title, text = text, icon = icon})
-
-	if not get_ui():is_open() then
-		-- TODO -> Change give_game_news to custom news implementation
-		db.actor:give_game_news(title, text, icon, 0, crc_config.get().news_duration)
-	end
-
-    if crc_config.get().news_sound then
-		xr_sound.set_sound_play(db.actor:id(), sound_picker(title))
-	end
-
-	if get_ui():is_open() then
-		get_ui():update_messages()
-	end
-end
-
--- Constructor.
 class "CRCPda" (CUIScriptWnd)
 function CRCPda:__init() super()
+	--- all mesages displayed inside the PDA
+	--- @type Message[]
     self.messages = {}
-    self.message_nodes = {}
 
+	--- load last selected channel (data from the save file)
     self.channel = start_channel
+	--- all available  channels
 	self.table_channel = {
 		"#crcr_english",
 		"#crcr_english_rp",
@@ -75,13 +39,19 @@ function CRCPda:__init() super()
 		"#crcr_tech_support",
 	}
 
+	--- all users displayed inside the PDA
+	--- @type table<string, string>
     self.users = {}
-    self.known_icons = {}
 
+	--- cached icons
+    --- @type table<string, string>
+	self.known_icons = {}
+
+	--- init gui
 	self:init_controls()
 end
 
--- Initialise the interface.
+-- initialise the interface.
 function CRCPda:init_controls()
 	self:SetWndRect(Frect():set(0, 0, 1024, 768))
 
@@ -100,8 +70,8 @@ function CRCPda:init_controls()
     self.users_caption = xml:InitTextWnd("users_caption", self)
     self.users_caption:SetText(game.translate_string('crc_pda_users'))
 
-    self.message_list = xml:InitScrollView("messages", self) 
-	self.user_list = xml:InitScrollView("users", self) 
+    self.message_list = xml:InitScrollView("messages", self)
+	self.user_list = xml:InitScrollView("users", self)
 
 	self.edit_box = crc_textbox.CRCTextbox(xml, 'edit_box', self)
 	self.edit_box.on_key_press = function(key) return self:handle_edit_key_press(key) end
@@ -116,6 +86,7 @@ function CRCPda:init_controls()
     self.messages = {}
 end
 
+--- add channels to the channel list and select the last selected one
 function CRCPda:__init_channel_list()
     for i=1, #self.table_channel do
 		self.list_channel:add_item(game.translate_string(self.table_channel[i]), i)
@@ -124,24 +95,34 @@ function CRCPda:__init_channel_list()
 	self.list_channel:select_item(self.channel)
 end
 
-function CRCPda:set_channel(channel)
-    self.channel = channel
-	self.list_channel:select_item(self.channel)
-end
-
+--- called by the list_channel component, when changing the channel it informs EXE applications of about the change
+--- @param channel number
 function CRCPda:on_select_channel(channel)
-	if self.channel ~= channel then 
+	if self.channel ~= channel then
 		self.channel = channel
 		crc_io.send("Channel/%s", self.channel)
     end
 end
 
+--- load channel from the action message
+--- @param value string
+function CRCPda:load_channel_from_settings(value)
+    self.channel = tonumber(value)
+	self.list_channel:select_item(self.channel)
+end
+
+--- called by the edit_box component, when a key is pressed while typing in a textbox. Used to implement keyboard shortcuts when typing a message.
+--- ff it returns true the edit_box will exit the edit mode.
+--- @param key number
+--- @return boolean
 function CRCPda:handle_edit_key_press(key)
+	--- close the pda when CHAT_KEY is pressed
 	if key == crc_config.get().chat_key then
         crc_shortcut.on_key_release(key)
         return true
     end
 
+	--- send message when enter pressed
 	if key == DIK_keys.DIK_RETURN then
         self:send()
         return true
@@ -150,6 +131,7 @@ function CRCPda:handle_edit_key_press(key)
 	return false
 end
 
+--- send the message from the textbox to the EXE application via crc_io.
 function CRCPda:send()
 	local input = self.edit_box:get_text()
     news_manager.send_tip(db.actor, input, nil, nil, 1)
@@ -164,27 +146,28 @@ function CRCPda:send()
 	end
 end
 
---- Returns true when the Chat menu is displayed inside the PDA
+--- returns true when the Chat menu is displayed inside the PDA
 --- @return boolean
 function CRCPda:is_open()
     return self:IsShown()
 end
 
-function CRCPda:show_UI()
+--- updates the user list and messages
+function CRCPda:update_ui()
 	self:update_users()
 	self:update_messages()
 end
 
---- Redraw the user list
+--- redraw the user list
 function CRCPda:update_users()
 	self.user_list:Clear()
 
-	for k, v in pairs(self.users) do
-		local is_in_game = v == "True"
+	for name, is_in_game in pairs(self.users) do
 		local user = xml:InitStatic("user", nil)
+		is_in_game = is_in_game == "True"
 
-		xml:InitStatic("user:icon", user):InitTexture(self.known_icons[k] or crc_user.unknown)
-		xml:InitStatic("user:name", user):TextControl():SetText(k:sub(1, 20))
+		xml:InitStatic("user:icon", user):InitTexture(self.known_icons[name] or crc_user.unknown)
+		xml:InitStatic("user:name", user):TextControl():SetText(name:sub(1, 20))
 		local user_status = xml:InitStatic("user:status", user)
 
 		if is_in_game then
@@ -200,6 +183,7 @@ function CRCPda:update_users()
 	end
 end
 
+--- redraw the displayed messages
 function CRCPda:update_messages()
     self.message_list:Clear()
 
@@ -216,11 +200,58 @@ function CRCPda:update_messages()
 	end
 end
 
+--- enters/exits connection lost mode
+--- @param state boolean
 function CRCPda:connection_lost(state)
     self.no_connection_error:Show(state)
     self.edit_box:enable(not state)
     self.button_send:Enable(not state)
 	self.list_channel:enable(not state)
+end
+
+--- selects pda sound by message type
+--- @param message_type string
+--- @return string
+function CRCPda:sound_picker(message_type)
+	if message_type == game.translate_string("crc_info") then
+		return "pda_welcome"
+
+	elseif message_type == game.translate_string("crc_error") then
+		return "pda_alarm"
+
+	else
+		return "pda_tips"
+	end
+end
+
+--- adds recived message to pda chat and log
+--- @param icon string
+--- @param title string
+--- @param text string
+function CRCPda:add_message(icon, title, text)
+    local max_messages = crc_config.get().max_messages_size
+	local messages_len = size_table(self.messages)
+
+	printf("max: %s type: %s, len: %s type %s", max_messages, type(max_messages), messages_len, type(messages_len))
+
+	if messages_len > max_messages then
+		for i=max_messages, messages_len, 1 do
+			table.remove(self.messages, i)
+		end
+	end
+
+    table.insert(self.messages, 1, {title = title, text = text, icon = icon})
+
+	if self:is_open() then
+		self:update_messages()
+	else
+		-- TODO -> Change give_game_news to custom news implementation
+		db.actor:give_game_news(title, text, icon, 0, crc_config.get().news_duration)
+	end
+
+    if crc_config.get().news_sound then
+		xr_sound.set_sound_play(db.actor:id(), self:sound_picker(title))
+	end
 end
 
 --- Saves the player's icon, for later use 
@@ -231,11 +262,12 @@ function CRCPda:save_icon(name, icon)
     self.known_icons[name] = icon
 end
 
+--- returns 
 function CRCPda:get_user(user)
     return self.users[user]
 end
 
-function CRCPda:set_users(users)
+function CRCPda:load_users(users)
     self.users = {}
 
     for k, v in users do

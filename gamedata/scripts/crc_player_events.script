@@ -69,10 +69,9 @@ function save_state(m_data)
 	m_data.prevChannel = crc_pda:get_ui().channel
 end
 
---- Loads information about the selected channel and current connection status the from save file
+--- Loads information about the current connection status the from save file
 function load_state(m_data)
 	prev_fake_conn_status = m_data.connstatus or false
-	crc_pda.start_channel = m_data.prevChannel or 1
 end
 
 function on_game_start()
