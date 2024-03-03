@@ -84,8 +84,16 @@ function CRCPda:init_controls()
 	self:AddCallback("button_send", ui_events.BUTTON_CLICKED, self.send, self)
 
 	self.sort_by_date = xml:InitCheck('sort_by_date', self)
+	self:Register(self.button_send, 'sort_by_date')
+    self:AddCallback(self.button_send, ui_events.BUTTON_CLICKED, self.__toggle_message_sorting, self)
+
 	self.use_cyrillic = xml:InitCheck('use_cyrillic', self)
+	self:Register(self.use_cyrillic, 'use_cyrillic')
+    self:AddCallback(self.use_cyrillic, ui_events.BUTTON_CLICKED, self.edit_box.use_cyrillic, self.edit_box)
+
 	self.ignore_outsiders = xml:InitCheck('ignore_outsiders', self)
+	self:Register(self.ignore_outsiders, 'ignore_outsiders')
+    self:AddCallback(self.ignore_outsiders, ui_events.BUTTON_CLICKED, self.__toggle_message_filter, self)
 
     self.messages = {}
 end
@@ -135,6 +143,15 @@ function CRCPda:handle_edit_key_press(key)
 	return false
 end
 
+--- scrolls the message list up or down as much as possible depending on the current sorting mode
+function CRCPda:scroll_messages_to_the_latest()
+	if self.sort_by_date:GetCheck() then
+		self.message_list:ScrollToBegin()
+	else
+		self.message_list:ScrollToEnd()
+	end
+end
+
 --- send the message from the textbox to the EXE application via crc_io.
 function CRCPda:send()
 	local input = self.edit_box:get_text()
@@ -148,6 +165,14 @@ function CRCPda:send()
 	if crc_config.get().close_chat then
 		crc_shortcut.hide_pda(crc_shortcut.load_pda())
 	end
+
+	self:scroll_messages_to_the_latest()
+end
+
+--- when the sorting mode was changed, it redraws the messages list
+function CRCPda:__toggle_message_sorting()
+	self:update_messages()
+	self:scroll_messages_to_the_latest()
 end
 
 --- returns true when the Chat menu is displayed inside the PDA
@@ -164,6 +189,9 @@ end
 
 --- redraw the user list
 function CRCPda:update_users()
+	--- clearing the scroll list set its scroll position to zero, so we need to store it
+	local last_scroll_pos = self.message_list:GetCurrentScrollPos()
+
 	self.user_list:Clear()
 
 	for name, is_in_game in pairs(self.users) do
@@ -185,13 +213,33 @@ function CRCPda:update_users()
 		self.user_list:AddWindow(user, true)
 		user:SetAutoDelete(true)
 	end
+
+	--- restore scroll position
+	self.message_list:SetScrollPos(last_scroll_pos)
+end
+
+--- check if list is scrolled to end
+--- @param list CUIScrollView
+--- @return boolean
+function CRCPda:is_list_max_scrolled(list)
+	return list:GetCurrentScrollPos() >= list:GetMaxScrollPos() - list:GetHeight()
 end
 
 --- redraw the displayed messages
 function CRCPda:update_messages()
-    self.message_list:Clear()
+	--- clearing the scroll list set its scroll position to zero, so we need to store it
+	local last_scroll_pos = self.message_list:GetCurrentScrollPos()
+	local was_max_scrolled = self:is_list_max_scrolled(self.message_list)
 
-	for _, messageData in ipairs(self.messages) do
+	--- display latest message as first or last depending on player preference 
+	local start_index = (self.sort_by_date:GetCheck() and 1 or #self.messages)
+    local end_index = (self.sort_by_date:GetCheck() and #self.messages or 1)
+    local iterator = (self.sort_by_date:GetCheck() and 1 or -1)
+
+	self.message_list:Clear()
+
+	for i = start_index, end_index, iterator do
+		local messageData = self.messages[i]
         local message = xml:InitStatic("message", nil)
 
         xml:InitStatic("message:image", message):InitTexture(messageData.icon)
@@ -201,6 +249,14 @@ function CRCPda:update_messages()
 
 	    self.message_list:AddWindow(message, true)
 	 	message:SetAutoDelete(true)
+	end
+
+	--- restore scroll position
+	self.message_list:SetScrollPos(last_scroll_pos)
+
+	--- auto scroll to the latest message in sort_by_date mode
+	if not self.sort_by_date:GetCheck() and was_max_scrolled then
+		self.message_list:ScrollToEnd()
 	end
 end
 
@@ -244,7 +300,7 @@ function CRCPda:add_message(icon, title, text)
 		end
 	end
 
-    table.insert(self.messages, 1, {title = title, text = text, icon = icon})
+	table.insert(self.messages, 1, {title = title, text = text, icon = icon})
 
 	if self:is_open() then
 		self:update_messages()
