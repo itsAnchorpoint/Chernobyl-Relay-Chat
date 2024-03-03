@@ -92,7 +92,6 @@ function CRCTextbox:__init(xml, xml_tag, parent)
 
     self.parent:Register(self.checkbox, self.name)
     self.parent:AddCallback(self.name, ui_events.BUTTON_CLICKED, self.__handle_click, self)
-    printf("Textbox functing registerd~!!!!!!!!!!!!!!!!!!")
 
     self.fake_ui.handle_key_press = self.__handle_key_press
     self.fake_ui.handle_key_release = self.__handle_key_release
@@ -206,8 +205,6 @@ end
 
 --- Setting textbox into the edit mode, displays the cursor, blocks all game's keyboard actions, hides the mouse cursor
 function CRCTextbox:focus()
-    printf("focusing!!!!!")
-
     --- make checkbox pressed to indicate the edit mode
     self.checkbox:SetCheck(true)
     --- show the fakeui to block character movement
@@ -229,8 +226,6 @@ function CRCTextbox:focus()
         SetCursorPosition(GetCursorPosition():set(2000, 2000))
         return false
     end)
-
-    printf("focusing done!!!!!")
 end
 
 --- Setting textbox into the display mode
