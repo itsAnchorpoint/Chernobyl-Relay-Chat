@@ -95,7 +95,7 @@
 		<text x="-60" y="2" font="letterica16" r="170" g="170" b="170" align="l">crc_use_cyrillic</text>
 	</use_cyrillic>
 
-	<ignore_outsiders x="620" y="94" width="30" height="30">
+	<ignore_outsiders x="600" y="94" width="30" height="30">
         <texture>ui_inGame2_checkbox</texture>
 		<text x="-60" y="2" font="letterica16" r="170" g="170" b="170" align="l">crc_ignore_outsiders</text>
 	</ignore_outsiders>

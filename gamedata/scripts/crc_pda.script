@@ -19,7 +19,7 @@ function load_state(m_data)
 	start_channel = m_data.prevChannel or 1
 end
 
---- @alias Message { icon: string, text: string, title: string }
+--- @alias Message { icon: string, text: string, title: string, from_zone: boolean, author: string }
 
 class "CRCPda" (CUIScriptWnd)
 function CRCPda:__init() super()
@@ -84,16 +84,16 @@ function CRCPda:init_controls()
 	self:AddCallback("button_send", ui_events.BUTTON_CLICKED, self.send, self)
 
 	self.sort_by_date = xml:InitCheck('sort_by_date', self)
-	self:Register(self.button_send, 'sort_by_date')
-    self:AddCallback(self.button_send, ui_events.BUTTON_CLICKED, self.__toggle_message_sorting, self)
+	self:Register(self.sort_by_date, 'sort_by_date')
+    self:AddCallback('sort_by_date', ui_events.BUTTON_CLICKED, self.__react_to_messages_filter_or_sort_update, self)
 
 	self.use_cyrillic = xml:InitCheck('use_cyrillic', self)
 	self:Register(self.use_cyrillic, 'use_cyrillic')
-    self:AddCallback(self.use_cyrillic, ui_events.BUTTON_CLICKED, self.edit_box.use_cyrillic, self.edit_box)
+    self:AddCallback('use_cyrillic', ui_events.BUTTON_CLICKED, self.edit_box.use_cyrillic, self.edit_box)
 
 	self.ignore_outsiders = xml:InitCheck('ignore_outsiders', self)
 	self:Register(self.ignore_outsiders, 'ignore_outsiders')
-    self:AddCallback(self.ignore_outsiders, ui_events.BUTTON_CLICKED, self.__toggle_message_filter, self)
+    self:AddCallback('ignore_outsiders', ui_events.BUTTON_CLICKED, self.__react_to_messages_filter_or_sort_update, self)
 
     self.messages = {}
 end
@@ -169,8 +169,8 @@ function CRCPda:send()
 	self:scroll_messages_to_the_latest()
 end
 
---- when the sorting mode was changed, it redraws the messages list
-function CRCPda:__toggle_message_sorting()
+--- redraws the message list and scrolls it to the latest message
+function CRCPda:__react_to_messages_filter_or_sort_update()
 	self:update_messages()
 	self:scroll_messages_to_the_latest()
 end
@@ -190,7 +190,7 @@ end
 --- redraw the user list
 function CRCPda:update_users()
 	--- clearing the scroll list set its scroll position to zero, so we need to store it
-	local last_scroll_pos = self.message_list:GetCurrentScrollPos()
+	local last_scroll_pos = self.user_list:GetCurrentScrollPos()
 
 	self.user_list:Clear()
 
@@ -215,7 +215,23 @@ function CRCPda:update_users()
 	end
 
 	--- restore scroll position
-	self.message_list:SetScrollPos(last_scroll_pos)
+	self.user_list:SetScrollPos(last_scroll_pos)
+end
+
+--- returns true if the message was not filtered by user filters
+---@param message Message
+function CRCPda:__should_message_be_displayed(message)
+	--- do not ignore messages from system
+	if message.author == "system" then
+		return true
+	end
+
+	--- ignore the message if the user filters out messages from outside of the zone and this is one of them
+	if not message.from_zone and self.ignore_outsiders:GetCheck() then
+		return false
+	end
+
+	return true
 end
 
 --- check if list is scrolled to end
@@ -240,15 +256,19 @@ function CRCPda:update_messages()
 
 	for i = start_index, end_index, iterator do
 		local messageData = self.messages[i]
-        local message = xml:InitStatic("message", nil)
 
-        xml:InitStatic("message:image", message):InitTexture(messageData.icon)
-        xml:InitStatic("message:date_static", message):TextControl():SetText(game.get_game_time():dateToString())
-        xml:InitStatic("message:caption_static", message):TextControl():SetText(messageData.title)
-        xml:InitStatic("message:text_static", message):TextControl():SetText(messageData.text)
+		--- do not display message if the user filters out messages from outside of the zone and this is one of them
+		if self:__should_message_be_displayed(messageData) then
+			local message = xml:InitStatic("message", nil)
 
-	    self.message_list:AddWindow(message, true)
-	 	message:SetAutoDelete(true)
+			xml:InitStatic("message:image", message):InitTexture(messageData.icon)
+			xml:InitStatic("message:date_static", message):TextControl():SetText(game.get_game_time():dateToString())
+			xml:InitStatic("message:caption_static", message):TextControl():SetText(messageData.title)
+			xml:InitStatic("message:text_static", message):TextControl():SetText(messageData.text)
+
+			self.message_list:AddWindow(message, true)
+			message:SetAutoDelete(true)
+		end
 	end
 
 	--- restore scroll position
@@ -288,11 +308,10 @@ end
 --- @param icon string
 --- @param title string
 --- @param text string
-function CRCPda:add_message(icon, title, text)
+--- @param author string
+function CRCPda:add_message(icon, title, text, author)
     local max_messages = crc_config.get().max_messages_size
 	local messages_len = size_table(self.messages)
-
-	printf("max: %s type: %s, len: %s type %s", max_messages, type(max_messages), messages_len, type(messages_len))
 
 	if messages_len > max_messages then
 		for i=max_messages, messages_len, 1 do
@@ -300,13 +319,20 @@ function CRCPda:add_message(icon, title, text)
 		end
 	end
 
-	table.insert(self.messages, 1, {title = title, text = text, icon = icon})
+	--- was sender inside the Zone when the message was added?
+	local from_zone = self:get_user(author) == "True"
+	local message = {title = title, text = text, icon = icon, from_zone = from_zone, author = author};
+
+	table.insert(self.messages, 1, message)
 
 	if self:is_open() then
 		self:update_messages()
 	else
-		-- TODO -> Change give_game_news to custom news implementation
-		db.actor:give_game_news(title, text, icon, 0, crc_config.get().news_duration)
+		--- do not display message if the user filters it out
+		if self:__should_message_be_displayed(message) then
+			-- TODO -> Change give_game_news to custom news implementation
+			db.actor:give_game_news(message.title, message.text, icon, 0, crc_config.get().news_duration)
+		end
 	end
 
     if crc_config.get().news_sound then
