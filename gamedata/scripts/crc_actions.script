@@ -17,7 +17,7 @@ actions = {
 		local icon = crc_user.info
 		local title = game.translate_string("crc_info")
 		local text = body
-		crc_pda.get_ui():add_message(icon, title, text)
+		crc_pda.get_ui():add_message(icon, title, text, "system")
 	end,
 
 	--- Adds an error message to the chat and logs in the PDA.
@@ -27,7 +27,7 @@ actions = {
 		local title = game.translate_string("crc_error")
 		local text = ERROR_COLOR .. body
 
-		crc_pda.get_ui():add_message(icon, title, text)
+		crc_pda.get_ui():add_message(icon, title, text, "system")
 	end,
 
 	--- Adds an error message to the chat and logs in the PDA.
@@ -52,7 +52,7 @@ actions = {
 			text = message
 		end
 
-		crc_pda.get_ui():add_message(icon, title, text)
+		crc_pda.get_ui():add_message(icon, title, text, name)
 	end,
 
 	--- Adds a direct messages bettwen two players
@@ -60,7 +60,7 @@ actions = {
 	Query = function (body)
 		local faction, from, to, message = body:match("([^/]+)/([^/]+)/([^/]+)/(.+)")
 
-        local icon = crc_user.getIcon(from, faction)
+        local icon = crc_user.get_icon(from, faction)
 		crc_pda.get_ui():save_icon(from, icon)
 
         if crc_pda.get_ui():is_open() then
@@ -70,7 +70,7 @@ actions = {
 		local title = from .. " -> " .. to
 		local text = QUERY_COLOR..message
 
-		crc_pda.get_ui():add_message(icon, title, text)
+		crc_pda.get_ui():add_message(icon, title, text, from)
 	end,
 
 	--- Sends money to somebody
@@ -86,7 +86,7 @@ actions = {
 		local title = from .. " " .. (game.translate_string("crc_money")) .. " " .. to
 		local text = MONEY_COLOR..message.." RUB"
 
-        crc_pda.get_ui():add_message(icon, title, text)
+        crc_pda.get_ui():add_message(icon, title, text, "system")
 
         if crc_pda.get_ui():get_user(from) then
 			db.actor:give_money(-message)
@@ -106,7 +106,7 @@ actions = {
 		local title = from .. " " .. (game.translate_string("crc_money_recv"))
 		local text = MONEY_COLOR .. message .. " RUB"
 
-		crc_pda.get_ui():add_message(icon, title, text)
+		crc_pda.get_ui():add_message(icon, title, text, "system")
 		db.actor:give_money(message)
 	end,
 
