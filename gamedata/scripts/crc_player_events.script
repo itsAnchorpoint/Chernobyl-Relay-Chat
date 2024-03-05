@@ -63,10 +63,9 @@ local function onDeath(whoID)
 	end
 end
 
---- Saves information about the selected channel and current connection status before player exit the game
+--- Saves information about the current connection status before player exit the game
 function save_state(m_data)
 	m_data.connstatus = prev_fake_conn_status
-	m_data.prevChannel = crc_pda:get_ui().channel
 end
 
 --- Loads information about the current connection status the from save file

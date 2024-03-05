@@ -13,10 +13,33 @@ function get_ui()
     return SINGLETON
 end
 
---- loads information about the last selected channel from the save file
-local start_channel = 1
+--- information from the save file
+local data_from_save = {
+	start_channel = 1,
+	sort_by_date = false,
+	use_cyrillic = false,
+	ignore_outsiders = false,
+}
+
+--- loads information from the save file
 function load_state(m_data)
-	start_channel = m_data.prevChannel or 1
+	data_from_save.start_channel = m_data.prevChannel or 1
+	data_from_save.sort_by_date = m_data.sort_by_date or false
+	data_from_save.use_cyrillic = m_data.use_cyrillic or false
+	data_from_save.ignore_outsiders = m_data.ignore_outsiders or false
+end
+
+--- saves information to the save file
+function save_state(m_data)
+	m_data.prevChannel = get_ui().channel
+	m_data.sort_by_date = get_ui().sort_by_date:GetCheck()
+	m_data.use_cyrillic = get_ui().use_cyrillic:GetCheck()
+	m_data.ignore_outsiders = get_ui().ignore_outsiders:GetCheck()
+end
+
+function on_game_start()
+	RegisterScriptCallback("load_state", load_state)
+	RegisterScriptCallback("save_state", save_state)
 end
 
 --- @alias Message { icon: string, text: string, title: string, from_zone: boolean, author: string }
@@ -28,7 +51,7 @@ function CRCPda:__init() super()
     self.messages = {}
 
 	--- load last selected channel (data from the save file)
-    self.channel = start_channel
+    self.channel = data_from_save.start_channel
 	--- all available  channels
 	self.table_channel = {
 		"#crcr_english",
@@ -84,14 +107,17 @@ function CRCPda:init_controls()
 	self:AddCallback("button_send", ui_events.BUTTON_CLICKED, self.send, self)
 
 	self.sort_by_date = xml:InitCheck('sort_by_date', self)
+	self.sort_by_date:SetCheck(data_from_save.sort_by_date)
 	self:Register(self.sort_by_date, 'sort_by_date')
     self:AddCallback('sort_by_date', ui_events.BUTTON_CLICKED, self.__react_to_messages_filter_or_sort_update, self)
 
 	self.use_cyrillic = xml:InitCheck('use_cyrillic', self)
+	self.use_cyrillic:SetCheck(data_from_save.use_cyrillic)
 	self:Register(self.use_cyrillic, 'use_cyrillic')
     self:AddCallback('use_cyrillic', ui_events.BUTTON_CLICKED, function () self.edit_box:use_cyrillic(self.use_cyrillic:GetCheck()) end, self)
 
 	self.ignore_outsiders = xml:InitCheck('ignore_outsiders', self)
+	self.ignore_outsiders:SetCheck(data_from_save.ignore_outsiders)
 	self:Register(self.ignore_outsiders, 'ignore_outsiders')
     self:AddCallback('ignore_outsiders', ui_events.BUTTON_CLICKED, self.__react_to_messages_filter_or_sort_update, self)
 
