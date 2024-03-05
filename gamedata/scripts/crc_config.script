@@ -10,6 +10,70 @@ local config = {
 	news_sound = true,
 	close_chat = true,
 	max_messages_size = 50,
+	keyboard_layout = 1,
+	keyboard_layout_cyrillic = 1,
+}
+
+keyboard_layouts = {
+	{ 1, "usa" },
+	{ 2, "uk" },
+	{ 3, "albanian" },
+	{ 4, "azerbaijani" },
+	{ 5, "azerbaijani_2010" },
+	{ 6, "czech_qwerty" },
+	{ 7, "czech_qwertz" },
+	{ 8, "danish" },
+	{ 9, "dutch" },
+	{10, "estonian" },
+	{11, "faroese" },
+	{12, "finnish"},
+	{13, "french_azerty" },
+	{14, "french_bepo" },
+	{15, "french_canada" },
+	{16, "german" },
+	{17, "hungary" },
+	{18, "icelandic" },
+	{19, "irish" },
+	{20, "italian" },
+	{21, "latvian" },
+	{22, "lithuanian_qwerty"},
+	{23, "lithuanian" },
+	{24, "maltese_47" },
+	{25, "maltese_48" },
+	{25, "norwegian" },
+	{26, "polish" },
+	{27, "portuguese" },
+	{28, "brazil" },
+	{29, "romanian" },
+	{30, "slovak_qwerty" },
+	{31, "slovak_qwertz"},
+	{31, "sorbian" },
+	{32, "spanish" },
+	{33, "spanish_latinamerican" },
+	{34, "swedish" },
+	{35, "swiss_french" },
+	{36, "swiss_german" },
+	{37, "turkish_f" },
+	{38, "turkish_q" },
+	{39, "turkmen" },
+	{40, "vietnamese" },
+}
+
+keyboard_layouts_cyrillic = {
+	{1, "russian" },
+	{2, "azerbaijani" },
+	{3, "bashkir" },
+	{4, "belarusian" },
+	{5, "bulgarian" },
+	{6, "kazakh" },
+	{7, "kyrgyz" },
+	{8, "macedonian" },
+	{9, "mongolian" },
+	{10, "serbian" },
+	{11, "tajik" },
+	{12, "tatar" },
+	{13, "ukrainian" },
+	{14, "uzbek" },
 }
 
 --- MCM Config
@@ -20,8 +84,11 @@ local mcm_config = {
 		{id = "news_sound", type = "check", val = 1, def = config.news_sound},
 		{id = "close_chat", type = "check", val = 1, def = config.close_chat},
 		{id = "max_messages_size", type = "input", val = 2, def = config.max_messages_size, min = 0, max=MAX_VALUE},
+		{id = "keyboard_layout", type = "list", val = 2, content = keyboard_layouts, def = config.keyboard_layout},
+		{id = "keyboard_layout_cyrillic", type = "list", val = 2, content = keyboard_layouts_cyrillic, def = config.keyboard_layout_cyrillic},
 	}
 }
+
 --- returns CRCR Configuration
 function get()
 	return config

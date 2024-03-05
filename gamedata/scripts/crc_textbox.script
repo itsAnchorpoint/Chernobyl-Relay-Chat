@@ -79,6 +79,10 @@ function CRCTextbox:__init(xml, xml_tag, parent)
     --- @type boolean
     self.capital_mode = false
 
+    --- is cyrillic mod enabled?
+    --- @type boolean
+    self.cyrillic_mode = false
+
     --- store the last key pressed
     --- @type number|nil
     self.last_pressed_key = nil
@@ -102,6 +106,11 @@ function CRCTextbox:__init(xml, xml_tag, parent)
     --- It's useful for handling all sorts of keyboard shortcuts such as sending a message when the enter key is pressed
     --- @type (fun(key: number): boolean) | nil
     self.on_key_press = nil
+end
+
+--- enable/disable cyrillic mode
+function CRCTextbox:use_cyrillic(value)
+    self.cyrillic_mode = value
 end
 
 --- sets the cursor position
@@ -316,7 +325,8 @@ function CRCTextbox:__handle_edit(key)
     end
 
     --- convert DIK code to the key character
-    local char = crc_dik.to_char(key, self.capital_mode)
+    local char = crc_dik.to_char(key, self.capital_mode, self.cyrillic_mode)
+    printf("textbox char: %s", char)
 
     if char then
         self:__add_letter(char)
@@ -343,6 +353,4 @@ function CRCTextbox:__handle_click()
     if not self:is_focused() then
         self:focus()
    end
-
-   printf("is in edit mode: %s", self:is_focused())
 end

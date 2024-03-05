@@ -89,7 +89,7 @@ function CRCPda:init_controls()
 
 	self.use_cyrillic = xml:InitCheck('use_cyrillic', self)
 	self:Register(self.use_cyrillic, 'use_cyrillic')
-    self:AddCallback('use_cyrillic', ui_events.BUTTON_CLICKED, self.edit_box.use_cyrillic, self.edit_box)
+    self:AddCallback('use_cyrillic', ui_events.BUTTON_CLICKED, function () self.edit_box:use_cyrillic(self.use_cyrillic:GetCheck()) end, self)
 
 	self.ignore_outsiders = xml:InitCheck('ignore_outsiders', self)
 	self:Register(self.ignore_outsiders, 'ignore_outsiders')

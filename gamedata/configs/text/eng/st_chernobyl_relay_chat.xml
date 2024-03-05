@@ -15,10 +15,6 @@
 	<string id="crc_ignore_outsiders">
 		<text>Show only messages from the Zone</text>
 	</string>
-	
-	<string id="crc_pda_tab">
-		<text>Chat</text>
-	</string>
 
 	<string id="crc_info">
 		<text>Information</text>
@@ -190,5 +186,245 @@
 
 	<string id="ui_mcm_crc_max_messages_size">
 		<text>Save last n messages</text>
+	</string>
+
+
+
+	<string id="ui_mcm_crc_keyboard_layout">
+		<text>Keybaord layout</text>
+	</string>
+
+	<string id="ui_mcm_crc_keyboard_layout_cyrillic">
+		<text>Keybaord layout (cyrillic)</text>
+	</string>
+
+
+
+	<string id="ui_mcm_lst_usa">
+		<text>usa</text>
+	</string>
+
+	<string id="ui_mcm_lst_uk">
+		<text>uk</text>
+	</string>
+
+	<string id="ui_mcm_lst_albanian">
+		<text>albanian</text>
+	</string>
+
+	<string id="ui_mcm_lst_azerbaijani">
+		<text>azerbaijani</text>
+	</string>
+
+	<string id="ui_mcm_lst_azerbaijani_2010">
+		<text>azerbaijani 2010</text>
+	</string>
+
+	<string id="ui_mcm_lst_czech_qwerty">
+		<text>czech qwerty</text>
+	</string>
+
+	<string id="ui_mcm_lst_czech_qwertz">
+		<text>czech qwertz</text>
+	</string>
+
+	<string id="ui_mcm_lst_danish">
+		<text>danish</text>
+	</string>
+
+	<string id="ui_mcm_lst_dutch">
+		<text>dutch</text>
+	</string>
+
+	<string id="ui_mcm_lst_estonian">
+		<text>estonian</text>
+	</string>
+
+	<string id="ui_mcm_lst_faroese">
+		<text>faroese</text>
+	</string>
+
+	<string id="ui_mcm_lst_french_azerty">
+		<text>french azerty</text>
+	</string>
+
+	<string id="ui_mcm_lst_french_bepo">
+		<text>french bepo</text>
+	</string>
+
+	<string id="ui_mcm_lst_french_canada">
+		<text>french canada</text>
+	</string>
+
+	<string id="ui_mcm_lst_finnish">
+		<text>finnish</text>
+	</string>
+
+	<string id="ui_mcm_lst_german">
+		<text>german</text>
+	</string>
+
+	<string id="ui_mcm_lst_hungary">
+		<text>hungary</text>
+	</string>
+
+	<string id="ui_mcm_lst_icelandic">
+		<text>icelandic</text>
+	</string>
+
+	<string id="ui_mcm_lst_irish">
+		<text>irish</text>
+	</string>
+
+	<string id="ui_mcm_lst_italian">
+		<text>italian</text>
+	</string>
+
+	<string id="ui_mcm_lst_latvian">
+		<text>latvian</text>
+	</string>
+
+	<string id="lithuanian_qwerty">
+		<text>lithuanian qwerty</text>
+	</string>
+
+	<string id="ui_mcm_lst_lithuanian">
+		<text>lithuanian</text>
+	</string>
+
+	<string id="ui_mcm_lst_lithuanian_qwerty">
+		<text>lithuanian</text>
+	</string>
+
+	<string id="ui_mcm_lst_maltese_47">
+		<text>maltese 47</text>
+	</string>
+
+	<string id="ui_mcm_lst_maltese_48">
+		<text>maltese 48</text>
+	</string>
+
+	<string id="ui_mcm_lst_norwegian">
+		<text>norwegian</text>
+	</string>
+
+	<string id="ui_mcm_lst_polish">
+		<text>polish</text>
+	</string>
+
+	<string id="ui_mcm_lst_portuguese">
+		<text>portuguese</text>
+	</string>
+
+	<string id="ui_mcm_lst_brazil">
+		<text>brazil</text>
+	</string>
+
+	<string id="ui_mcm_lst_romanian">
+		<text>romanian</text>
+	</string>
+
+	<string id="ui_mcm_lst_slovak_qwerty">
+		<text>slovak qwerty</text>
+	</string>
+
+	<string id="ui_mcm_lst_slovak_qwertz">
+		<text>slovak qwertz</text>
+	</string>
+
+	<string id="ui_mcm_lst_sorbian">
+		<text>sorbian</text>
+	</string>
+
+	<string id="ui_mcm_lst_spanish">
+		<text>spanish</text>
+	</string>
+
+	<string id="ui_mcm_lst_spanish_latinamerican">
+		<text>spanish latinamerican</text>
+	</string>
+
+	<string id="ui_mcm_lst_swedish">
+		<text>swedish</text>
+	</string>
+
+	<string id="ui_mcm_lst_swiss_french">
+		<text>swiss french</text>
+	</string>
+
+	<string id="ui_mcm_lst_swiss_german">
+		<text>swiss german</text>
+	</string>
+
+	<string id="ui_mcm_lst_turkish_f">
+		<text>turkish f</text>
+	</string>
+
+	<string id="ui_mcm_lst_turkish_q">
+		<text>turkish q</text>
+	</string>
+
+	<string id="ui_mcm_lst_turkmen">
+		<text>turkmen</text>
+	</string>
+
+	<string id="ui_mcm_lst_vietnamese">
+		<text>vietnamese</text>
+	</string>
+
+	<string id="ui_mcm_lst_russian">
+		<text>russian</text>
+	</string>
+
+	<string id="ui_mcm_lst_azerbaijani">
+		<text>azerbaijani</text>
+	</string>
+
+	<string id="ui_mcm_lst_bashkir">
+		<text>bashkir</text>
+	</string>
+
+	<string id="ui_mcm_lst_belarusian">
+		<text>belarusian</text>
+	</string>
+
+	<string id="ui_mcm_lst_bulgarian">
+		<text>bulgarian</text>
+	</string>
+
+	<string id="ui_mcm_lst_kazakh">
+		<text>kazakh</text>
+	</string>
+
+	<string id="ui_mcm_lst_kyrgyz">
+		<text>kyrgyz</text>
+	</string>
+
+	<string id="ui_mcm_lst_macedonian">
+		<text>macedonian</text>
+	</string>
+
+	<string id="ui_mcm_lst_mongolian">
+		<text>mongolian</text>
+	</string>
+
+	<string id="ui_mcm_lst_serbian">
+		<text>serbian</text>
+	</string>
+
+	<string id="ui_mcm_lst_tajik">
+		<text>tajik</text>
+	</string>
+
+	<string id="ui_mcm_lst_tatar">
+		<text>tatar</text>
+	</string>
+
+	<string id="ui_mcm_lst_ukrainian">
+		<text>ukrainian</text>
+	</string>
+
+	<string id="ui_mcm_lst_uzbek">
+		<text>uzbek</text>
 	</string>
 </string_table>
