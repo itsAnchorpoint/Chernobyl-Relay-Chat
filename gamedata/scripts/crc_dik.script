@@ -5,21 +5,21 @@
 --- Returns DIK to char conversion table selected in MCM.
 --- @return {true: string, false: string}[]
 local function load_layout_from_mcm()
-    local config = crc_config.get().keyboard_layout
+    local layout_id = crc_config.get().keyboard_layout
     local layouts = crc_config.keyboard_layouts
-    local test = layouts[config][2]
+    local layout_name = layouts[layout_id][2]
 
-    return crc_dik_latin.layout[test]
+    return crc_dik_latin.layout[layout_name]
 end
 
 --- Returns DIK to char conversion table selected in MCM.
 --- @return {true: string, false: string}[]
 local function load_cyrillic_layout_from_mcm()
-    local config = crc_config.get().keyboard_layout_cyrillic
+    local layout_id = crc_config.get().keyboard_layout_cyrillic
     local layouts = crc_config.keyboard_layouts_cyrillic
-    local test = layouts[config][2]
+    local layout_name = layouts[layout_id][2]
 
-    return crc_dik_cyrillic.layout[test]
+    return crc_dik_cyrillic.layout[layout_name]
 end
 
 --- replaces DIK key number with coresponding character.
