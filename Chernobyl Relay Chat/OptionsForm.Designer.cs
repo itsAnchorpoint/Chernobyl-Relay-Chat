@@ -46,6 +46,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.checkBoxTimestamps = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.linkLabelDiscord = new System.Windows.Forms.LinkLabel();
             this.labelNewsDuration = new System.Windows.Forms.Label();
             this.numericUpDownNewsDuration = new System.Windows.Forms.NumericUpDown();
             this.labelNewsSeconds = new System.Windows.Forms.Label();
@@ -54,6 +55,8 @@
             this.buttonChatKey = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageClient = new System.Windows.Forms.TabPage();
+            this.labelPassword = new System.Windows.Forms.Label();
+            this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.checkBoxSoundToggle = new System.Windows.Forms.CheckBox();
             this.comboBoxLanguage = new System.Windows.Forms.ComboBox();
             this.labelLanguage = new System.Windows.Forms.Label();
@@ -61,7 +64,7 @@
             this.checkBoxCloseChat = new System.Windows.Forms.CheckBox();
             this.checkBoxNewsSound = new System.Windows.Forms.CheckBox();
             this.pictureBoxDiscordLogo = new System.Windows.Forms.PictureBox();
-            this.linkLabelDiscord = new System.Windows.Forms.LinkLabel();
+            this.checkBoxDisableUnregisteredMessage = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeath)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNewsDuration)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -72,7 +75,7 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(156, 376);
+            this.buttonOK.Location = new System.Drawing.Point(147, 441);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 0;
@@ -83,7 +86,7 @@
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(237, 376);
+            this.buttonCancel.Location = new System.Drawing.Point(228, 441);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
@@ -141,7 +144,7 @@
             // checkBoxDeathSend
             // 
             this.checkBoxDeathSend.AutoSize = true;
-            this.checkBoxDeathSend.Location = new System.Drawing.Point(6, 202);
+            this.checkBoxDeathSend.Location = new System.Drawing.Point(6, 280);
             this.checkBoxDeathSend.Name = "checkBoxDeathSend";
             this.checkBoxDeathSend.Size = new System.Drawing.Size(131, 17);
             this.checkBoxDeathSend.TabIndex = 7;
@@ -151,7 +154,7 @@
             // checkBoxDeathReceive
             // 
             this.checkBoxDeathReceive.AutoSize = true;
-            this.checkBoxDeathReceive.Location = new System.Drawing.Point(6, 225);
+            this.checkBoxDeathReceive.Location = new System.Drawing.Point(6, 303);
             this.checkBoxDeathReceive.Name = "checkBoxDeathReceive";
             this.checkBoxDeathReceive.Size = new System.Drawing.Size(146, 17);
             this.checkBoxDeathReceive.TabIndex = 8;
@@ -184,7 +187,7 @@
             // 
             // numericUpDownDeath
             // 
-            this.numericUpDownDeath.Location = new System.Drawing.Point(6, 288);
+            this.numericUpDownDeath.Location = new System.Drawing.Point(6, 366);
             this.numericUpDownDeath.Maximum = new decimal(new int[] {
             3600,
             0,
@@ -198,7 +201,7 @@
             // labelDeathInterval
             // 
             this.labelDeathInterval.AutoSize = true;
-            this.labelDeathInterval.Location = new System.Drawing.Point(6, 272);
+            this.labelDeathInterval.Location = new System.Drawing.Point(6, 350);
             this.labelDeathInterval.Name = "labelDeathInterval";
             this.labelDeathInterval.Size = new System.Drawing.Size(194, 13);
             this.labelDeathInterval.TabIndex = 12;
@@ -207,7 +210,7 @@
             // labelDeathSeconds
             // 
             this.labelDeathSeconds.AutoSize = true;
-            this.labelDeathSeconds.Location = new System.Drawing.Point(58, 290);
+            this.labelDeathSeconds.Location = new System.Drawing.Point(58, 368);
             this.labelDeathSeconds.Name = "labelDeathSeconds";
             this.labelDeathSeconds.Size = new System.Drawing.Size(47, 13);
             this.labelDeathSeconds.TabIndex = 13;
@@ -216,7 +219,7 @@
             // label4
             // 
             this.label4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label4.Location = new System.Drawing.Point(6, 165);
+            this.label4.Location = new System.Drawing.Point(6, 217);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(280, 2);
             this.label4.TabIndex = 14;
@@ -224,7 +227,7 @@
             // checkBoxTimestamps
             // 
             this.checkBoxTimestamps.AutoSize = true;
-            this.checkBoxTimestamps.Location = new System.Drawing.Point(6, 179);
+            this.checkBoxTimestamps.Location = new System.Drawing.Point(6, 257);
             this.checkBoxTimestamps.Name = "checkBoxTimestamps";
             this.checkBoxTimestamps.Size = new System.Drawing.Size(108, 17);
             this.checkBoxTimestamps.TabIndex = 15;
@@ -234,6 +237,20 @@
             // toolTip1
             // 
             this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
+            // 
+            // linkLabelDiscord
+            // 
+            this.linkLabelDiscord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.linkLabelDiscord.AutoSize = true;
+            this.linkLabelDiscord.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.linkLabelDiscord.Location = new System.Drawing.Point(38, 451);
+            this.linkLabelDiscord.Name = "linkLabelDiscord";
+            this.linkLabelDiscord.Size = new System.Drawing.Size(98, 13);
+            this.linkLabelDiscord.TabIndex = 27;
+            this.linkLabelDiscord.TabStop = true;
+            this.linkLabelDiscord.Text = "Join CRCR Discord";
+            this.toolTip1.SetToolTip(this.linkLabelDiscord, "Get the latest news and submit bugs");
+            this.linkLabelDiscord.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelDiscord_LinkClicked);
             // 
             // labelNewsDuration
             // 
@@ -311,11 +328,14 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(300, 350);
+            this.tabControl1.Size = new System.Drawing.Size(300, 423);
             this.tabControl1.TabIndex = 25;
             // 
             // tabPageClient
             // 
+            this.tabPageClient.Controls.Add(this.checkBoxDisableUnregisteredMessage);
+            this.tabPageClient.Controls.Add(this.labelPassword);
+            this.tabPageClient.Controls.Add(this.textBoxPassword);
             this.tabPageClient.Controls.Add(this.checkBoxSoundToggle);
             this.tabPageClient.Controls.Add(this.comboBoxLanguage);
             this.tabPageClient.Controls.Add(this.labelLanguage);
@@ -335,15 +355,32 @@
             this.tabPageClient.Location = new System.Drawing.Point(4, 22);
             this.tabPageClient.Name = "tabPageClient";
             this.tabPageClient.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageClient.Size = new System.Drawing.Size(292, 324);
+            this.tabPageClient.Size = new System.Drawing.Size(292, 397);
             this.tabPageClient.TabIndex = 0;
             this.tabPageClient.Text = "Client";
             this.tabPageClient.UseVisualStyleBackColor = true;
             // 
+            // labelPassword
+            // 
+            this.labelPassword.AutoSize = true;
+            this.labelPassword.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.labelPassword.Location = new System.Drawing.Point(6, 164);
+            this.labelPassword.Name = "labelPassword";
+            this.labelPassword.Size = new System.Drawing.Size(53, 13);
+            this.labelPassword.TabIndex = 22;
+            this.labelPassword.Text = "Password";
+            // 
+            // textBoxPassword
+            // 
+            this.textBoxPassword.Location = new System.Drawing.Point(7, 180);
+            this.textBoxPassword.Name = "textBoxPassword";
+            this.textBoxPassword.Size = new System.Drawing.Size(199, 20);
+            this.textBoxPassword.TabIndex = 21;
+            // 
             // checkBoxSoundToggle
             // 
             this.checkBoxSoundToggle.AutoSize = true;
-            this.checkBoxSoundToggle.Location = new System.Drawing.Point(6, 248);
+            this.checkBoxSoundToggle.Location = new System.Drawing.Point(6, 326);
             this.checkBoxSoundToggle.Name = "checkBoxSoundToggle";
             this.checkBoxSoundToggle.Size = new System.Drawing.Size(116, 17);
             this.checkBoxSoundToggle.TabIndex = 20;
@@ -385,7 +422,7 @@
             this.tabPageGame.Location = new System.Drawing.Point(4, 22);
             this.tabPageGame.Name = "tabPageGame";
             this.tabPageGame.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGame.Size = new System.Drawing.Size(292, 324);
+            this.tabPageGame.Size = new System.Drawing.Size(292, 374);
             this.tabPageGame.TabIndex = 1;
             this.tabPageGame.Text = "In-game";
             this.tabPageGame.UseVisualStyleBackColor = true;
@@ -414,26 +451,22 @@
             // 
             this.pictureBoxDiscordLogo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pictureBoxDiscordLogo.Image = global::Chernobyl_Relay_Chat.Properties.Resources.discord_icon_200x200;
-            this.pictureBoxDiscordLogo.Location = new System.Drawing.Point(10, 376);
+            this.pictureBoxDiscordLogo.Location = new System.Drawing.Point(10, 446);
             this.pictureBoxDiscordLogo.Name = "pictureBoxDiscordLogo";
             this.pictureBoxDiscordLogo.Size = new System.Drawing.Size(32, 23);
             this.pictureBoxDiscordLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxDiscordLogo.TabIndex = 26;
             this.pictureBoxDiscordLogo.TabStop = false;
             // 
-            // linkLabelDiscord
+            // checkBoxDisableUnregisteredMessage
             // 
-            this.linkLabelDiscord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.linkLabelDiscord.AutoSize = true;
-            this.linkLabelDiscord.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.linkLabelDiscord.Location = new System.Drawing.Point(38, 381);
-            this.linkLabelDiscord.Name = "linkLabelDiscord";
-            this.linkLabelDiscord.Size = new System.Drawing.Size(98, 13);
-            this.linkLabelDiscord.TabIndex = 27;
-            this.linkLabelDiscord.TabStop = true;
-            this.linkLabelDiscord.Text = "Join CRCR Discord";
-            this.toolTip1.SetToolTip(this.linkLabelDiscord, "Get the latest news and submit bugs");
-            this.linkLabelDiscord.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelDiscord_LinkClicked);
+            this.checkBoxDisableUnregisteredMessage.AutoSize = true;
+            this.checkBoxDisableUnregisteredMessage.Location = new System.Drawing.Point(6, 234);
+            this.checkBoxDisableUnregisteredMessage.Name = "checkBoxDisableUnregisteredMessage";
+            this.checkBoxDisableUnregisteredMessage.Size = new System.Drawing.Size(219, 17);
+            this.checkBoxDisableUnregisteredMessage.TabIndex = 23;
+            this.checkBoxDisableUnregisteredMessage.Text = "Disable unregistered nickname message.";
+            this.checkBoxDisableUnregisteredMessage.UseVisualStyleBackColor = true;
             // 
             // OptionsForm
             // 
@@ -441,7 +474,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(324, 411);
+            this.ClientSize = new System.Drawing.Size(324, 481);
             this.Controls.Add(this.linkLabelDiscord);
             this.Controls.Add(this.pictureBoxDiscordLogo);
             this.Controls.Add(this.tabControl1);
@@ -449,9 +482,9 @@
             this.Controls.Add(this.buttonOK);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(340, 450);
+            this.MaximumSize = new System.Drawing.Size(340, 520);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(340, 450);
+            this.MinimumSize = new System.Drawing.Size(340, 520);
             this.Name = "OptionsForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -504,5 +537,8 @@
         private System.Windows.Forms.CheckBox checkBoxSoundToggle;
         private System.Windows.Forms.PictureBox pictureBoxDiscordLogo;
         private System.Windows.Forms.LinkLabel linkLabelDiscord;
+        private System.Windows.Forms.Label labelPassword;
+        private System.Windows.Forms.TextBox textBoxPassword;
+        private System.Windows.Forms.CheckBox checkBoxDisableUnregisteredMessage;
     }
 }

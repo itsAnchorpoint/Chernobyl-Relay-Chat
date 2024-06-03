@@ -2,7 +2,7 @@
 --| Chernobyl Relay Chat
 --| Interface for external application
 --| By TKGP
---| CRCR additions by Anchorpoint
+--| CRCR additions by Anchorpoint and brzys
 
 local SCRIPT_VERSION = 6
 
@@ -97,7 +97,7 @@ local inputActions = {
 		if chatBox then
 			chatBox:UpdateUsers()
 		end
-		title = name..", "..(name == "Anchorpoint" and gt("crc_admin")
+		title = name..", "..(name == "brzys" and gt("crc_admin")
 			or gt("crc_"..faction) or gt("crc_actor_anonymous") or gt("crc_unknown"))
 		if highlight then
 			text = HIGHLIGHT_COLOR..message

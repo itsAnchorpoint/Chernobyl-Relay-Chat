@@ -1,6 +1,3 @@
-# DISCLAIMER  
-Original mod by TKGP. Please, hit me up if you are against me trying to revive this project and want me to shut it down!
-
 # Chernobyl Relay Chat Rebirth
 An IRC-based chat app for Anomaly, originally developed by TKGP for CoC. Features an independent client as well as in-game chat, automatic death messages, and compatibility with all other addons.
 
@@ -20,7 +17,7 @@ You may use text commands from the game or client by starting with a /. Use /com
 
 # What's Planned  
 I AM CURRENTLY LOOKING FOR ANYONE WHO IS WILLING TO HELP WITH DEVELOPING THIS MOD!  
-IF ANYONE IS WILLING TO HELP WITH ANY OF THIS FEATURES, FEEL FREE TO HIT ME ON DISCORD: anchorpoint#6144
+IF ANYONE IS WILLING TO HELP WITH ANY OF THIS FEATURES, FEEL FREE TO HIT ME ON DISCORD: anchorpoint#6144 or brzys
 - Advanced anti-spam and moderation features
 - New interface
 - (possibly) Own private IRC-server
@@ -35,4 +32,4 @@ Mirco Bauer: SmartIrc4Net
 nixx quality: GitHubUpdate  
   
 av661194, OWL, XMODER, Anchorpoint: Russian translation  
-Rebirth changes: Anchorpoint
+Rebirth changes: Anchorpoint, 8r2y5

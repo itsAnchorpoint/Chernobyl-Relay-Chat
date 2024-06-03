@@ -2,9 +2,9 @@
 --| Chernobyl Relay Chat
 --| Texture ID-getting utility for chernobyl_relay_chat.script
 --| By TKGP
---| CRCR edits by Anchorpoint
+--| CRCR edits by Anchorpoint and brzys
 
-anchorpoint = "crc_icon_tkgp"
+maintainer = "crc_icon_tkgp"
 info = "crc_icon_info"
 error = "crc_icon_error"
 unknown = "crc_icon_unknown"
@@ -26,8 +26,8 @@ factions = {
 	}
 
 function getIcon(name, faction)
-	if name == "Anchorpoint" then -- :^)
-		return anchorpoint
+	if name == "brzys" then -- :^)
+		return maintainer
 	else
 		-- There's a reason for this extreme wank but I don't remember what it is
 		local oldRandom = math.random()

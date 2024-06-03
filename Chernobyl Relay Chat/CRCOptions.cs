@@ -27,11 +27,13 @@ namespace Chernobyl_Relay_Chat
         public static string GameFaction;
         public static string ManualFaction;
         public static string Name;
+        public static string Password;
         public static bool SendDeath;
         public static bool ReceiveDeath;
         public static int DeathInterval;
         public static bool ShowTimestamps;
         public static bool SoundNotifications;
+        public static bool DisableUnregisteredMessage;
 
         public static int NewsDuration;
         public static string ChatKey;
@@ -89,10 +91,12 @@ namespace Chernobyl_Relay_Chat
                 GameFaction = (string)registry.GetValue("GameFaction", "actor_stalker");
                 ManualFaction = (string)registry.GetValue("ManualFaction", "actor_stalker");
                 Name = (string)registry.GetValue("Name", CRCStrings.RandomIrcName(GetFaction()));
+                Password = (string)registry.GetValue("Password", "");
                 SendDeath = Convert.ToBoolean((string)registry.GetValue("SendDeath", "True"));
                 ReceiveDeath = Convert.ToBoolean((string)registry.GetValue("ReceiveDeath", "True"));
                 DeathInterval = (int)registry.GetValue("DeathInterval", 0);
                 ShowTimestamps = Convert.ToBoolean((string)registry.GetValue("ShowTimestamps", "True"));
+                DisableUnregisteredMessage = Convert.ToBoolean((string)registry.GetValue("DisableUnregisteredMessage", "False"));
                 SoundNotifications = Convert.ToBoolean((string)registry.GetValue("SoundNotifications", "True"));
 
                 NewsDuration = (int)registry.GetValue("NewsDuration", 10);
@@ -122,11 +126,13 @@ namespace Chernobyl_Relay_Chat
             registry.SetValue("GameFaction", GameFaction);
             registry.SetValue("ManualFaction", ManualFaction);
             registry.SetValue("Name", Name);
+            registry.SetValue("Password", Password);
             registry.SetValue("SendDeath", SendDeath);
             registry.SetValue("ReceiveDeath", ReceiveDeath);
             registry.SetValue("DeathInterval", DeathInterval);
             registry.SetValue("ShowTimestamps", ShowTimestamps);
             registry.SetValue("SoundNotifications", SoundNotifications);
+            registry.SetValue("DisableUnregisteredMessage", DisableUnregisteredMessage);
 
             registry.SetValue("NewsDuration", NewsDuration);
             registry.SetValue("ChatKey", ChatKey);

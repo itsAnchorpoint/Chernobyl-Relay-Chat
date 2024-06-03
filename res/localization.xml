@@ -180,9 +180,37 @@ You can join the official Discord server in the Options menu!</eng>
 		<eng>Name</eng>
 		<rus>Имя</rus>
 	</string>
+	<string id="options_password">
+		<eng>Password</eng>
+		<rus>Пароль</rus>
+	</string>
+	<string id="recover_nick">
+		<eng>Trying to recover nick {0} with provided password.</eng>
+		<rus>Пытаюсь восстановить ник {0} с указанным паролем.</rus>
+	</string>
+	<string id="logged_in_as">
+		<eng>You are logged in as {0}.</eng>
+		<rus>Вы вошли в систему как {0}.</rus>
+	</string>
+	<string id="try_identify_as">
+		<eng>Will authorize with provided password as {0}.</eng>
+		<rus>Авторизуемся с предоставленным паролем как {0}.</rus>
+	</string>
+	<string id="incorrect_password">
+		<eng>Password you provided for {0} is incorrect.</eng>
+		<rus>Пароль, который вы указали для {0}, неверен.</rus>
+	</string>
+	<string id="unregistered_nickname">
+		<eng>You can register this nickname using /msg NickServ REGISTER password email. You can disable this message in settings.</eng>
+		<rus>Вы можете зарегистрировать этот никнейм, используя /msg NickServ REGISTER пароль email. Вы можете отключить это сообщение в настройках.</rus>
+	</string>
 	<string id="options_name_random">
 		<eng>Random</eng>
 		<rus>Случайно</rus>
+	</string>
+	<string id="options_disable_unregistered">
+		<eng>Disable unregistered nickname message</eng>
+		<rus>Отключить сообщение о незарегистрированном никнейме</rus>
 	</string>
 	<string id="options_timestamps">
 		<eng>Show timestamps</eng>
