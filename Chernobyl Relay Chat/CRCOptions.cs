@@ -1,8 +1,10 @@
 ﻿using Microsoft.Win32;
+using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Security;
+using System.Linq;
 
 namespace Chernobyl_Relay_Chat
 {
@@ -28,11 +30,13 @@ namespace Chernobyl_Relay_Chat
         public static string ManualFaction;
         public static string Name;
         public static string Password;
+        public static List<string>BlockList;
         public static bool SendDeath;
         public static bool ReceiveDeath;
         public static int DeathInterval;
         public static bool ShowTimestamps;
         public static bool SoundNotifications;
+        public static bool BlockPayments;
         public static bool DisableUnregisteredMessage;
 
         public static int NewsDuration;
@@ -51,7 +55,7 @@ namespace Chernobyl_Relay_Chat
 #if DEBUG
             return Channel + "_debug";
 #else
-            return Channel;
+            return "#crcr_english";
 #endif
         }
 
@@ -96,6 +100,9 @@ namespace Chernobyl_Relay_Chat
                 ReceiveDeath = Convert.ToBoolean((string)registry.GetValue("ReceiveDeath", "True"));
                 DeathInterval = (int)registry.GetValue("DeathInterval", 0);
                 ShowTimestamps = Convert.ToBoolean((string)registry.GetValue("ShowTimestamps", "True"));
+                string registry_block = (string)registry.GetValue("BlockList", "");
+                BlockList = registry_block.Split(',').Where(x => !string.IsNullOrEmpty(x)).Distinct().ToList();
+                BlockPayments = Convert.ToBoolean((string)registry.GetValue("BlockPayments", "False"));
                 DisableUnregisteredMessage = Convert.ToBoolean((string)registry.GetValue("DisableUnregisteredMessage", "False"));
                 SoundNotifications = Convert.ToBoolean((string)registry.GetValue("SoundNotifications", "True"));
 
@@ -133,8 +140,11 @@ namespace Chernobyl_Relay_Chat
             registry.SetValue("ShowTimestamps", ShowTimestamps);
             registry.SetValue("SoundNotifications", SoundNotifications);
             registry.SetValue("DisableUnregisteredMessage", DisableUnregisteredMessage);
+            registry.SetValue("BlockPayments", BlockPayments);
 
+            registry.SetValue("BlockList", String.Join(",", BlockList));
             registry.SetValue("NewsDuration", NewsDuration);
+
             registry.SetValue("ChatKey", ChatKey);
             registry.SetValue("NewsSound", NewsSound);
             registry.SetValue("CloseChat", CloseChat);

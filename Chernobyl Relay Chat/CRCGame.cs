@@ -74,17 +74,23 @@ namespace Chernobyl_Relay_Chat
                 {
                     if (process.MainWindowTitle == "S.T.A.L.K.E.R.: Anomaly")
                     {
-                        string path = Path.GetDirectoryName(process.GetProcessPath());
-                        if (File.Exists(path + CRCOptions.InPath))
-                        {
-                            gamePath = path;
-                            firstClear = false;
-                            processID = process.Id;
-                            IsInGame = true;
-                            CRCClient.UpdateStatus();
-                            UpdateSettings();
-                            break;
+                        try {
+                            string path = Path.GetDirectoryName(process.GetProcessPath());
+                            if (File.Exists(path + CRCOptions.InPath))
+                            {
+                                gamePath = path;
+                                firstClear = false;
+                                processID = process.Id;
+                                IsInGame = true;
+                                CRCClient.UpdateStatus();
+                                UpdateSettings();
+                                break;
+                            }
                         }
+                        catch 
+                        {
+                            continue;
+                        }                        
                     }
                 }
             }

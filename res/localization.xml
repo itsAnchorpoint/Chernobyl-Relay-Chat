@@ -4,13 +4,17 @@
 		<eng>Chernobyl Relay Chat Rebirth</eng>
 		<rus>Chernobyl Relay Chat Rebirth</rus>
 	</string>
+	<string id="user_is_blocked">
+		<eng>User "{0}" is blocked.</eng>
+		<rus>Пользователь "{0}" заблокирован.</rus>
+	</string>
 	<string id="welcome_msg">
 		<eng>Welcome to CRCR!
-This addon is currently in closed beta.
+This addon is currently in beta.
 You can join the official Discord server in the Options menu!</eng>
 		<rus>Добро пожаловать в CRCR!
-В данный момент аддон проходит стадию закрытого бета-тестирования.
-Загляните в "Опции", если хотите присоединиться к официальному серверу в Discord!</rus>
+Аддон на данный момент находится в стадии бета-тестирования.
+Проверьте «Параметры», если хотите присоединиться к официальному серверу Discord!</rus>
 	</string>
 	<string id="crc_seconds">
 		<eng>seconds</eng>
@@ -208,9 +212,17 @@ You can join the official Discord server in the Options menu!</eng>
 		<eng>Random</eng>
 		<rus>Случайно</rus>
 	</string>
+	<string id="payment_blocked">
+		<eng>Command blocked, please check options.</eng>
+		<rus>Команда заблокирована, проверьте параметры.</rus>
+	</string>
+	<string id="options_disable_payment">
+		<eng>Block payment command and from others</eng>
+		<rus>Заблокировать платежную команду и от других</rus>
+	</string>
 	<string id="options_disable_unregistered">
-		<eng>Disable unregistered nickname message</eng>
-		<rus>Отключить сообщение о незарегистрированном никнейме</rus>
+		<eng>Hide unregistered message</eng>
+		<rus>Скрыть незарегистрированное сообщение</rus>
 	</string>
 	<string id="options_timestamps">
 		<eng>Show timestamps</eng>
@@ -307,6 +319,46 @@ You can join the official Discord server in the Options menu!</eng>
 	<string id="command_pay_help">
 		<eng>Sends a specified amount of in-game money to another user. Must be in-game.</eng>
 		<rus>Отправляет указанное количество игровых денег другому пользователю. Вы и адресат должны находиться в игре.</rus>
+	</string>
+	<string id="command_block_help">
+		<eng>Blocks messages from another user.</eng>
+		<rus>Блокирует сообщения от другого пользователя.</rus>
+	</string>
+	<string id="command_block_usage">
+		<eng>/block [nick]</eng>
+		<rus>/block [ник]</rus>
+	</string>
+	<string id="command_block_user_not_on_list">
+		<eng>"{0}" not on block list.</eng>
+		<rus>"{0}" нет в черном списке.</rus>
+	</string>
+	<string id="command_block_user_removed_from_list">
+		<eng>"{0}" removed from the list.</eng>
+		<rus>"{0}" удален из списка.</rus>
+	</string>
+	<string id="command_block_user_added_to_list">
+		<eng>"{0}" added to the list.</eng>
+		<rus>"{0}" добавлен в список.</rus>
+	</string>
+	<string id="command_unblock_help">
+		<eng>Unblocks user that was previously blocked.</eng>
+		<rus>Разблокируйте пользователя, который был ранее заблокирован.</rus>
+	</string>
+	<string id="command_unblock_usage">
+		<eng>/unblock [nick]</eng>
+		<rus>/unblock [ник]</rus>
+	</string>
+	<string id="command_list_help">
+		<eng>Shows nicks of blocked users.</eng>
+		<rus>Показывает ники заблокированных пользователей.</rus>
+	</string>
+	<string id="command_list_usage">
+		<eng>/list</eng>
+		<rus>/list</rus>
+	</string>
+	<string id="block_list_is_empty">
+		<eng>Block list is empty.</eng>
+		<rus>Черный список пуст.</rus>
 	</string>
 	<string id="command_available_commands">
 		<eng>Available commands: </eng>

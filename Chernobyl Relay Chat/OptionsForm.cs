@@ -22,6 +22,7 @@ namespace Chernobyl_Relay_Chat
             labelName.Text = CRCStrings.Localize("options_name");
             labelPassword.Text = CRCStrings.Localize("options_password");
             buttonRandom.Text = CRCStrings.Localize("options_name_random");
+            checkBoxBlockPayment.Text = CRCStrings.Localize("options_disable_payment");
             checkBoxDisableUnregisteredMessage.Text = CRCStrings.Localize("options_disable_unregistered");
             checkBoxTimestamps.Text = CRCStrings.Localize("options_timestamps");
             checkBoxDeathSend.Text = CRCStrings.Localize("options_send_deaths");
@@ -49,6 +50,8 @@ namespace Chernobyl_Relay_Chat
             textBoxName.Text = CRCOptions.Name;
             textBoxPassword.Text = CRCOptions.Password;
             comboBoxFaction.SelectedIndex = factionToIndex[CRCOptions.ManualFaction];
+            checkBoxBlockPayment.Checked = CRCOptions.BlockPayments;
+            checkBoxDisableUnregisteredMessage.Checked = CRCOptions.DisableUnregisteredMessage;
             checkBoxTimestamps.Checked = CRCOptions.ShowTimestamps;
             checkBoxDeathSend.Checked = CRCOptions.SendDeath;
             checkBoxDeathReceive.Checked = CRCOptions.ReceiveDeath;
@@ -98,6 +101,7 @@ namespace Chernobyl_Relay_Chat
             CRCOptions.NewsSound = checkBoxNewsSound.Checked;
             CRCOptions.CloseChat = checkBoxCloseChat.Checked;
             CRCOptions.DisableUnregisteredMessage = checkBoxDisableUnregisteredMessage.Checked;
+            CRCOptions.BlockPayments = checkBoxBlockPayment.Checked;
 
             CRCOptions.Save();
             CRCClient.UpdateSettings();

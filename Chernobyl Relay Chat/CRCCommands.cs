@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Octokit;
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Chernobyl_Relay_Chat
@@ -14,7 +16,11 @@ namespace Chernobyl_Relay_Chat
             new CRCCommand("msg", CRCStrings.Localize("command_msg_usage"), CRCStrings.Localize("command_msg_help"), 2, true, SendQuery),
             new CRCCommand("nick", CRCStrings.Localize("command_nick_usage"), CRCStrings.Localize("command_nick_help"), 1, true, ChangeNick),
             new CRCCommand("reply", CRCStrings.Localize("command_reply_usage"), CRCStrings.Localize("command_reply_help"), 1, true, SendReply),
+            new CRCCommand("r", CRCStrings.Localize("command_reply_usage"), CRCStrings.Localize("command_reply_help"), 1, true, SendReply),
             new CRCCommand("pay", CRCStrings.Localize("command_pay_usage"), CRCStrings.Localize("command_pay_help"), 2, true, SendMoney),
+            new CRCCommand("block", CRCStrings.Localize("command_block_usage"), CRCStrings.Localize("command_block_help"), 1, true, Block),
+            new CRCCommand("unblock", CRCStrings.Localize("command_unblock_usage"), CRCStrings.Localize("command_unblock_help"), 1, true, UnBlock),
+            new CRCCommand("list", CRCStrings.Localize("command_list_usage"), CRCStrings.Localize("command_list_help"), 0, true, ListBlocked),
         };
 
         public static void ProcessCommand(string message, ICRCSendable output)
@@ -56,6 +62,46 @@ namespace Chernobyl_Relay_Chat
             CRCClient.SendQuery(args[0], args[1]);
         }
 
+        private static void ListBlocked(List<string> args, ICRCSendable output)
+        {
+            if (CRCOptions.BlockList.Count == 0)
+            {
+                CRCClient.ShowInformation(CRCStrings.Localize("block_list_is_empty"));
+                return;
+            }
+            else {
+                CRCClient.ShowInformation(String.Join(", ", CRCOptions.BlockList));
+            }
+        }
+
+        private static void Block(List<string> args, ICRCSendable output)
+        {
+            string nick = args[0];
+            if (CRCOptions.BlockList.Contains(nick))
+            {
+                CRCClient.ShowError(String.Format(CRCStrings.Localize("command_block_user_not_on_list"), nick));
+            }
+            else
+            {
+                CRCOptions.BlockList.Add(nick);
+                CRCClient.ShowInformation(String.Format(CRCStrings.Localize("command_block_user_added_to_list"), nick));
+            }
+        }
+
+        private static void UnBlock(List<string> args, ICRCSendable output)
+        {
+            string nick = args[0];
+            if (CRCOptions.BlockList.Contains(nick))
+            {
+                CRCOptions.BlockList.Remove(nick);
+                CRCClient.ShowInformation(String.Format(CRCStrings.Localize("command_block_user_removed_from_list"), nick));
+            }
+            else
+            {
+                CRCClient.ShowError(String.Format(CRCStrings.Localize("command_block_user_not_on_list"), nick));
+            }
+        }
+
         private static void SendMoney(List<string> args, ICRCSendable output)
         {
             if (CRCGame.DEBUG)
@@ -68,6 +114,10 @@ namespace Chernobyl_Relay_Chat
             if (CRCGame.disable || CRCGame.processID == -1)
             {
                 output.AddError(CRCStrings.Localize("command_pay_notingame"));
+            }
+            else if (CRCOptions.BlockList.Contains(args[0]))
+            {
+                CRCClient.ShowError(String.Format(CRCStrings.Localize("user_is_blocked"), args[0]));
             }
             else if (CRCClient.userData.ContainsKey(args[0]) && CRCClient.userData[args[0]].IsInGame == "False")
             {
