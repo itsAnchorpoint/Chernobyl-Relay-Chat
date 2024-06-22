@@ -4,7 +4,7 @@
 --| By TKGP
 --| CRCR additions by Anchorpoint and brzys
 
-local SCRIPT_VERSION = 6
+local SCRIPT_VERSION = 7
 
 -- Constants
 local UPDATE_INTERVAL = 250
@@ -153,7 +153,7 @@ local inputActions = {
 			option.closeChat = value == "True"
 		elseif setting == "ActorStatus" then
 			send("Money/%s", db.actor:money())
-			send("ConnLost/%s", fake_conn_lost())
+			send("ConnLost/%s/None", fake_conn_lost())
 			send("DEBUG/%s", DEV_DEBUG)
 		elseif setting == "Channel" then
 			prevChannel = tonumber(value)
@@ -161,8 +161,9 @@ local inputActions = {
 	end,
 	Users = function (body)
 		users = {}
-		for k, v in body:gmatch("([^/]+)%s=%s([^/]+)") do
+		for k, faction, v in body:gmatch("([^/]+),([^/]+)%s=%s([^/]+)") do
 			users[k] = v
+			knownIcons[k] = crc_icons.getIcon(k, faction)
 		end
 		if chatBox then
 			chatBox:UpdateUsers()
@@ -268,8 +269,15 @@ function fake_conn_lost_update_client()
 	cur_fake_conn_status = fake_conn_lost()
 	if prev_fake_conn_status == cur_fake_conn_status then return end
 	prev_fake_conn_status = cur_fake_conn_status
-	send("ConnLost/%s", cur_fake_conn_status)
-	printf("Connection status updated to client - "..tostring(cur_fake_conn_status))
+	if (level_weathers.bLevelUnderground) then
+        reason = "Underground"
+    elseif (xr_conditions.surge_started()) then
+        reason = "Surge"
+    else
+        reason = "None"
+    end
+    send("ConnLost/%s/%s", cur_fake_conn_status, reason)
+    printf("Connection status updated to client - "..tostring(cur_fake_conn_status))
 end
 
 function fake_conn_lost()

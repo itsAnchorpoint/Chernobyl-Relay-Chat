@@ -85,9 +85,21 @@ You can join the official Discord server in the Options menu!</eng>
 		<eng> has logged on</eng>
 		<rus> подключился</rus>
 	</string>
-	<string id="client_part">
+	<string id="client_quit">
 		<eng> has logged off</eng>
 		<rus> отключился</rus>
+	</string>
+	<string id="client_part">
+		<eng> has lost connection</eng>
+		<rus> потерял соединение</rus>
+	</string>
+	<string id="clinet_part_underground">
+		<eng>{0} went underground</eng>
+		<rus>{0} ушел под землю</rus>
+	</string>
+	<string id="clinet_part_surge">
+		<eng>{0} got caught in emission</eng>
+		<rus>{0} попал в выбросы</rus>
 	</string>
 	<string id="client_own_part">
 		<eng>Disconnected from </eng>
@@ -339,6 +351,10 @@ You can join the official Discord server in the Options menu!</eng>
 	<string id="command_block_user_added_to_list">
 		<eng>"{0}" added to the list.</eng>
 		<rus>"{0}" добавлен в список.</rus>
+	</string>
+	<string id="command_block_user_nick_contains_space">
+		<eng>The nickname "{0}" contains a space.</eng>
+		<rus>Псевдоним "{0}" содержит пробел.</rus>
 	</string>
 	<string id="command_unblock_help">
 		<eng>Unblocks user that was previously blocked.</eng>

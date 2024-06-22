@@ -81,6 +81,10 @@ namespace Chernobyl_Relay_Chat
             {
                 CRCClient.ShowError(String.Format(CRCStrings.Localize("command_block_user_not_on_list"), nick));
             }
+            else if (nick.Contains(" "))
+            {
+                CRCClient.ShowError(String.Format(CRCStrings.Localize("command_block_user_nick_contains_space"), nick));
+            }
             else
             {
                 CRCOptions.BlockList.Add(nick);

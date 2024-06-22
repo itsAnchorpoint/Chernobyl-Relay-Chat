@@ -118,6 +118,7 @@ namespace Chernobyl_Relay_Chat
                     userData[CRCOptions.Name].Faction = CRCOptions.GetFaction();
                 client.SendMessage(SendType.CtcpReply, CRCOptions.ChannelProxy(), "AMOGUS " + UserDataUpdate());
                 lastFaction = CRCOptions.GetFaction();
+                UpdateUsers();
             }
         }
 
@@ -277,7 +278,7 @@ namespace Chernobyl_Relay_Chat
             else
             {
                 fakeNick = null;
-                faction = "actor_stalker";
+                faction = "actor_anonymous";
                 return message;
             }
         }
@@ -439,7 +440,7 @@ namespace Chernobyl_Relay_Chat
             foreach (ChannelUser user in client.GetChannel(e.Data.Channel).Users.Values)
             {
                 if (!userData.ContainsKey(user.Nick))
-                    userData.Add(user.Nick, new Userdata { User = user.Nick, Faction = "actor_stalker", IsInGame = "False" });
+                    userData.Add(user.Nick, new Userdata { User = user.Nick, Faction = "actor_anonymous", IsInGame = "False" });
             }
             client.SendMessage(SendType.CtcpRequest, e.Data.Channel, "USERDATA");
             client.SendMessage(SendType.CtcpReply, e.Data.Channel, "AMOGUS " + UserDataUpdate());
@@ -466,10 +467,10 @@ namespace Chernobyl_Relay_Chat
             ShowInformation(CRCStrings.Localize("client_topic_change") + e.NewTopic);
         }
 
-        public static void OnSignalLost()
+        public static void OnSignalLost(string reason)
         {
             userData.Clear();
-            client.RfcPart(CRCOptions.ChannelProxy());
+            client.RfcPart(CRCOptions.ChannelProxy(), reason);
         }
 
         public static void OnSignalRestored()
@@ -506,7 +507,7 @@ namespace Chernobyl_Relay_Chat
                     }
                     else
                     {
-                        faction = "actor_stalker";
+                        faction = "actor_anonymous";
                     }
                 }
                 else if (CRCOptions.ReceiveDeath && (DateTime.Now - lastDeath).TotalSeconds > CRCOptions.DeathInterval)
@@ -537,13 +538,13 @@ namespace Chernobyl_Relay_Chat
 
         private static void ShowHighlightMessage(string nick, string faction, string message)
         {
-            CRCDisplay.OnHighlightMessage(nick, message);
+            CRCDisplay.OnHighlightMessage(nick, message, faction);
             CRCGame.OnHighlightMessage(nick, faction, message);
         }
 
         private static void ShowChannelMessage(string nick, string faction, string message)
         {
-            CRCDisplay.OnChannelMessage(nick, message);
+            CRCDisplay.OnChannelMessage(nick, message, faction);
             CRCGame.OnChannelMessage(nick, faction, message);
         }
 
@@ -604,7 +605,7 @@ namespace Chernobyl_Relay_Chat
                 {
                     return;
                 }
-                userData.Add(e.Who, new Userdata { User = e.Who, Faction = "actor_stalker", IsInGame = "False" });
+                userData.Add(e.Who, new Userdata { User = e.Who, Faction = "actor_anonymous", IsInGame = "False" });
                 UpdateUsers();
                 ShowInformation(e.Who + CRCStrings.Localize("client_join"));
             }
@@ -618,20 +619,32 @@ namespace Chernobyl_Relay_Chat
 
         private static void OnPart(object sender, PartEventArgs e)
         {
-            if (e.Who != CRCOptions.Name)
-            {
-                if (CRCOptions.BlockList.Contains(e.Who))
-                {
-                    return;
-                }
-                userData.Remove(e.Who);
-                UpdateUsers();
-                ShowInformation(e.Who + CRCStrings.Localize("client_part"));
-            }
-            else
+            if (e.Who == CRCOptions.Name)
             {
                 ShowInformation(CRCStrings.Localize("client_own_part") + ChannelToChannelName(prevChannel));
+                return;
             }
+
+            if (CRCOptions.BlockList.Contains(e.Who))
+            {
+                return;
+            }
+            userData.Remove(e.Who);
+            UpdateUsers();
+            if (e.PartMessage != null)
+            {
+                if (e.PartMessage == "Underground")
+                {
+                    ShowInformation(String.Format(CRCStrings.Localize("clinet_part_underground"), e.Who));
+                    return;
+                }
+                else if (e.PartMessage == "Surge")
+                {
+                    ShowInformation(String.Format(CRCStrings.Localize("clinet_part_surge"), e.Who));
+                    return;
+                }
+            }
+            ShowInformation(e.Who + CRCStrings.Localize("client_part"));
         }
 
         private static void OnQuit(object sender, QuitEventArgs e)
@@ -642,7 +655,7 @@ namespace Chernobyl_Relay_Chat
             }
             userData.Remove(e.Who);
             UpdateUsers();
-            ShowInformation(e.Who + CRCStrings.Localize("client_part"));
+            ShowInformation(e.Who + CRCStrings.Localize("client_quit"));
         }
 
         private static void OnKick(object sender, KickEventArgs e)
@@ -681,7 +694,7 @@ namespace Chernobyl_Relay_Chat
 
             try
             {
-                userData.Add(newNick, new Userdata { User = newNick, Faction = "actor_stalker", IsInGame = "False" });
+                userData.Add(newNick, new Userdata { User = newNick, Faction = "actor_anonymous", IsInGame = "False" });
                 userData[newNick] = userData[oldNick];
                 userData.Remove(oldNick);
             }

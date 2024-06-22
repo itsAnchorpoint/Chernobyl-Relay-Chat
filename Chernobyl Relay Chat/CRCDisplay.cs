@@ -33,8 +33,6 @@ namespace Chernobyl_Relay_Chat
             clientDisplay?.AddError(message);
         }
 
-
-
         public static void OnConnected()
         {
             clientDisplay?.Enable();
@@ -45,14 +43,14 @@ namespace Chernobyl_Relay_Chat
             clientDisplay?.UpdateUsers(CRCClient.userData);
         }
 
-        public static void OnHighlightMessage(string nick, string message)
+        public static void OnHighlightMessage(string nick, string message, string faction_name)
         {
-            clientDisplay?.AddHighlightMessage(nick, message);
+            clientDisplay?.AddHighlightMessage(nick, message, faction_name);
         }
 
-        public static void OnChannelMessage(string nick, string message)
+        public static void OnChannelMessage(string nick, string message, string nick_faction)
         {
-            clientDisplay?.AddMessage(nick, message, Color.Black);
+            clientDisplay?.AddMessage(nick, message, nick_faction);
         }
 
         public static void OnOwnChannelMessage(string nick, string message)
