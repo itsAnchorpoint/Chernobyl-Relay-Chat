@@ -256,7 +256,7 @@ namespace Chernobyl_Relay_Chat
         {
             switch (v)
             {
-                case "actor_stalker": return Color.Goldenrod;
+                case "actor_stalker": return Color.DarkGoldenrod;
                 case "actor_csky": return Color.DodgerBlue;
                 case "actor_dolg": return Color.Firebrick;
                 case "actor_ecolog": return Color.Chocolate;

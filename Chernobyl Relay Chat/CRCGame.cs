@@ -194,7 +194,7 @@ namespace Chernobyl_Relay_Chat
                             FakeConnLost = true;
                             new ConnLostForm().ShowDialog(ClientDisplay.staticVar);
                         }
-                        else if (typeMatch.Groups[2].Value == "false")
+                        else if (connLostMatch.Groups[1].Value == "false")
                         {
                             if (ConnLostForm.staticVar != null)
                             {

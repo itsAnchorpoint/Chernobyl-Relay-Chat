@@ -55,7 +55,7 @@ namespace Chernobyl_Relay_Chat
 #if DEBUG
             return Channel + "_debug";
 #else
-            return "#crcr_english";
+            return Channel;
 #endif
         }
 
