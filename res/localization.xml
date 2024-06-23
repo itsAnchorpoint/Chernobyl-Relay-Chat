@@ -356,6 +356,10 @@ You can join the official Discord server in the Options menu!</eng>
 		<eng>The nickname "{0}" contains a space.</eng>
 		<rus>Псевдоним "{0}" содержит пробел.</rus>
 	</string>
+	<string id="command_block_user_already_on_list">
+		<eng>"{0}" is already on the list.</eng>
+		<rus>"{0}" уже есть в списке.</rus>
+	</string>
 	<string id="command_unblock_help">
 		<eng>Unblocks user that was previously blocked.</eng>
 		<rus>Разблокируйте пользователя, который был ранее заблокирован.</rus>
@@ -365,7 +369,7 @@ You can join the official Discord server in the Options menu!</eng>
 		<rus>/unblock [ник]</rus>
 	</string>
 	<string id="command_list_help">
-		<eng>Shows nicks of blocked users.</eng>
+		<eng>Shows list of currently blocked users.</eng>
 		<rus>Показывает ники заблокированных пользователей.</rus>
 	</string>
 	<string id="command_list_usage">

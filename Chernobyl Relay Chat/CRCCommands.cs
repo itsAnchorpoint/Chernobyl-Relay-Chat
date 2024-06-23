@@ -1,5 +1,7 @@
-﻿using Octokit;
+﻿using Meebey.SmartIrc4net;
+using Octokit;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -64,22 +66,27 @@ namespace Chernobyl_Relay_Chat
 
         private static void ListBlocked(List<string> args, ICRCSendable output)
         {
-            if (CRCOptions.BlockList.Count == 0)
+            if (IsNullOrEmpty(CRCOptions.blockListData))
             {
                 CRCClient.ShowInformation(CRCStrings.Localize("block_list_is_empty"));
                 return;
             }
             else {
-                CRCClient.ShowInformation(String.Join(", ", CRCOptions.BlockList));
+                CRCClient.ShowInformation(String.Join(", ", CRCOptions.blockListData.Keys));
             }
+        }
+
+        private static bool IsNullOrEmpty(Dictionary<string, List<string>> blockListData)
+        {
+            return (blockListData == null || blockListData.Count < 1);
         }
 
         private static void Block(List<string> args, ICRCSendable output)
         {
             string nick = args[0];
-            if (CRCOptions.BlockList.Contains(nick))
+            if (CRCOptions.blockListData.ContainsKey(nick))
             {
-                CRCClient.ShowError(String.Format(CRCStrings.Localize("command_block_user_not_on_list"), nick));
+                CRCClient.ShowError(String.Format(CRCStrings.Localize("command_block_user_already_on_list"), nick));
             }
             else if (nick.Contains(" "))
             {
@@ -87,7 +94,7 @@ namespace Chernobyl_Relay_Chat
             }
             else
             {
-                CRCOptions.BlockList.Add(nick);
+                CRCOptions.addToBlockList(nick);
                 CRCClient.ShowInformation(String.Format(CRCStrings.Localize("command_block_user_added_to_list"), nick));
             }
         }
@@ -95,10 +102,11 @@ namespace Chernobyl_Relay_Chat
         private static void UnBlock(List<string> args, ICRCSendable output)
         {
             string nick = args[0];
-            if (CRCOptions.BlockList.Contains(nick))
+            if (CRCOptions.blockListData.ContainsKey(nick))
             {
-                CRCOptions.BlockList.Remove(nick);
+                CRCOptions.removeFromList(nick);
                 CRCClient.ShowInformation(String.Format(CRCStrings.Localize("command_block_user_removed_from_list"), nick));
+                CRCClient.askAboutNames();
             }
             else
             {
@@ -119,7 +127,7 @@ namespace Chernobyl_Relay_Chat
             {
                 output.AddError(CRCStrings.Localize("command_pay_notingame"));
             }
-            else if (CRCOptions.BlockList.Contains(args[0]))
+            else if (CRCOptions.blockListData.ContainsKey(args[0]))
             {
                 CRCClient.ShowError(String.Format(CRCStrings.Localize("user_is_blocked"), args[0]));
             }

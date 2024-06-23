@@ -1,11 +1,35 @@
 # Chernobyl Relay Chat Rebirth
 An IRC-based chat app for Anomaly, originally developed by TKGP for CoC. Features an independent client as well as in-game chat, automatic death messages, and compatibility with all other addons.
 
+# [Download](https://github.com/8r2y5/Chernobyl-Relay-Chat-Rebirth/releases/tag/0.7.1)
+
 ## Note
-Currently new russian translations are done using translator.
+Currently (since [0.5.0](https://github.com/8r2y5/Chernobyl-Relay-Chat-Rebirth/releases/tag/0.5.0) release) russian localisation is done using translator.
+
+# Features
+## Faction colors in chat
+![Preview](./preview/faction_colors.png)
+
+## Ability to identify with IRC server
+You can provide password in `Options`.  
+To register your nick type, `/msg NickServ REGISTER [password] [email]` and follow the instructions.
+
+## Commands
+| Command    | Description                                     | Usage                   | Note                                                                           |
+|------------|-------------------------------------------------|-------------------------|--------------------------------------------------------------------------------|
+| `/block`   | Blocks interactions/messages with provided user | `/block [nick]`         |                                                                                |
+| `/unblock` | Unblocks previously blocked user                | `/unblock [nick]`       |                                                                                |
+| `/list`    | Shows list of currently blocked users           | `/list`                 |                                                                                |
+| `/help`    | Shows help message for command                  | `/help block`           |                                                                                |
+| `/commands` | Shows avaliable commands                        | `/commands`             |                                                                                |
+| `/msg`      | Sends private message to user                   | `/msg [nick] [message]` |                                                                                |
+| `/nick` | Changes you nicname in chat.                    | `/nick [new nick]`       | Nick cannot contain space, it's IRC limitation                                 |
+| `/reply` | Replyes to last private message/dm | `/reply [message]` |                                                                                |
+| `/r` | Alias for `/reply` | `/r [message]` |                                                                                |
+| `/pay` | Transfers money to another user | `/pay [nick] [amount]` | Both need to be in-game. There is option to block money transfer in `Options`. |                       |
 
 # Official CRCR Discord Server
-[Join](https://discord.gg/crcr) to get help, leave feedback or just to hang out! 
+[Join](https://discord.gg/KjNHXCkHr9) to get help, leave feedback or just to hang out! 
 
 # Installation
 1. Install the [.NET framework](https://www.microsoft.com/net/download/framework) if you don't have it already  

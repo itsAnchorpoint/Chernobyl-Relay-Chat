@@ -177,7 +177,7 @@ namespace Chernobyl_Relay_Chat
 
         public static void SendQuery(string nick, string message)
         {
-            if (CRCOptions.BlockList.Contains(nick))
+            if (CRCOptions.blockListData.ContainsKey(nick))
             {
                 CRCClient.ShowError(String.Format(CRCStrings.Localize("user_is_blocked"), nick));
                 return;
@@ -201,7 +201,7 @@ namespace Chernobyl_Relay_Chat
 
         public static void SendMoney(string nick, string message)
         {
-            if (CRCOptions.BlockList.Contains(nick))
+            if (CRCOptions.blockListData.ContainsKey(nick))
             {
                 CRCClient.ShowError(String.Format(CRCStrings.Localize("user_is_blocked"), nick));
                 return;
@@ -245,7 +245,7 @@ namespace Chernobyl_Relay_Chat
         {
             if (lastQuery != null)
             {
-                if (CRCOptions.BlockList.Contains(lastQuery))
+                if (CRCOptions.blockListData.ContainsKey(lastQuery))
                 {
                     CRCClient.ShowError(String.Format(CRCStrings.Localize("user_is_blocked"), lastQuery));
                     return false;
@@ -325,7 +325,6 @@ namespace Chernobyl_Relay_Chat
                 if (!CRCOptions.DisableUnregisteredMessage) {
                     ShowInformation(CRCStrings.Localize("unregistered_nickname"));
                 }
-                
             }
             else
             {
@@ -350,12 +349,12 @@ namespace Chernobyl_Relay_Chat
 
         private static void OnCtcpRequest(object sender, CtcpEventArgs e)
         {
-            string from = e.Data.Nick;
-            System.Console.WriteLine(from + " CTCP: " + e.CtcpCommand.ToUpper());
-            if (CRCOptions.BlockList.Contains(from))
+            if (CRCOptions.isHostBlocked(e))
             {
                 return;
             }
+            string from = e.Data.Nick;
+            System.Console.WriteLine(from + " CTCP: " + e.CtcpCommand.ToUpper());
             switch (e.CtcpCommand.ToUpper())
             {
                 case "USERDATA":
@@ -376,7 +375,7 @@ namespace Chernobyl_Relay_Chat
         private static void OnCtcpReply(object sender, CtcpEventArgs e)
         {
             string from = e.Data.Nick;
-            if (CRCOptions.BlockList.Contains(from))
+            if (CRCOptions.isHostBlocked(e))
             {
                 return;
             }
@@ -430,6 +429,10 @@ namespace Chernobyl_Relay_Chat
 
         private static void OnChannelActiveSynced(object sender, IrcEventArgs e)
         {
+            if (CRCOptions.isHostBlocked(e))
+            {
+                return;
+            }
             try
             {
                 userData.Add(CRCOptions.Name, new Userdata { User = CRCOptions.Name, Faction = CRCOptions.GetFaction(), IsInGame = CRCGame.IsInGame.ToString() });
@@ -484,6 +487,10 @@ namespace Chernobyl_Relay_Chat
 
         private static void OnChannelMessage(object sender, IrcEventArgs e)
         {
+            if (CRCOptions.isHostBlocked(e))
+            {
+                return;
+            }
             string fakeNick, faction;
             string message = GetMetadata(e.Data.Message, out fakeNick, out faction);
             // If some cheeky m8 just sends delimiters, ignore it
@@ -518,11 +525,6 @@ namespace Chernobyl_Relay_Chat
                 else
                     return;
 
-                if (CRCOptions.BlockList.Contains(nick))
-                {
-                    return;
-                }
-
                 if (message.Contains(CRCOptions.Name))
                 {
                     if (CRCOptions.SoundNotifications)
@@ -550,7 +552,7 @@ namespace Chernobyl_Relay_Chat
 
         private static void OnQueryMessage(object sender, IrcEventArgs e)
         {
-            if (CRCOptions.BlockList.Contains(e.Data.Nick))
+            if (CRCOptions.isHostBlocked(e))
             {
                 return;
             }
@@ -601,7 +603,7 @@ namespace Chernobyl_Relay_Chat
         {
             if (e.Who != client.Nickname)
             {
-                if (CRCOptions.BlockList.Contains(e.Who))
+                if (CRCOptions.isHostBlocked(e))
                 {
                     return;
                 }
@@ -624,8 +626,7 @@ namespace Chernobyl_Relay_Chat
                 ShowInformation(CRCStrings.Localize("client_own_part") + ChannelToChannelName(prevChannel));
                 return;
             }
-
-            if (CRCOptions.BlockList.Contains(e.Who))
+            if (CRCOptions.isHostBlocked(e))
             {
                 return;
             }
@@ -649,12 +650,12 @@ namespace Chernobyl_Relay_Chat
 
         private static void OnQuit(object sender, QuitEventArgs e)
         {
-            if (CRCOptions.BlockList.Contains(e.Who))
+            userData.Remove(e.Who);
+            UpdateUsers();
+            if (CRCOptions.isHostBlocked(e))
             {
                 return;
             }
-            userData.Remove(e.Who);
-            UpdateUsers();
             ShowInformation(e.Who + CRCStrings.Localize("client_quit"));
         }
 
@@ -667,7 +668,7 @@ namespace Chernobyl_Relay_Chat
                 ShowError(CRCStrings.Localize("client_got_kicked") + e.KickReason);
                 CRCDisplay.OnGotKicked();
             }
-            else if (CRCOptions.BlockList.Contains(victim))
+            else if (CRCOptions.isHostBlocked(e))
             {
                 return;
             }
@@ -686,9 +687,17 @@ namespace Chernobyl_Relay_Chat
 #if DEBUG
             System.Console.WriteLine("Nick change: '{0}' -> '{1}'", oldNick, newNick);
 #endif
-            if (CRCOptions.BlockList.Contains(oldNick))
+            if (CRCOptions.isHostBlocked(e))
             {
-                CRCOptions.BlockList.Add(newNick);
+                CRCOptions.addToBlockList(e);
+                try
+                {
+                    userData.Remove(oldNick);
+                    UpdateUsers();
+                } catch
+                {
+
+                }
                 return;
             }
 
@@ -720,7 +729,7 @@ namespace Chernobyl_Relay_Chat
             UpdateUsers();
         }
 
-        private static void UpdateUsers()
+        public static void UpdateUsers()
         {
             CRCDisplay.UpdateUsers();
             CRCGame.UpdateUsers();
@@ -791,6 +800,11 @@ namespace Chernobyl_Relay_Chat
         {
             string userDataUpdate = CRCOptions.Name + "/" + CRCOptions.GetFaction() + "/" + CRCGame.IsInGame.ToString();
             return userDataUpdate;
+        }
+
+        internal static void askAboutNames()
+        {
+            client.RfcNames(CRCOptions.Channel);
         }
     }
 

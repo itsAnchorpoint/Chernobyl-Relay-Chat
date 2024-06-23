@@ -55,6 +55,7 @@
             this.buttonChatKey = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageClient = new System.Windows.Forms.TabPage();
+            this.checkBoxBlockPayment = new System.Windows.Forms.CheckBox();
             this.checkBoxDisableUnregisteredMessage = new System.Windows.Forms.CheckBox();
             this.labelPassword = new System.Windows.Forms.Label();
             this.textBoxPassword = new System.Windows.Forms.TextBox();
@@ -65,7 +66,6 @@
             this.checkBoxCloseChat = new System.Windows.Forms.CheckBox();
             this.checkBoxNewsSound = new System.Windows.Forms.CheckBox();
             this.pictureBoxDiscordLogo = new System.Windows.Forms.PictureBox();
-            this.checkBoxBlockPayment = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeath)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNewsDuration)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -362,6 +362,16 @@
             this.tabPageClient.Text = "Client";
             this.tabPageClient.UseVisualStyleBackColor = true;
             // 
+            // checkBoxBlockPayment
+            // 
+            this.checkBoxBlockPayment.AutoSize = true;
+            this.checkBoxBlockPayment.Location = new System.Drawing.Point(6, 222);
+            this.checkBoxBlockPayment.Name = "checkBoxBlockPayment";
+            this.checkBoxBlockPayment.Size = new System.Drawing.Size(221, 17);
+            this.checkBoxBlockPayment.TabIndex = 24;
+            this.checkBoxBlockPayment.Text = "Block payment command and from others";
+            this.checkBoxBlockPayment.UseVisualStyleBackColor = true;
+            // 
             // checkBoxDisableUnregisteredMessage
             // 
             this.checkBoxDisableUnregisteredMessage.AutoSize = true;
@@ -434,7 +444,7 @@
             this.tabPageGame.Location = new System.Drawing.Point(4, 22);
             this.tabPageGame.Name = "tabPageGame";
             this.tabPageGame.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGame.Size = new System.Drawing.Size(292, 397);
+            this.tabPageGame.Size = new System.Drawing.Size(292, 410);
             this.tabPageGame.TabIndex = 1;
             this.tabPageGame.Text = "In-game";
             this.tabPageGame.UseVisualStyleBackColor = true;
@@ -469,16 +479,6 @@
             this.pictureBoxDiscordLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxDiscordLogo.TabIndex = 26;
             this.pictureBoxDiscordLogo.TabStop = false;
-            // 
-            // checkBoxBlockPayment
-            // 
-            this.checkBoxBlockPayment.AutoSize = true;
-            this.checkBoxBlockPayment.Location = new System.Drawing.Point(6, 222);
-            this.checkBoxBlockPayment.Name = "checkBoxBlockPayment";
-            this.checkBoxBlockPayment.Size = new System.Drawing.Size(221, 17);
-            this.checkBoxBlockPayment.TabIndex = 24;
-            this.checkBoxBlockPayment.Text = "Block payment command and from others";
-            this.checkBoxBlockPayment.UseVisualStyleBackColor = true;
             // 
             // OptionsForm
             // 

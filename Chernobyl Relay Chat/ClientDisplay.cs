@@ -105,7 +105,7 @@ namespace Chernobyl_Relay_Chat
         private void richTextBoxMessages_LinkClicked(object sender, LinkClickedEventArgs e)
         {
             // Apparently safer than just passing the link
-            Process.Start("explorer.exe", e.LinkText);
+            Process.Start(e.LinkText);
         }
 
 
@@ -181,20 +181,6 @@ namespace Chernobyl_Relay_Chat
             AddMessage(nick, message, GetFactionColor(nick_faction));
         }
 
-        public void AddHighlightMessage(string nick, string message)
-        {
-            Invoke(() =>
-            {
-                AddMessage(nick, message, Color.Black);
-                int start = richTextBoxMessages.GetFirstCharIndexOfCurrentLine();
-                int length = richTextBoxMessages.TextLength - start;
-                richTextBoxMessages.Select(start, length);
-                richTextBoxMessages.SelectionBackColor = Color.Yellow;
-                richTextBoxMessages.Select(0, 0);
-                richTextBoxMessages.SelectionBackColor = Color.White;
-            });
-        }
-
         public void AddHighlightMessage(string nick, string message, string faction_name)
         {
             Invoke(() =>
@@ -204,7 +190,7 @@ namespace Chernobyl_Relay_Chat
                 int length = richTextBoxMessages.TextLength - start;
                 richTextBoxMessages.Select(start, length);
                 richTextBoxMessages.SelectionBackColor = Color.Yellow;
-                richTextBoxMessages.Select(0, 0);
+                richTextBoxMessages.Select(richTextBoxMessages.TextLength, richTextBoxMessages.TextLength);
                 richTextBoxMessages.SelectionBackColor = Color.White;
             });
         }
@@ -254,6 +240,7 @@ namespace Chernobyl_Relay_Chat
 
         public Color GetFactionColor(string v)
         {
+            System.Console.WriteLine(v);
             switch (v)
             {
                 case "actor_stalker": return Color.DarkGoldenrod;

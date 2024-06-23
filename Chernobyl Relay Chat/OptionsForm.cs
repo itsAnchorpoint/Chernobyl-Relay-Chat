@@ -191,7 +191,7 @@ namespace Chernobyl_Relay_Chat
 
         private void linkLabelDiscord_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("explorer.exe", "https://discord.gg/m9yfGYq8Sy");
+            Process.Start("explorer.exe", "https://discord.gg/KjNHXCkHr9");
         }
     }
 }

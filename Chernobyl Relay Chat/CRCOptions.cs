@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Security;
 using System.Linq;
+using Meebey.SmartIrc4net;
+using Newtonsoft.Json;
 
 namespace Chernobyl_Relay_Chat
 {
@@ -30,7 +32,7 @@ namespace Chernobyl_Relay_Chat
         public static string ManualFaction;
         public static string Name;
         public static string Password;
-        public static List<string>BlockList;
+        public static Dictionary<string, List<string>> blockListData = new Dictionary<string, List<string>>();
         public static bool SendDeath;
         public static bool ReceiveDeath;
         public static int DeathInterval;
@@ -100,8 +102,14 @@ namespace Chernobyl_Relay_Chat
                 ReceiveDeath = Convert.ToBoolean((string)registry.GetValue("ReceiveDeath", "True"));
                 DeathInterval = (int)registry.GetValue("DeathInterval", 0);
                 ShowTimestamps = Convert.ToBoolean((string)registry.GetValue("ShowTimestamps", "True"));
-                string registry_block = (string)registry.GetValue("BlockList", "");
-                BlockList = registry_block.Split(',').Where(x => !string.IsNullOrEmpty(x)).Distinct().ToList();
+                try
+                {
+                    blockListData = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>((string)registry.GetValue("BlockList"));
+                }
+                catch { 
+                    // probably differences between 0.7.0 and 0.7.1
+                    blockListData = new Dictionary<string, List<string>>();
+                }
                 BlockPayments = Convert.ToBoolean((string)registry.GetValue("BlockPayments", "False"));
                 DisableUnregisteredMessage = Convert.ToBoolean((string)registry.GetValue("DisableUnregisteredMessage", "False"));
                 SoundNotifications = Convert.ToBoolean((string)registry.GetValue("SoundNotifications", "True"));
@@ -142,12 +150,104 @@ namespace Chernobyl_Relay_Chat
             registry.SetValue("DisableUnregisteredMessage", DisableUnregisteredMessage);
             registry.SetValue("BlockPayments", BlockPayments);
 
-            registry.SetValue("BlockList", String.Join(",", BlockList));
+            SaveBlockList();
             registry.SetValue("NewsDuration", NewsDuration);
 
             registry.SetValue("ChatKey", ChatKey);
             registry.SetValue("NewsSound", NewsSound);
             registry.SetValue("CloseChat", CloseChat);
+        }
+
+        public static void addToBlockList(NickChangeEventArgs e)
+        {
+            addToBlockList(e.NewNickname, e.Data.Host);
+        }
+
+        public static void addToBlockList(string nick)
+        {
+            if (!blockListData.ContainsKey(nick))
+            {
+                blockListData.Add(nick, new List<string>());
+                removeBlockedUserFromUserData(nick);
+                SaveBlockList();
+            }
+        }
+
+        private static void removeBlockedUserFromUserData(string nick)
+        {
+            if (CRCClient.userData.ContainsKey(nick))
+            {
+                CRCClient.userData.Remove(nick);
+                CRCClient.UpdateUsers();
+            }
+        }
+
+        private static void SaveBlockList()
+        {
+            registry.SetValue("BlockList", JsonConvert.SerializeObject(blockListData));
+        }
+
+        public static void addToBlockList(string nick, string host)
+        {
+            if (blockListData.ContainsKey(nick)) {
+                if (!blockListData[nick].Contains(host)) { 
+                    blockListData[nick].Add(host);
+                    SaveBlockList();
+                }
+            }
+            else {
+                blockListData.Add(nick, new List<string> { host });
+                removeBlockedUserFromUserData(nick);
+                SaveBlockList();
+            }
+        }
+        public static void removeFromList(string nick)
+        {
+            try
+            {
+                blockListData.Remove(nick);
+                SaveBlockList();
+            }
+            catch { }
+        }
+
+        internal static bool isHostBlocked(IrcEventArgs e)
+        {
+            ensureHostIsBlocked(e.Data.Nick, e.Data.Host);
+            return isHostBlocked(e.Data.Host);
+        }
+
+        private static bool isHostBlocked(string host)
+        {
+            foreach (var item in blockListData)
+            {
+                if (item.Value.Contains(host))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static void ensureHostIsBlocked(string nick, string host)
+        {
+            try
+            {
+                List<string> hosts = blockListData[nick];
+                if (!hosts.Contains(host))
+                {
+                    hosts.Add(host);
+                    SaveBlockList();
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        public static bool IsNickBlocked(string nick)
+        {
+            return blockListData.ContainsKey(nick);
         }
     }
 }

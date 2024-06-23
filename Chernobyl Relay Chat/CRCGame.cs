@@ -276,7 +276,9 @@ namespace Chernobyl_Relay_Chat
             string UserStatus = "";
             foreach (KeyValuePair<string, Userdata> item in CRCClient.userData)
             {
-                UserStatus += item.Key + ',' + item.Value.Faction + " = " + item.Value.IsInGame + "/";
+                if (!CRCOptions.IsNickBlocked(item.Key)) {
+                    UserStatus += item.Key + ',' + item.Value.Faction + " = " + item.Value.IsInGame + "/";
+                }
             }
             SendToGame("Users/" + UserStatus.TrimEnd('/'));
 #if DEBUG
