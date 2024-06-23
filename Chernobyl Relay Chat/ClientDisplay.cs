@@ -240,7 +240,6 @@ namespace Chernobyl_Relay_Chat
 
         public Color GetFactionColor(string v)
         {
-            System.Console.WriteLine(v);
             switch (v)
             {
                 case "actor_stalker": return Color.DarkGoldenrod;

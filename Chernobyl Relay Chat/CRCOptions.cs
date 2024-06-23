@@ -102,13 +102,14 @@ namespace Chernobyl_Relay_Chat
                 ReceiveDeath = Convert.ToBoolean((string)registry.GetValue("ReceiveDeath", "True"));
                 DeathInterval = (int)registry.GetValue("DeathInterval", 0);
                 ShowTimestamps = Convert.ToBoolean((string)registry.GetValue("ShowTimestamps", "True"));
+                blockListData = new Dictionary<string, List<string>>();
                 try
                 {
                     blockListData = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>((string)registry.GetValue("BlockList"));
                 }
-                catch { 
-                    // probably differences between 0.7.0 and 0.7.1
+                catch (Exception e) { 
                     blockListData = new Dictionary<string, List<string>>();
+                    SaveBlockList();
                 }
                 BlockPayments = Convert.ToBoolean((string)registry.GetValue("BlockPayments", "False"));
                 DisableUnregisteredMessage = Convert.ToBoolean((string)registry.GetValue("DisableUnregisteredMessage", "False"));
